@@ -4,18 +4,19 @@
     ViewData["Title"] = "List of Books";
 }
 
-<div class="card-deck">
+<h1 class="text-center p-2" style="color:#86bc42">List of Books</h1><br />
+
+<div class="row">
 
     @foreach (var item in Model)
     {
-        //var photoPath = "~/images/" + (item.ImageUrl ?? "noimage.jpg");
         var photoPath = (item.ImageUrl ?? "noimage.jpg");
-        <div class="card m-3" style="min-width:18rem;">
-            <div class="card-header">
-                <h3>@item.BookName</h3>
-            </div>
-            <img class="imageThumbnail" src="@photoPath" asp-append-version="true" />
-            <div class="card-footer text-center">
+
+        <div class=" col-md-3 p-3 border">
+            <div class="text-center">
+                <img class="img-fluid" src="@photoPath" asp-append-version="true" alt="Card image cap" height="150" width="150"><hr />
+                <h5>@item.BookName</h5>
+                <p>@item.Description</p>
                 <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" class="btn btn-primary m-1">View</a>
                 <a asp-controller="Books" asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-primary m-1">Edit</a>
             </div>

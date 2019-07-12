@@ -137,11 +137,12 @@ body {
 /* Sticky footer styles start*/
 
 .footer {
-    /*position: absolute;*/
+    position: fixed;
+    left: 0;
     bottom: 0;
+    width:100%;
     background-color: #242c42;
     padding: 2%;
-    padding-bottom:0% !important;
 }
 
     .footer a {
