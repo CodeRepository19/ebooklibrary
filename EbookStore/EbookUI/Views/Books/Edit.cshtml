@@ -1,62 +1,59 @@
 ﻿@model EbookApplication.ViewModels.BookViewModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = "Edit Product Details";
-    //var photoPath = "~/images/" + (Model._bookObj.ImageUrl ?? "noimage.jpg");
-    var photoPath = (Model.book.ImageUrl ?? "noimage.jpg");
+    ViewData["Title"] = "Edit Book Details";
+    var photoPath = "~/images/" + (Model.ExistingImageUrl ?? "noimage.jpg");
+    //var photoPath = (Model.ImageUrl ?? "noimage.jpg");
 }
 
-<form enctype="multipart/form-data" asp-controller="Books" asp-action="Edit" method="post" class="m-3">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group row">
-        <label asp-for="@Model.book.BookName" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="@Model.book.BookName" class="form-control" placeholder="Book Name" />
-            <span asp-validation-for="@Model.book.BookName" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label asp-for="@Model.book.Description" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="@Model.book.Description" class="form-control" placeholder="Description" />
-            <span asp-validation-for="@Model.book.Description" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label asp-for="@Model.book.ImageUrl" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <div class="custom-file">
-                <input asp-for="@Model.book.ImageUrl" class="form-control custom-file-input" />
-                <label class="custom-file-label">Choose File...</label>
+    <form enctype="multipart/form-data" asp-controller="Books" asp-action="Edit" method="post" class="m-3">
+        <input hidden asp-for="book.BookId" />
+        <input hidden asp-for="ExistingImageUrl" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group row">
+            <label asp-for="book.BookName" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="book.BookName" class="form-control" placeholder="Book Name" />
+                <span asp-validation-for="book.BookName" class="text-danger"></span>
             </div>
         </div>
-    </div>
-    <div class="card-body text-center">
-        <img src="@photoPath" class="imageThumbnail" asp-append-version="true"  />
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a asp-action="Home" asp-controller="Index" class="btn btn-primary">Cancel</a>
-
+        <div class="form-group row">
+            <label asp-for="book.Description" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="book.Description" class="form-control" placeholder="Description" />
+                <span asp-validation-for="book.Description" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    @section Scripts{
-        <script>
-            $(document).ready(function () {
-                $('.custom-file-input').on("change", function () {
-                    var fileLabel = $(this).next('.custom-file-label');
-                    var files = $(this)[0].files;
-                    if (files.length > 1) {
-                        fileLabel.html(files.length + ' files selected');
-                    }
-                    else if (files.length == 1) {
-                        fileLabel.html(files[0].name);
-                    }
+        <div class="form-group row">
+            <label asp-for="Image" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="custom-file">
+                    <input asp-for="Image" class="form-control custom-file-input" />
+                    <label class="custom-file-label">Choose File...</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1">Cancel</a>
+            </div>
+        </div>
+        @section Scripts{
+            <script>
+                $(document).ready(function () {
+                    $('.custom-file-input').on("change", function () {
+                        var fileLabel = $(this).next('.custom-file-label');
+                        var files = $(this)[0].files;
+                        if (files.length > 1) {
+                            fileLabel.html(files.length + ' files selected');
+                        }
+                        else if (files.length == 1) {
+                            fileLabel.html(files[0].name);
+                        }
+                    });
                 });
-            });
-        </script>
-    }
-</form>
+            </script>
+        }
+    </form>
 

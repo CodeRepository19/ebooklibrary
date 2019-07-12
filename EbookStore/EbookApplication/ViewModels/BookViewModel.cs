@@ -10,6 +10,8 @@ namespace EbookApplication.ViewModels
     {
         public IEnumerable<Book> Books { get; set; }
         public Book book { get; set; }
+        public Technology technology { get; set; }
         public IFormFile Image { get; set; }
+        public string ExistingImageUrl { get; set; }
     }
 }
