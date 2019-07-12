@@ -1,17 +1,17 @@
-﻿
+﻿@model EbookApplication.ViewModels.BookViewModel
+
 @{
     ViewData["Title"] = "HandleErrorCode";
 }
-    <div class="container mt-5">
-        <div class="jumbotron">
-            <h1>Error Occured</h1>
-            <span style="color:red;">@ViewBag.ErrorMessage</span>
-
+<div class="row" style="height:500px;">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <h1 class="text-center" style="color:red;">Error Occured</h1>
+        <p class="text-center" style="color:red;">@ViewBag.ErrorMessage</p>
+        <div class="text-center">
+            <img src="~/Images/404-new.svg" alt="404 Page" />
+            <a class="btn-custom" asp-area="" asp-controller="Home" asp-action="Index">Go Back Home</a>
         </div>
-
     </div>
-
-@*<span style="color:red;">Error Path: @ViewBag.RouteOfException</span>*@
-
-
-
+    <div class="col-md-2"></div>
+</div>

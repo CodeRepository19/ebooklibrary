@@ -1,5 +1,3 @@
-using System;
-
 namespace EbookUI.Models
 {
     public class ErrorViewModel

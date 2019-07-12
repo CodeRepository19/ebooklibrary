@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using EbookApplication.ViewModels;
-using EbookDomain.Interfaces;
+﻿using EbookApplication.ViewModels;
 using EbookDomain.Models;
 using EbookInfraData.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EbookUI.Controllers
 {
@@ -26,7 +24,6 @@ namespace EbookUI.Controllers
             this.hostingEnvironment = hostingEnvironment;
         }
 
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Books.ToListAsync());
@@ -79,7 +76,7 @@ namespace EbookUI.Controllers
             BookViewModel objNewBook = new BookViewModel();
             List<Technology> objTechnology = new List<Technology>();
             objTechnology = (from x in _context.Technologys select x).ToList();
-            objTechnology.Insert(0, new Technology { TechnologyId = 0, TechnologyName = "Select" });
+            //objTechnology.Insert(0, new Technology { TechnologyId = 0, TechnologyName = "Select" });
             ViewBag.technologyList = objTechnology;
             return objTechnology;
         }
@@ -128,6 +125,7 @@ namespace EbookUI.Controllers
         }
 
         // GET: books/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             BookViewModel objNewBook = null;

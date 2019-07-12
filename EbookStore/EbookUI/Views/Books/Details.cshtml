@@ -2,30 +2,35 @@
 
 @{
     ViewData["Title"] = "View Book Details";
-    //var photoPath = (Model.ImageUrl ?? "noimage.jpg");
     var photoPath = "~/images/" + (Model.book.ImageUrl ?? "noimage.jpg");
 }
 
+<div class="container mt-5">
+    <div class="card-header text-left">
+        <h1>@Model.book.BookName</h1>
+    </div>
+</div>
+
 <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header text-center">
-                <h1>book.BookName</h1>
-            </div>
-            <div class="card-body text-center">
-                <img src="@photoPath" class="imageThumbnail" asp-append-version="true" height="250" width="250" /><hr />
-                <h4>Book Id: @Model.book.BookId</h4>
-                <h4>Description: @Model.book.Description</h4>
-                <h4>Technology: @Model.technology.TechnologyName</h4>
-            </div>
-            <div class="card-footer text-center">
-                <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1">Back</a>
-                <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary m-1">Edit</a>
-            </div>
+
+    <div class="col-md-4">
+        <div class="card-body text-center ml-5">
+            <img src="@photoPath" class="imageThumbnail" asp-append-version="true" height="250" width="250" />
         </div>
     </div>
-    <div class="col-md-2"></div>
+
+    <div class="card-body col-md-7">
+        <h4 style="font-size:15px;">Technology: @Model.technology.TechnologyName</h4> <hr />
+        <h4 style="font-size:15px;">Book Id: @Model.book.BookId</h4><hr />
+        <h4 style="font-size:15px;">Description:<br /><br /> @Model.book.Description</h4>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<div class="container">
+    <div class="card-footer text-center">
+        <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1">Back</a>
+        <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary m-1">Edit</a>
+    </div>
 </div>
 
 @section Scripts {

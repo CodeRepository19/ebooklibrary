@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EbookDomain.Models;
+﻿using EbookDomain.Models;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace EbookApplication.ViewModels
 {

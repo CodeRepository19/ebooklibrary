@@ -7,10 +7,10 @@ namespace EbookInfraData.Context
     {
         public ebooklibraryDBcontext(DbContextOptions<ebooklibraryDBcontext> options) : base(options)
         {
-
         }
 
         public DbSet<Book> Books { get; set; }
+
         public DbSet<Technology> Technologys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

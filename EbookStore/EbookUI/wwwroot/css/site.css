@@ -137,11 +137,12 @@ body {
 /* Sticky footer styles start*/
 
 .footer {
-    position: fixed;
+    position:fixed;
+    left:0;
     bottom: 0;
     width: 100%;
     background-color: #242c42;
-    padding: 2%;
+    padding: 1%;
 }
 
     .footer a {
@@ -176,4 +177,11 @@ body {
 .fa-angle-right, .fa-envelope-o, .fa-phone, .fa-map-marker, .fa-facebook, .fa-google-plus, .fa-twitter, .fa-dribbble, .fa-pinterest, .fa-instagram {
     color: #86bc42;
 }
+
+.btn-custom {
+    color: #fff;
+    background-color: #86bc42;
+    padding: 1%;
+}
 /* Sticky footer styles End*/
+

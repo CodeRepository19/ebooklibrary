@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EbookUI.Models;
 using Microsoft.AspNetCore.Mvc;
-using EbookUI.Models;
+using System.Diagnostics;
 
 namespace EbookUI.Controllers
 {

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Diagnostics;
 
 namespace EbookUI.Controllers
 {
@@ -14,13 +10,11 @@ namespace EbookUI.Controllers
         {
             var exceptionData = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
-            if(exceptionData!=null)
+            if (exceptionData != null)
             {
                 ViewBag.ErrorMessage = exceptionData.Error.Message;
                 ViewBag.RouteOfException = exceptionData.Path;
-
             }
-
             return View("HandleErrorCode");
         }
 

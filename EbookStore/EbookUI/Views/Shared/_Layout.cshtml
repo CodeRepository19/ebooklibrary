@@ -83,63 +83,20 @@
             </div>
         </nav>
     </header>
-    <div class="container-fluid">
+    <div class="container-fluid pb-5">
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    @*<footer class="footer text-muted">
+    <footer class="footer text-muted">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-4">
-                    <h3>Contact Us</h3>
-                    <div class="contact-item">
-                        <i class="fa fa-phone"></i><span>&nbsp;Tel: +91 (40) 4448 1122</span>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fa fa-map-marker"></i>
-
-                        <span>&nbsp;"Vaishnavi's Cynosure", Unit: 4A to 4F,</span><br />
-                        <span>4th Floor, #1-72/3/19 to 49/VC,</span><br />
-                        <span>Survey No:18, Gachibowli,</span><br />
-                        <span>Hyderabad - 500 032, Telangana,</span>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <h3>Useful Links</h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index"><i class="fa fa-angle-right"></i>&nbsp;Home</a>
-                            <a class="nav-link" asp-controller="Home" asp-action="Index"><i class="fa fa-angle-right"></i>&nbsp;Register</a>
-                            <a class="nav-link" asp-controller="Home" asp-action="Index"><i class="fa fa-angle-right"></i>&nbsp;Login</a>
-                        </div>
-                        <div class="col-md-6">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index"><i class="fa fa-angle-right"></i>&nbsp;Books</a>
-                            <a class="nav-link" asp-controller="Home" asp-action="Index"><i class="fa fa-angle-right"></i>&nbsp;About Ebooks Store</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 gallerylist">
-                    <h3>Gallery</h3>
-                    <div class="row">
-                        <a><img class="img-responsive" src="~/Images/1.jpg" height="75" width="75"></a>
-                        <a><img class="img-responsive" src="~/Images/2.jpg" height="75" width="75"></a>
-                        <a><img class="img-responsive" src="~/Images/3.jpg" height="75" width="75"></a>
-                        <a><img class="img-responsive" src="~/Images/4.jpg" height="75" width="75"></a>
-                        <a><img class="img-responsive" src="~/Images/5.jpg" height="75" width="75"></a>
-                        <a><img class="img-responsive" src="~/Images/6.jpg" height="75" width="75"></a>
-                        <a><img class="img-responsive" src="~/Images/7.png" height="75" width="75"></a>
-                        <a><img class="img-responsive" src="~/Images/8.jpg" height="75" width="75"></a>
-                    </div>
-                </div>
-            </div><hr />
             <div class=" container text-center">
                 <span> © 2019 EBook Library., All Rights Reserved.</span>
             </div>
         </div>
-    </footer>*@
+    </footer>
 
     @RenderSection("Scripts", required: false)
 </body>

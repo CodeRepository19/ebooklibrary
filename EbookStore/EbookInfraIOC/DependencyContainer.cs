@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.DependencyInjection;
-using EbookApplication.interfaces;
+﻿using EbookApplication.interfaces;
 using EbookApplication.Services;
 using EbookDomain.Interfaces;
 using EbookInfraData.Repository;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EbookInfraIOC
 {
@@ -17,9 +14,7 @@ namespace EbookInfraIOC
             services.AddScoped<IBookService, BookService>();
 
             // Infra.Data Layer
-
             services.AddScoped<IBookRepository, BookRepository>();
-
         }
     }
 }

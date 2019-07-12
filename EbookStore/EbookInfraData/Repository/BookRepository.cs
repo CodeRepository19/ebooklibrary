@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EbookDomain.Interfaces;
+﻿using EbookDomain.Interfaces;
 using EbookDomain.Models;
 using EbookInfraData.Context;
+using System.Collections.Generic;
 
 namespace EbookInfraData.Repository
 {
