@@ -16,6 +16,7 @@
                 <img src="@photoPath" class="imageThumbnail" asp-append-version="true" height="250" width="250" /><hr />
                 <h4>Book Id: @Model.BookId</h4>
                 <h4>Description: @Model.Description</h4>
+                <h4>Description: @Model.technology.TechnologyName</h4>
             </div>
             <div class="card-footer text-center">
                 <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1">Back</a>
