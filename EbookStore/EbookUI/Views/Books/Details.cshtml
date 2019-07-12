@@ -2,7 +2,8 @@
 
 @{
     ViewData["Title"] = "View Book Details";
-    var photoPath = "~/images/" + (Model.ImageUrl ?? "noimage.jpg");
+    //var photoPath = "~/images/" + (Model.ImageUrl ?? "noimage.jpg");
+    var photoPath = (Model.ImageUrl ?? "noimage.jpg");
 }
 
 <div class="row justify-content-center m-3">
@@ -12,7 +13,7 @@
                 <h1>@Model.BookName</h1>
             </div>
             <div class="card-body text-center">
-                <img src="@photoPath" class="imageThumbnail" asp-append-version="true" />
+                <img src="@photoPath" class="imageThumbnail" asp-append-version="true" height="250" width="250" />
                 <h4>Product Id: @Model.BookId</h4>
                 <h4>Description: @Model.Description</h4>                
             </div>

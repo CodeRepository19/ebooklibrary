@@ -8,7 +8,8 @@
 
     @foreach (var item in Model)
     {
-        var photoPath = "~/images/" + (item.ImageUrl ?? "noimage.jpg");
+        //var photoPath = "~/images/" + (item.ImageUrl ?? "noimage.jpg");
+        var photoPath = (item.ImageUrl ?? "noimage.jpg");
         <div class="card m-3" style="min-width:18rem;">
             <div class="card-header">
                 <h3>@item.BookName</h3>
