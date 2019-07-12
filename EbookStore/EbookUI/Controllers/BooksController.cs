@@ -7,6 +7,7 @@ using EbookApplication.ViewModels;
 using EbookDomain.Interfaces;
 using EbookDomain.Models;
 using EbookInfraData.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ namespace EbookUI.Controllers
             this.hostingEnvironment = hostingEnvironment;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Books.ToListAsync());
@@ -70,6 +72,7 @@ namespace EbookUI.Controllers
         }
 
         // GET: Courses/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
