@@ -19,10 +19,6 @@ namespace EbookUI.Controllers
         private readonly ebooklibraryDBcontext _context;
         private readonly IHostingEnvironment hostingEnvironment;
 
-        //private readonly IBookRepository _bookRepository;
-        //private readonly IHostingEnvironment _hostingEnvironment;
-        //public BooksController(ebooklibraryDBcontext context, IBookRepository bookRepository, IHostingEnvironment hostingEnvironment)
-
         public BooksController(ebooklibraryDBcontext context, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
@@ -72,7 +68,17 @@ namespace EbookUI.Controllers
         // GET: Courses/Create
         public IActionResult Create()
         {
+            lstTechnology();
             return View();
+        }
+        private List<Technology> lstTechnology()
+        {
+            BookViewModel objNewBook = new BookViewModel();
+            List<Technology> objTechnology = new List<Technology>();
+            objTechnology = (from x in _context.Technologys select x).ToList();
+            objTechnology.Insert(0, new Technology { TechnologyId = 0, TechnologyName = "Select" });
+            ViewBag.technologyList = objTechnology;
+            return objTechnology;
         }
 
         // POST: Courses/Create
@@ -90,7 +96,7 @@ namespace EbookUI.Controllers
                 {
                     BookName = objbookDetails.book.BookName,
                     Description = objbookDetails.book.Description,
-                    TechnologyId = 1,
+                    TechnologyId = objbookDetails.book.TechnologyId,
                     ImageUrl = uniqueFileNmae
                 };
 
@@ -128,14 +134,13 @@ namespace EbookUI.Controllers
                 return NotFound();
             }
 
+            lstTechnology();
+
             var bookDetails = await _context.Books.FindAsync(id);
             if (bookDetails == null)
             {
                 return NotFound();
             }
-
-            var technologyDetails = await _context.Technologys
-                .FirstOrDefaultAsync(m => m.TechnologyId == bookDetails.TechnologyId);
 
             if (bookDetails != null)
             {
@@ -145,11 +150,10 @@ namespace EbookUI.Controllers
                 objNewBook.book.BookId = bookDetails.BookId;
                 objNewBook.book.BookName = bookDetails.BookName;
                 objNewBook.book.Description = bookDetails.Description;
-                objNewBook.technology.TechnologyId = bookDetails.TechnologyId;
+                objNewBook.book.TechnologyId = bookDetails.TechnologyId;
                 objNewBook.book.ImageUrl = bookDetails.ImageUrl;
                 objNewBook.ExistingImageUrl = bookDetails.ImageUrl;
             }
-
             return View(objNewBook);
         }
 
@@ -187,7 +191,7 @@ namespace EbookUI.Controllers
                         BookId = objbookDetails.book.BookId,
                         BookName = objbookDetails.book.BookName,
                         Description = objbookDetails.book.Description,
-                        TechnologyId = 1,
+                        TechnologyId = objbookDetails.book.TechnologyId,
                         ImageUrl = objbookDetails.book.ImageUrl
                     };
 
