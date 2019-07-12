@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using EbookInfraIOC;
 using EbookInfraData.Context;
+using EbookDomain.Interfaces;
+using EbookInfraData.Repository;
 
 namespace EbookUI
 {
@@ -49,6 +51,8 @@ namespace EbookUI
                 options.UseSqlServer(
                    Configuration.GetConnectionString("ebookLibraryDBConnection"));
             });
+
+            services.AddScoped<IBookRepository, BookRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             RegisterServices(services);

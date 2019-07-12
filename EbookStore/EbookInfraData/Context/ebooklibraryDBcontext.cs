@@ -5,7 +5,7 @@ namespace EbookInfraData.Context
 {
     public class ebooklibraryDBcontext : DbContext
     {
-        public ebooklibraryDBcontext(DbContextOptions options) : base(options)
+        public ebooklibraryDBcontext(DbContextOptions<ebooklibraryDBcontext> options) : base(options)
         {
 
         }
