@@ -17,13 +17,16 @@ namespace EbookUI.Controllers
     public class BooksController : Controller
     {
         private readonly ebooklibraryDBcontext _context;
+        private readonly IHostingEnvironment hostingEnvironment;
+
         //private readonly IBookRepository _bookRepository;
         //private readonly IHostingEnvironment _hostingEnvironment;
         //public BooksController(ebooklibraryDBcontext context, IBookRepository bookRepository, IHostingEnvironment hostingEnvironment)
 
-        public BooksController(ebooklibraryDBcontext context)
+        public BooksController(ebooklibraryDBcontext context, IHostingEnvironment hostingEnvironment)
         {
-            _context = context;            
+            _context = context;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -34,19 +37,36 @@ namespace EbookUI.Controllers
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            BookViewModel objNewBook = null;
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var book = await _context.Books
+            var bookDetails = await _context.Books
                 .FirstOrDefaultAsync(m => m.BookId == id);
-            if (book == null)
+            if (bookDetails == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            var technologyDetails = await _context.Technologys
+                .FirstOrDefaultAsync(m => m.TechnologyId == bookDetails.TechnologyId);
+
+            if (bookDetails != null && technologyDetails != null)
+            {
+                objNewBook = new BookViewModel();
+                objNewBook.book = new Book();
+                objNewBook.technology = new Technology();
+                objNewBook.book.BookId = bookDetails.BookId;
+                objNewBook.book.BookName = bookDetails.BookName;
+                objNewBook.book.Description = bookDetails.Description;
+                objNewBook.technology.TechnologyName = technologyDetails.TechnologyName;
+                objNewBook.book.ImageUrl = bookDetails.ImageUrl;
+            }
+
+            return View(objNewBook);
         }
 
         // GET: Courses/Create
@@ -60,31 +80,77 @@ namespace EbookUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,BookName,Description,ImageUrl,TechnologyId")] Book book)
+        public async Task<IActionResult> Create(BookViewModel objbookDetails) //[Bind("BookId,BookName,Description,ImageUrl,TechnologyId")] Book book)
         {
+            Book objNewBook = null;
             if (ModelState.IsValid)
             {
-                _context.Add(book);
+                string uniqueFileNmae = ProcessUploadFile(objbookDetails);
+                objNewBook = new Book
+                {
+                    BookName = objbookDetails.book.BookName,
+                    Description = objbookDetails.book.Description,
+                    TechnologyId = 1,
+                    ImageUrl = uniqueFileNmae
+                };
+
+                _context.Add(objNewBook);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(book);
+            return View(objNewBook);
+        }
+
+        private string ProcessUploadFile(BookViewModel objbookDetails)
+        {
+            string uniqueFileNmae = null;
+            if (objbookDetails.Image != null)
+            {
+                string UploadFolders = Path.Combine(hostingEnvironment.WebRootPath, "images");
+                uniqueFileNmae = Guid.NewGuid().ToString() + "_" + objbookDetails.Image.FileName;
+                string filePath = Path.Combine(UploadFolders, uniqueFileNmae);
+                using (var FileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    objbookDetails.Image.CopyTo(FileStream);
+                }
+            }
+
+            return uniqueFileNmae;
         }
 
         // GET: books/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            BookViewModel objNewBook = null;
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
+            var bookDetails = await _context.Books.FindAsync(id);
+            if (bookDetails == null)
             {
                 return NotFound();
             }
-            return View(book);
+
+            var technologyDetails = await _context.Technologys
+                .FirstOrDefaultAsync(m => m.TechnologyId == bookDetails.TechnologyId);
+
+            if (bookDetails != null)
+            {
+                objNewBook = new BookViewModel();
+                objNewBook.book = new Book();
+                objNewBook.technology = new Technology();
+                objNewBook.book.BookId = bookDetails.BookId;
+                objNewBook.book.BookName = bookDetails.BookName;
+                objNewBook.book.Description = bookDetails.Description;
+                objNewBook.technology.TechnologyId = bookDetails.TechnologyId;
+                objNewBook.book.ImageUrl = bookDetails.ImageUrl;
+                objNewBook.ExistingImageUrl = bookDetails.ImageUrl;
+            }
+
+            return View(objNewBook);
         }
 
         // POST: Books/Edit/5
@@ -92,23 +158,45 @@ namespace EbookUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,BookName,Description,ImageUrl,TechnologyId")] Book book)
+        public async Task<IActionResult> Edit(int id, BookViewModel objbookDetails)
         {
-            if (id != book.BookId)
+            if (id != objbookDetails.book.BookId)
             {
                 return NotFound();
             }
-
+            Book objEditBook = null;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(book);
+                    if (objbookDetails.Image != null)
+                    {
+                        if (objbookDetails.ExistingImageUrl != null)
+                        {
+                            string filePath = Path.Combine(hostingEnvironment.WebRootPath, "images", objbookDetails.ExistingImageUrl);
+                            System.IO.File.Delete(filePath);
+                        }
+
+                        objbookDetails.book.ImageUrl = ProcessUploadFile(objbookDetails);
+                    }
+                    else
+                        objbookDetails.book.ImageUrl = objbookDetails.ExistingImageUrl;
+
+                    objEditBook = new Book
+                    {
+                        BookId = objbookDetails.book.BookId,
+                        BookName = objbookDetails.book.BookName,
+                        Description = objbookDetails.book.Description,
+                        TechnologyId = 1,
+                        ImageUrl = objbookDetails.book.ImageUrl
+                    };
+
+                    _context.Update(objEditBook);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookExists(book.BookId))
+                    if (!BookExists(objbookDetails.book.BookId))
                     {
                         return NotFound();
                     }
@@ -119,7 +207,7 @@ namespace EbookUI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(book);
+            return View(objbookDetails.book);
         }
 
         private bool BookExists(int id)

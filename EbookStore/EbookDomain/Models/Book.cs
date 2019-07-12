@@ -15,10 +15,12 @@ namespace EbookDomain.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
         public string ImageUrl { get; set; }
+        //public string ExistingImageUrl { get; set; }
         //public IFormFile Image { get; set; }
         [Display(Name = "Technology")]
         public int TechnologyId { get; set; }
 
         public Technology technology { get; set; }
+
     }
 }

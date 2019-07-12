@@ -1,8 +1,9 @@
-﻿@model EbookDomain.Models.Book
+﻿@model EbookApplication.ViewModels.BookViewModel
 
 @{
     ViewData["Title"] = "View Book Details";
-    var photoPath = (Model.ImageUrl ?? "noimage.jpg");
+    //var photoPath = (Model.ImageUrl ?? "noimage.jpg");
+    var photoPath = "~/images/" + (Model.book.ImageUrl ?? "noimage.jpg");
 }
 
 <div class="row">
@@ -10,16 +11,17 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header text-center">
-                <h1>@Model.BookName</h1>
+                <h1>book.BookName</h1>
             </div>
             <div class="card-body text-center">
                 <img src="@photoPath" class="imageThumbnail" asp-append-version="true" height="250" width="250" /><hr />
-                <h4>Book Id: @Model.BookId</h4>
-                <h4>Description: @Model.Description</h4>
+                <h4>Book Id: @Model.book.BookId</h4>
+                <h4>Description: @Model.book.Description</h4>
+                <h4>Technology: @Model.technology.TechnologyName</h4>
             </div>
             <div class="card-footer text-center">
                 <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1">Back</a>
-                <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.BookId" class="btn btn-primary m-1">Edit</a>
+                <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary m-1">Edit</a>
             </div>
         </div>
     </div>
