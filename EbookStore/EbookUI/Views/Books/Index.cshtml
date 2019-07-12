@@ -10,11 +10,16 @@
 
     @foreach (var item in Model)
     {
-        var photoPath = (item.ImageUrl ?? "noimage.jpg");
+        var photoPath = (item.ImageUrl);
+
+        if(photoPath.Length == 0)
+        {
+            photoPath = "~/Images/noimage.jpg";
+        }
 
         <div class=" col-md-3 p-3 border">
             <div class="text-center">
-                <img class="img-fluid" src="@photoPath" asp-append-version="true" alt="Card image cap" height="150" width="150"><hr />
+                <img class="img-fluid" src="@photoPath" asp-append-version="true" alt="@photoPath" height="150" width="150"><hr />
                 <h5>@item.BookName</h5>
                 <p>@item.Description</p>
                 <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" class="btn btn-primary m-1">View</a>

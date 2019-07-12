@@ -7,8 +7,15 @@ namespace EbookDomain.Models
     {
         [Key]
         public int TechnologyId { get; set; }
+
+        [Required]
+        [StringLength(100)]
         public string TechnologyName { get; set; }
+
+        [Required]
+        [StringLength(100)]
         public string TechnologyDomain { get; set; }
+
         public ICollection<Book> Books { get; set; }
     }
 }
