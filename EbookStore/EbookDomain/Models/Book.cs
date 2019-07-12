@@ -23,6 +23,7 @@ namespace EbookDomain.Models
 
         public string ImageUrl { get; set; }
 
+        [Required]
         [Display(Name = "Technology")]
         public int TechnologyId { get; set; }
 
