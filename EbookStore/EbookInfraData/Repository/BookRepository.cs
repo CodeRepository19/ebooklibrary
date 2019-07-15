@@ -51,5 +51,15 @@ namespace EbookInfraData.Repository
 
             return book;
         }
+
+        public IEnumerable<Technology> GetTechnologys()
+        {
+            return _ctx.Technologys;
+        }
+
+        public Technology GetTechnologyDetailsById(int technologyId)
+        {
+            return _ctx.Technologys.Find(technologyId);
+        }
     }
 }
