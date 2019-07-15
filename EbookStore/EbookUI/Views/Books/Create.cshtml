@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Create Book Details";
 }
+<h5 class="text-center mt-3" style="color:#86bc42;text-decoration:underline;">Add New E-Book</h5>
 
 <form enctype="multipart/form-data" asp-controller="Books" asp-action="Create" method="post" class="m-3">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -33,15 +34,15 @@
         <label asp-for="Image" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
             <div class="custom-file">
-                <input asp-for="Image" class="form-control custom-file-input" />
+                <input asp-for="Image" class="form-control custom-file-input" accept="application/pdf" />
                 <label class="custom-file-label">Choose File...</label>
             </div>
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Add</button>
-            <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1">Cancel</a>
+            <button type="submit" class="btn btn-primary" title="Create a New E Book">Add</button>
+            <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1" title="Go To Index Page">Cancel</a>
         </div>
     </div>
     @section Scripts{
@@ -61,4 +62,3 @@
         </script>
     }
 </form>
-

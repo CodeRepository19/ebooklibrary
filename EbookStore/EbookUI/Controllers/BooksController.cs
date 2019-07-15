@@ -203,7 +203,11 @@ namespace EbookUI.Controllers
 
         private bool BookExists(int id)
         {
-            return _context.Books.Any(e => e.BookId == id);
+            var details = _ctx.GetBookDetailsById(id);
+            if (details != null)
+                return true;
+            else
+                return false;
         }
     }
 }
