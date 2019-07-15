@@ -16,13 +16,19 @@ namespace EbookUI.Controllers
 {
     public class BooksController : Controller
     {
-        private readonly ebooklibraryDBcontext _context;
+        //private readonly ebooklibraryDBcontext _context;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly IBookRepository _ctx;
 
-        public BooksController(ebooklibraryDBcontext context, IHostingEnvironment hostingEnvironment, IBookRepository ctx)
+        //public BooksController(ebooklibraryDBcontext context, IHostingEnvironment hostingEnvironment, IBookRepository ctx)
+        //{
+        //    _context = context;
+        //    this.hostingEnvironment = hostingEnvironment;
+        //    _ctx = ctx;
+        //}
+
+        public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository ctx)
         {
-            _context = context;
             this.hostingEnvironment = hostingEnvironment;
             _ctx = ctx;
         }
