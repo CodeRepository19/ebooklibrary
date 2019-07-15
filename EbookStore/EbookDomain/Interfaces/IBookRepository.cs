@@ -10,5 +10,7 @@ namespace EbookDomain.Interfaces
         Book Add(Book bookDetails);
         Book Update(Book bookDetails);
         Book Delete(int bookId);
+        IEnumerable<Technology> GetTechnologys();
+        Technology GetTechnologyDetailsById(int technologyId);
     }
 }

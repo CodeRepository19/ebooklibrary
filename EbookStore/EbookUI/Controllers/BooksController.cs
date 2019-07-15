@@ -1,4 +1,5 @@
 ﻿using EbookApplication.ViewModels;
+using EbookDomain.Interfaces;
 using EbookDomain.Models;
 using EbookInfraData.Context;
 using Microsoft.AspNetCore.Authorization;
@@ -17,38 +18,41 @@ namespace EbookUI.Controllers
     {
         private readonly ebooklibraryDBcontext _context;
         private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IBookRepository _ctx;
 
-        public BooksController(ebooklibraryDBcontext context, IHostingEnvironment hostingEnvironment)
+        public BooksController(ebooklibraryDBcontext context, IHostingEnvironment hostingEnvironment, IBookRepository ctx)
         {
             _context = context;
             this.hostingEnvironment = hostingEnvironment;
+            _ctx = ctx;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Books.ToListAsync());
+            return View(_ctx.GetBooks());
         }
 
         // GET: Courses/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int id)
         {
             BookViewModel objNewBook = null;
 
-            if (id == null)
+            if (id == 0)
             {
                 return NotFound();
             }
 
-            var bookDetails = await _context.Books
-                .FirstOrDefaultAsync(m => m.BookId == id);
-            if (bookDetails == null)
-            {
-                return NotFound();
-            }
+            objNewBook = getDetails(id);
 
-            var technologyDetails = await _context.Technologys
-                .FirstOrDefaultAsync(m => m.TechnologyId == bookDetails.TechnologyId);
+            return View(objNewBook);
+        }
 
+        private BookViewModel getDetails(int id)
+        {
+            BookViewModel objNewBook = null;
+            var bookDetails = _ctx.GetBookDetailsById(id);            
+            var technologyDetails = _ctx.GetTechnologyDetailsById(bookDetails.TechnologyId);
+            
             if (bookDetails != null && technologyDetails != null)
             {
                 objNewBook = new BookViewModel();
@@ -57,13 +61,15 @@ namespace EbookUI.Controllers
                 objNewBook.book.BookId = bookDetails.BookId;
                 objNewBook.book.BookName = bookDetails.BookName;
                 objNewBook.book.Description = bookDetails.Description;
+                objNewBook.book.ImageUrl = bookDetails.ImageUrl;
+                objNewBook.book.TechnologyId = bookDetails.TechnologyId;
                 objNewBook.technology.TechnologyName = technologyDetails.TechnologyName;
                 objNewBook.book.ImageUrl = bookDetails.ImageUrl;
+                objNewBook.ExistingImageUrl = bookDetails.ImageUrl;
             }
 
-            return View(objNewBook);
+            return objNewBook;
         }
-
         // GET: Courses/Create
         [Authorize]
         public IActionResult Create()
@@ -72,14 +78,10 @@ namespace EbookUI.Controllers
             return View();
         }
 
-        private List<Technology> lstTechnology()
+        private IEnumerable<Technology> lstTechnology()
         {
-            BookViewModel objNewBook = new BookViewModel();
-            List<Technology> objTechnology = new List<Technology>();
-            objTechnology = (from x in _context.Technologys select x).ToList();
-            //objTechnology.Insert(0, new Technology { TechnologyId = 0, TechnologyName = "Select" });
-            ViewBag.technologyList = objTechnology;
-            return objTechnology;
+            ViewBag.technologyList = _ctx.GetTechnologys();
+            return _ctx.GetTechnologys();
         }
 
         // POST: Courses/Create
@@ -101,10 +103,10 @@ namespace EbookUI.Controllers
                     ImageUrl = uniqueFileNmae
                 };
 
-                _context.Add(objNewBook);
-                await _context.SaveChangesAsync();
+                _ctx.Add(objNewBook);
                 return RedirectToAction(nameof(Index));
             }
+
             return View(objNewBook);
         }
 
@@ -127,35 +129,17 @@ namespace EbookUI.Controllers
 
         // GET: books/Edit/5
         [Authorize]
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id)
         {
             BookViewModel objNewBook = null;
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             lstTechnology();
-
-            var bookDetails = await _context.Books.FindAsync(id);
-            if (bookDetails == null)
+            if (id == 0)
             {
                 return NotFound();
             }
 
-            if (bookDetails != null)
-            {
-                objNewBook = new BookViewModel();
-                objNewBook.book = new Book();
-                objNewBook.technology = new Technology();
-                objNewBook.book.BookId = bookDetails.BookId;
-                objNewBook.book.BookName = bookDetails.BookName;
-                objNewBook.book.Description = bookDetails.Description;
-                objNewBook.book.TechnologyId = bookDetails.TechnologyId;
-                objNewBook.book.ImageUrl = bookDetails.ImageUrl;
-                objNewBook.ExistingImageUrl = bookDetails.ImageUrl;
-            }
+            objNewBook = getDetails(id);
+            
             return View(objNewBook);
         }
 
@@ -170,6 +154,7 @@ namespace EbookUI.Controllers
             {
                 return NotFound();
             }
+
             Book objEditBook = null;
             if (ModelState.IsValid)
             {
@@ -197,8 +182,7 @@ namespace EbookUI.Controllers
                         ImageUrl = objbookDetails.book.ImageUrl
                     };
 
-                    _context.Update(objEditBook);
-                    await _context.SaveChangesAsync();
+                    _ctx.Update(objEditBook);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -213,12 +197,17 @@ namespace EbookUI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(objbookDetails.book);
         }
 
         private bool BookExists(int id)
         {
-            return _context.Books.Any(e => e.BookId == id);
+            var details = _ctx.GetBookDetailsById(id);
+            if (details != null)
+                return true;
+            else
+                return false;
         }
     }
 }
