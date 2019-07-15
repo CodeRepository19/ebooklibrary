@@ -15,7 +15,7 @@ namespace EbookDomain.Models
         public string BookName { get; set; }
 
         [Required]
-        [MaxLength(150, ErrorMessage = "Description cannot be greater than 50")]
+        [MaxLength(500, ErrorMessage = "Description cannot be greater than 500")]
         [MinLength(10, ErrorMessage = "Description cannot be less than 10")]
         [Display(Name = "Description")]
         public string Description { get; set; }

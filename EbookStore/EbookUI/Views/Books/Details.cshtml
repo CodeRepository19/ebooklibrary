@@ -17,17 +17,13 @@
 
     <div class="col-md-4">
         <div class="card-body text-center ml-5">
-
-
-            @*<img src="@photoPath" class="imageThumbnail" asp-append-version="true" height="250" width="250" />*@
-            <object data="@photoPath" height="430" width="350"  type="application/pdf" style="min-width:101%;min-height:101%;"></object>
-
+            <object data="@photoPath#toolbar=0" height="430" width="350" type="application/pdf" style="min-width:101%;min-height:101%;"></object>
         </div>
     </div>
 
     <div class="card-body col-md-7">
-        <h4 style="font-size:15px;">Technology: @Model.technology.TechnologyName</h4> <hr />
-        <h4 style="font-size:15px;">Description:<br /><br /> @Model.book.Description</h4>
+        <p style="font-size:15px;"><strong>Technology:</strong> @Model.technology.TechnologyName</p> <hr />
+        <p style="font-size:15px;"><strong>Description:</strong><br /><br /> @Model.book.Description</p>
         <a class="btn btn-primary m-1" href="@photoPath" download>Download</a>
     </div>
     <div class="col-md-1"></div>
@@ -38,7 +34,3 @@
         <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary m-1" title="Edit @Model.book.BookName book">Edit</a>
     </div>
 </div>
-
-@section Scripts {
-<script src="~/js/CustomScript.js"></script>
-}

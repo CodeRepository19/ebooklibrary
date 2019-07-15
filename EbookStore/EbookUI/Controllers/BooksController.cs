@@ -41,29 +41,39 @@ namespace EbookUI.Controllers
         // GET: Courses/Details/5
         public IActionResult Details(int id)
         {
-            BookViewModel objNewBook = null;
 
             if (id == 0)
             {
                 return NotFound();
             }
 
-            objNewBook = getDetails(id);
-
-            return View(objNewBook);
+            BookViewModel objNewBook = GetBookDetails(id);
+            if (objNewBook == null)
+                return NotFound(); 
+            else
+                return View(objNewBook);
         }
 
-        private BookViewModel getDetails(int id)
+        private BookViewModel GetBookDetails(int id)
         {
             BookViewModel objNewBook = null;
-            var bookDetails = _ctx.GetBookDetailsById(id);            
+            var bookDetails = _ctx.GetBookDetailsById(id);
+            if (bookDetails == null)
+            {
+                return objNewBook;
+            }
+
             var technologyDetails = _ctx.GetTechnologyDetailsById(bookDetails.TechnologyId);
-            
+
+
+
             if (bookDetails != null && technologyDetails != null)
             {
-                objNewBook = new BookViewModel();
-                objNewBook.book = new Book();
-                objNewBook.technology = new Technology();
+                objNewBook = new BookViewModel
+                {
+                    book = new Book(),
+                    technology = new Technology()
+                };
                 objNewBook.book.BookId = bookDetails.BookId;
                 objNewBook.book.BookName = bookDetails.BookName;
                 objNewBook.book.Description = bookDetails.Description;
@@ -73,18 +83,17 @@ namespace EbookUI.Controllers
                 objNewBook.book.ImageUrl = bookDetails.ImageUrl;
                 objNewBook.ExistingImageUrl = bookDetails.ImageUrl;
             }
-
             return objNewBook;
         }
         // GET: Courses/Create
         [Authorize]
         public IActionResult Create()
         {
-            lstTechnology();
+            TechnologyList();
             return View();
         }
 
-        private IEnumerable<Technology> lstTechnology()
+        private IEnumerable<Technology> TechnologyList()
         {
             ViewBag.technologyList = _ctx.GetTechnologys();
             return _ctx.GetTechnologys();
@@ -95,7 +104,7 @@ namespace EbookUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BookViewModel objbookDetails) //[Bind("BookId,BookName,Description,ImageUrl,TechnologyId")] Book book)
+        public IActionResult Create(BookViewModel objbookDetails) //[Bind("BookId,BookName,Description,ImageUrl,TechnologyId")] Book book)
         {
             Book objNewBook = null;
             if (ModelState.IsValid)
@@ -137,16 +146,22 @@ namespace EbookUI.Controllers
         [Authorize]
         public IActionResult Edit(int id)
         {
-            BookViewModel objNewBook = null;
-            lstTechnology();
+            TechnologyList();
+
             if (id == 0)
             {
                 return NotFound();
             }
 
-            objNewBook = getDetails(id);
-            
-            return View(objNewBook);
+            BookViewModel objNewBook = GetBookDetails(id);
+
+            if(objNewBook!=null)
+            {
+                return View(objNewBook);
+            }
+            else
+                return NotFound();
+
         }
 
         // POST: Books/Edit/5
@@ -154,14 +169,14 @@ namespace EbookUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, BookViewModel objbookDetails)
+        public IActionResult Edit(int id, BookViewModel objbookDetails)
         {
             if (id != objbookDetails.book.BookId)
             {
                 return NotFound();
             }
 
-            Book objEditBook = null;
+
             if (ModelState.IsValid)
             {
                 try
@@ -179,7 +194,7 @@ namespace EbookUI.Controllers
                     else
                         objbookDetails.book.ImageUrl = objbookDetails.ExistingImageUrl;
 
-                    objEditBook = new Book
+                    Book objEditBook = new Book
                     {
                         BookId = objbookDetails.book.BookId,
                         BookName = objbookDetails.book.BookName,
