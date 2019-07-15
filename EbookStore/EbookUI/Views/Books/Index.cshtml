@@ -4,7 +4,7 @@
     ViewData["Title"] = "List of Books";
 }
 
-<h1 class="text-center mt-3" style="color:#86bc42;">List of Books</h1>
+<h1 class="text-center mt-3" style="color:#86bc42;">E-Books</h1>
 
 <div class="container">
     <div class="row">
@@ -12,7 +12,7 @@
         @foreach (var item in Model)
         {
             var photoPath = "~/images/" + (item.ImageUrl ?? "noimage.jpg");
-            <div class=" col-md-3 border m-3 p-3">
+            <div class=" col-md-4 border p-3">
                 <div class="text-center">
                     <img src="@photoPath" asp-append-version="true" alt="Card image cap" height="150" width="150"><hr />
                     <h5>@item.BookName</h5>
