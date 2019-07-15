@@ -11,7 +11,7 @@ namespace EbookApplication.ViewModels
         public IEnumerable<Technology> Technologys { get; set; }
         public Book book { get; set; }
         public Technology technology { get; set; }
-        [Display(Name = "Choose File")]
+        [Display(Name = "Upload E-Book")]
         public IFormFile Image { get; set; }
         public string ExistingImageUrl { get; set; }
     }

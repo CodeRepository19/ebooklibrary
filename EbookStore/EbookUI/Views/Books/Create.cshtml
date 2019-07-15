@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Create Book Details";
 }
-<h5 class="text-center mt-3" style="color:#86bc42;text-decoration:underline;">Add E-Book</h5>
+<h5 class="text-center mt-3" style="color:#86bc42;">Add E-Book</h5>
 
 <form enctype="multipart/form-data" asp-controller="Books" asp-action="Create" method="post" class="m-3">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -30,6 +30,7 @@
             <span asp-validation-for="book.TechnologyId" class="text-danger"></span>
         </div>
     </div>
+
     <div class="form-group row">
         <label asp-for="Image" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
@@ -39,6 +40,7 @@
             </div>
         </div>
     </div>
+
     <div class="form-group row">
         <div class="col-sm-10">
             <button type="submit" class="btn btn-primary" title="Create a New E Book">Add</button>

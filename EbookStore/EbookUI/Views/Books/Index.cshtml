@@ -4,20 +4,24 @@
     ViewData["Title"] = "E-Books";
 }
 
-<h3 class="text-center mt-3" style="color:#86bc42;text-decoration:underline;">E-Books</h3>
+<h3 class="text-center mt-3" style="color:#86bc42;">E-Books</h3>
 <div class="container">
     <div class="row">
 
         @foreach (var item in Model)
         {
             var photoPath = "/images/" + (item.ImageUrl ?? "noimage.jpg");
-            <div class=" col-md-3 border p-3">
+            <div class=" col-md-2 border p-md-2 m-3" >
                 <div class="text-center" style="overflow:hidden;">
                     <object data="@photoPath#toolbar=0" type="application/pdf" style="min-width:100%;min-height:100%;"></object>
-                    <h5 style="font-size:14px;font-weight:bold;">@item.BookName</h5>
-                    <p style="line-height:1.5em;height:3em;overflow:hidden">@item.Description</p>
-                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" class="btn btn-primary m-1" title="View @item.BookName">View</a>
-                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-primary m-1" title="Edit @item.BookName">Edit</a>
+
+                    <div class="mt-2" style="height:15px;overflow:hidden;">
+                        <h5 style="font-size:14px;font-weight:bold;line-height:15px;">@item.BookName</h5>
+                    </div><br />
+
+                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" class="btn btn-outline-primary btn-sm m-1" title="View @item.BookName">View</a>
+                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-outline-primary btn-sm m-1" title="Edit @item.BookName">Edit</a>
+                    <a class="btn btn-light btn-sm" href="@photoPath" download>Download</a>
                 </div>
             </div>
         }

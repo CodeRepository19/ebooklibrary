@@ -155,7 +155,13 @@ namespace EbookUI.Controllers
 
             BookViewModel objNewBook = GetBookDetails(id);
 
-            return View(objNewBook);
+            if(objNewBook!=null)
+            {
+                return View(objNewBook);
+            }
+            else
+                return NotFound();
+
         }
 
         // POST: Books/Edit/5
