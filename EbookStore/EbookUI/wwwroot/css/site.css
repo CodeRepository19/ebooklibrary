@@ -25,10 +25,14 @@ body {
         font-size: 20px;
     }
 
+
+.ehcolor
+{
+    color:#430e12;
+    font-family: inherit;
+}
 /* Top Header styles End*/
-
 /* Carousel styles start*/
-
 .carousel-content {
     position: fixed;
     top: 30%;
