@@ -13,11 +13,8 @@
             var photoPath = "/images/" + (item.ImageUrl ?? "noimage.jpg");
             <div class=" col-md-3 border p-3">
                 <div class="text-center" style="overflow:hidden;">
-                    @*<img src="@photoPath" asp-append-version="true" alt="Card image cap" height="150" width="150" title="@item.Description"><hr />*@
-                    @*<embed src="@photoPath" type="application/pdf" asp-append-version="true" height="200" width="250" style="overflow-y:hidden;height:200px;width:250px">*@
-
-                    <object data="@photoPath" type="application/pdf" style="min-width:101%;min-height:101%;" align="middle"></object>
-                    <h5>@item.BookName</h5>
+                    <object data="@photoPath#toolbar=0" type="application/pdf" style="min-width:100%;min-height:100%;"></object>
+                    <h5 style="font-size:14px;font-weight:bold;">@item.BookName</h5>
                     <p style="line-height:1.5em;height:3em;overflow:hidden">@item.Description</p>
                     <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" class="btn btn-primary m-1" title="View @item.BookName">View</a>
                     <a asp-controller="Books" asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-primary m-1" title="Edit @item.BookName">Edit</a>
