@@ -33,6 +33,10 @@ namespace EbookUI.Controllers
                     ViewBag.ErrorMessage = "Sorry something went wrong on the server";
                     ViewBag.RouteOfException = statusCodeData.OriginalPath;
                     break;
+                case 0:
+                    ViewBag.ErrorMessage = "We couldn't find anything for ewfwesdfdsafasdfsadf Try different or less specific keywords.";
+                    ViewBag.RouteOfException = statusCodeData.OriginalPath;
+                    break;
             }
 
             return View();
