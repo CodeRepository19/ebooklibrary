@@ -1,24 +1,26 @@
 ﻿@model IEnumerable<EbookDomain.Models.Book>
 
 @{
-    ViewData["Title"] = "List of Books";
+    ViewData["Title"] = "E-Books";
 }
 
-<h1 class="text-center mt-3" style="color:#86bc42;">E-Books</h1>
-
+<h3 class="text-center mt-3" style="color:#86bc42;text-decoration:underline;">E-Books</h3>
 <div class="container">
     <div class="row">
 
         @foreach (var item in Model)
         {
-            var photoPath = "~/images/" + (item.ImageUrl ?? "noimage.jpg");
-            <div class=" col-md-4 border p-3">
-                <div class="text-center">
-                    <img src="@photoPath" asp-append-version="true" alt="Card image cap" height="150" width="150"><hr />
+            var photoPath = "/images/" + (item.ImageUrl ?? "noimage.jpg");
+            <div class=" col-md-3 border p-3">
+                <div class="text-center" style="overflow:hidden;">
+                    @*<img src="@photoPath" asp-append-version="true" alt="Card image cap" height="150" width="150" title="@item.Description"><hr />*@
+                    @*<embed src="@photoPath" type="application/pdf" asp-append-version="true" height="200" width="250" style="overflow-y:hidden;height:200px;width:250px">*@
+
+                    <object data="@photoPath" type="application/pdf" style="min-width:101%;min-height:101%;" align="middle"></object>
                     <h5>@item.BookName</h5>
                     <p style="line-height:1.5em;height:3em;overflow:hidden">@item.Description</p>
-                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" class="btn btn-primary m-1">View</a>
-                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-primary m-1">Edit</a>
+                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" class="btn btn-primary m-1" title="View @item.BookName">View</a>
+                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-primary m-1" title="Edit @item.BookName">Edit</a>
                 </div>
             </div>
         }
