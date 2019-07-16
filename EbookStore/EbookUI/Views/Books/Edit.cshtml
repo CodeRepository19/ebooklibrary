@@ -39,7 +39,7 @@
             <label asp-for="Image" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
                 <div class="custom-file">
-                    <input asp-for="Image" id="upload-dialog" class="form-control custom-file-input" value="Choose PDF" />
+                    <input asp-for="Image" id="upload-dialog" class="form-control custom-file-input" />
                     <label class="custom-file-label">Choose File..</label>
                 </div>
             </div>
@@ -167,6 +167,17 @@
                         // send the object url of the pdf to the PDF preview function
                         showPDF(_OBJECT_URL);
                     });
+
+                      $('.custom-file-input').on("change", function () {
+                    var fileLabel = $(this).next('.custom-file-label');
+                    var files = $(this)[0].files;
+                    if (files.length > 1) {
+                        fileLabel.html(files.length + ' files selected');
+                    }
+                    else if (files.length == 1) {
+                        fileLabel.html(files[0].name);
+                    }
+                });
 
                 });
             </script>
