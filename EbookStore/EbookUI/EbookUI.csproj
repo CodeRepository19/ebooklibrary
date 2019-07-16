@@ -7,8 +7,16 @@
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="wwwroot\books\**" />
+    <Content Remove="wwwroot\books\**" />
+    <EmbeddedResource Remove="wwwroot\books\**" />
+    <None Remove="wwwroot\books\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
+    <PackageReference Include="Interop.Acrobat" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.11" />
@@ -20,11 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EbookInfraIOC\EbookInfraIOC.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="wwwroot\books\" />
   </ItemGroup>
 
 </Project>

@@ -6,13 +6,15 @@
     var Path = "/uploadBooks/" + (Model.book.ImageUrl ?? "noimage.jpg");
     var splitPath = Path.Split(".");
     var bookPath = splitPath[0].ToString() + ".pdf";
+    var bookdownload = @Model.book.BookName + ".pdf";
 }
 
-<h3 class="text-center mt-1" style="color:#86bc42;text-decoration:underline;">Book Details</h3>
+<h3 class="text-center mt-1" style="color:#86bc42;">Book Details</h3>
 
 <div class="container mt-2">
     <div class="card-header text-left">
         <h1>@Model.book.BookName</h1>
+        
     </div>
 </div>
 
@@ -20,7 +22,7 @@
 
     <div class="col-md-4">
         <div class="card-body text-center ml-5">
-            <a href="@bookPath" target="_blank"><img class="imageThumbnail" src="@photoPath" asp-append-version="true"/></a>
+            <img class="imageThumbnail" src="@photoPath" asp-append-version="true"/>
         </div>
     </div>
 
@@ -34,5 +36,6 @@
     <div class="card-footer text-center">
         <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1" title="Go To E-Books Page">Back</a>
         <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary m-1" title="Edit @Model.book.BookName book">Edit</a>
+        <a href="@bookPath" class="btn btn-primary m-1" download="@bookdownload">Download</a>
     </div>
 </div>

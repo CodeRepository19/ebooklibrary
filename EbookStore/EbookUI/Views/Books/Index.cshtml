@@ -11,13 +11,10 @@
         @foreach (var item in Model)
         {
             var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
-            var Path = "/uploadBooks/" + (item.ImageUrl ?? "noimage.jpg");
-            var splitPath = Path.Split(".");
-            var bookPath = splitPath[0].ToString() + ".pdf";
 
             <div class=" col-md-2 border p-md-2 m-3" >
                 <div class="text-center" style="overflow:hidden;">
-                    <a href="@bookPath" target="_blank"><img class="imageThumbnail" src="@photoPath" asp-append-version="true" /></a>
+                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId"><img class="imageThumbnail" src="@photoPath" asp-append-version="true" /></a>
                     <div class="mt-2" style="height:15px;overflow:hidden;">
                         <h5 style="font-size:14px;font-weight:bold;line-height:15px;">@item.BookName</h5>
                     </div><br />

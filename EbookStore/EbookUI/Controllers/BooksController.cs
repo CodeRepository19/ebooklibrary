@@ -192,8 +192,14 @@ namespace EbookUI.Controllers
                     {
                         if (objbookDetails.ExistingImageUrl != null)
                         {
-                            string filePath = Path.Combine(hostingEnvironment.WebRootPath, "uploadImages", objbookDetails.ExistingImageUrl);
-                            System.IO.File.Delete(filePath);
+                            var URLPath = objbookDetails.ExistingImageUrl;
+                            var splitPath = URLPath.Split(".");
+                            var bookPath = splitPath[0].ToString() + ".pdf";
+
+                            string imageFilePath = Path.Combine(hostingEnvironment.WebRootPath, "uploadImages", objbookDetails.ExistingImageUrl);
+                            string bookFilePath = Path.Combine(hostingEnvironment.WebRootPath, "uploadBooks", bookPath);
+                            System.IO.File.Delete(imageFilePath);
+                            System.IO.File.Delete(bookFilePath);
                         }
 
                         objbookDetails.book.ImageUrl = ProcessUploadFile(objbookDetails);
