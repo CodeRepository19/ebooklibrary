@@ -1,19 +1,16 @@
 ﻿using EbookApplication.ViewModels;
 using EbookDomain.Interfaces;
 using EbookDomain.Models;
-using EbookInfraData.Context;
+using IronPdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using IronPdf;
 
 namespace EbookUI.Controllers
 {
@@ -21,7 +18,7 @@ namespace EbookUI.Controllers
     {
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly IBookRepository repositotyObj;
-   
+
         public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository ctx)
         {
             this.hostingEnvironment = hostingEnvironment;
@@ -32,6 +29,32 @@ namespace EbookUI.Controllers
         {
             return View(repositotyObj.GetBooks());
         }
+
+
+        public async Task<IActionResult> SearchBook(string searchString)
+        {
+            var Books = from m in repositotyObj.GetBooks()
+                        select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
+            }
+            else
+            {
+                return View("Error/500");
+            }
+
+            if (Books.ToList().Count == 0)
+            {
+                return RedirectToAction("HandleErrorCode",
+                          "Error",
+                          new { statusCode = 264 });
+            }
+            else
+                return await Task.FromResult(View("Index", Books.ToList()));
+        }
+
 
         // GET: Courses/Details/5
         public IActionResult Details(int id)
