@@ -2,7 +2,10 @@
 
 @{
     ViewData["Title"] = "View Book Details";
-    var photoPath = "/images/" + (Model.book.ImageUrl ?? "noimage.jpg");
+    var photoPath = "/uploadImages/" + (Model.book.ImageUrl ?? "noimage.jpg");
+    var Path = "/uploadBooks/" + (Model.book.ImageUrl ?? "noimage.jpg");
+    var splitPath = Path.Split(".");
+    var bookPath = splitPath[0].ToString() + ".pdf";
 }
 
 <h3 class="text-center mt-1" style="color:#86bc42;text-decoration:underline;">Book Details</h3>
@@ -17,14 +20,13 @@
 
     <div class="col-md-4">
         <div class="card-body text-center ml-5">
-            <object data="@photoPath#toolbar=0" height="430" width="350" type="application/pdf" style="min-width:101%;min-height:101%;"></object>
+            <a href="@bookPath" target="_blank"><img class="imageThumbnail" src="@photoPath" asp-append-version="true"/></a>
         </div>
     </div>
 
     <div class="card-body col-md-7">
         <p style="font-size:15px;"><strong>Technology:</strong> @Model.technology.TechnologyName</p> <hr />
         <p style="font-size:15px;"><strong>Description:</strong><br /><br /> @Model.book.Description</p>
-        <a class="btn btn-primary m-1" href="@photoPath" download>Download</a>
     </div>
     <div class="col-md-1"></div>
 </div>

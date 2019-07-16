@@ -8,9 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronPdf;
 
 namespace EbookUI.Controllers
 {
@@ -49,7 +52,7 @@ namespace EbookUI.Controllers
 
             BookViewModel objNewBook = GetBookDetails(id);
             if (objNewBook == null)
-                return NotFound(); 
+                return NotFound();
             else
                 return View(objNewBook);
         }
@@ -127,19 +130,31 @@ namespace EbookUI.Controllers
 
         private string ProcessUploadFile(BookViewModel objbookDetails)
         {
-            string uniqueFileNmae = null;
+            string uniquePdfFileName = null;
+            string uniqueImageFileName = null;
             if (objbookDetails.Image != null)
             {
-                string UploadFolders = Path.Combine(hostingEnvironment.WebRootPath, "images");
-                uniqueFileNmae = Guid.NewGuid().ToString() + "_" + objbookDetails.Image.FileName;
-                string filePath = Path.Combine(UploadFolders, uniqueFileNmae);
+                string UploadBookFolder = Path.Combine(hostingEnvironment.WebRootPath, "uploadBooks");
+                string UploadImageFolder = Path.Combine(hostingEnvironment.WebRootPath, "uploadImages");
+
+                uniquePdfFileName = Guid.NewGuid().ToString() + "_" + objbookDetails.Image.FileName;
+
+                var splitFileName = uniquePdfFileName.Split("_");
+                uniqueImageFileName = splitFileName[0].ToString() + ".png";
+
+                string filePath = Path.Combine(UploadBookFolder, splitFileName[0].ToString() + ".pdf");
+
                 using (var FileStream = new FileStream(filePath, FileMode.Create))
                 {
                     objbookDetails.Image.CopyTo(FileStream);
                 }
+
+                var pdf = PdfDocument.FromFile(filePath);
+                var opdf = pdf.CopyPage(0);
+                opdf.RasterizeToImageFiles(UploadImageFolder + "\\" + uniqueImageFileName, 250, 150);
             }
 
-            return uniqueFileNmae;
+            return uniqueImageFileName;
         }
 
         // GET: books/Edit/5
@@ -155,7 +170,7 @@ namespace EbookUI.Controllers
 
             BookViewModel objNewBook = GetBookDetails(id);
 
-            if(objNewBook!=null)
+            if (objNewBook != null)
             {
                 return View(objNewBook);
             }
@@ -185,7 +200,7 @@ namespace EbookUI.Controllers
                     {
                         if (objbookDetails.ExistingImageUrl != null)
                         {
-                            string filePath = Path.Combine(hostingEnvironment.WebRootPath, "images", objbookDetails.ExistingImageUrl);
+                            string filePath = Path.Combine(hostingEnvironment.WebRootPath, "uploadImages", objbookDetails.ExistingImageUrl);
                             System.IO.File.Delete(filePath);
                         }
 
