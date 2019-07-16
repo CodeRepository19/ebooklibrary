@@ -28,8 +28,10 @@ body {
 
 .ehcolor
 {
-    color:#430e12;
+  
     font-family: inherit;
+    color: #de1717;
+    padding-top: 50px;
 }
 /* Top Header styles End*/
 
@@ -194,7 +196,7 @@ body {
 .btn-custom {
     color: #fff;
     background-color: #86bc42;
-    padding: 1%;
+    padding: 10px;
 }
 /* Sticky footer styles End*/
 
