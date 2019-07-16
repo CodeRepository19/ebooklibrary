@@ -16,26 +16,18 @@ namespace EbookUI.Controllers
 {
     public class BooksController : Controller
     {
-        //private readonly ebooklibraryDBcontext _context;
         private readonly IHostingEnvironment hostingEnvironment;
-        private readonly IBookRepository _ctx;
-
-        //public BooksController(ebooklibraryDBcontext context, IHostingEnvironment hostingEnvironment, IBookRepository ctx)
-        //{
-        //    _context = context;
-        //    this.hostingEnvironment = hostingEnvironment;
-        //    _ctx = ctx;
-        //}
-
+        private readonly IBookRepository repositotyObj;
+   
         public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository ctx)
         {
             this.hostingEnvironment = hostingEnvironment;
-            _ctx = ctx;
+            repositotyObj = ctx;
         }
 
         public IActionResult Index()
         {
-            return View(_ctx.GetBooks());
+            return View(repositotyObj.GetBooks());
         }
 
         // GET: Courses/Details/5
@@ -57,13 +49,13 @@ namespace EbookUI.Controllers
         private BookViewModel GetBookDetails(int id)
         {
             BookViewModel objNewBook = null;
-            var bookDetails = _ctx.GetBookDetailsById(id);
+            var bookDetails = repositotyObj.GetBookDetailsById(id);
             if (bookDetails == null)
             {
                 return objNewBook;
             }
 
-            var technologyDetails = _ctx.GetTechnologyDetailsById(bookDetails.TechnologyId);
+            var technologyDetails = repositotyObj.GetTechnologyDetailsById(bookDetails.TechnologyId);
 
 
 
@@ -95,8 +87,8 @@ namespace EbookUI.Controllers
 
         private IEnumerable<Technology> TechnologyList()
         {
-            ViewBag.technologyList = _ctx.GetTechnologys();
-            return _ctx.GetTechnologys();
+            ViewBag.technologyList = repositotyObj.GetTechnologys();
+            return repositotyObj.GetTechnologys();
         }
 
         // POST: Courses/Create
@@ -118,7 +110,7 @@ namespace EbookUI.Controllers
                     ImageUrl = uniqueFileNmae
                 };
 
-                _ctx.Add(objNewBook);
+                repositotyObj.Add(objNewBook);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -203,7 +195,7 @@ namespace EbookUI.Controllers
                         ImageUrl = objbookDetails.book.ImageUrl
                     };
 
-                    _ctx.Update(objEditBook);
+                    repositotyObj.Update(objEditBook);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -224,7 +216,7 @@ namespace EbookUI.Controllers
 
         private bool BookExists(int id)
         {
-            var details = _ctx.GetBookDetailsById(id);
+            var details = repositotyObj.GetBookDetailsById(id);
             if (details != null)
                 return true;
             else
