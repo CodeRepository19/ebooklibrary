@@ -141,9 +141,20 @@ namespace EbookUI.Controllers
                     objbookDetails.Image.CopyTo(FileStream);
                 }
 
-                var pdf = PdfDocument.FromFile(filePath);
-                var opdf = pdf.CopyPage(0);
-                opdf.RasterizeToImageFiles(UploadImageFolder + "\\" + uniqueImageFileName, 250, 150);
+
+                byte[] bytes = Convert.FromBase64String(objbookDetails.book.ImageUrl);
+
+                Image image;
+                using (MemoryStream ms = new MemoryStream(bytes))
+                {
+                    image = Image.FromStream(ms);
+                }
+
+                image.Save(UploadImageFolder+ "\\" + uniqueImageFileName, System.Drawing.Imaging.ImageFormat.Png);
+
+                //var pdf = PdfDocument.FromFile(filePath);
+                //var opdf = pdf.CopyPage(0);
+               // opdf.RasterizeToImageFiles(UploadImageFolder + "\\" + uniqueImageFileName, 250, 150);
             }
 
             return uniqueImageFileName;
@@ -164,6 +175,7 @@ namespace EbookUI.Controllers
 
             if (objNewBook != null)
             {
+                ViewBag.FileName = objNewBook.ExistingImageUrl;
                 return View(objNewBook);
             }
             else

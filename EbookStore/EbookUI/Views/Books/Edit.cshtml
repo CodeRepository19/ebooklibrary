@@ -5,70 +5,172 @@
     var photoPath = "/uploadImages/" + (Model.ExistingImageUrl ?? "noimage.jpg");
 }
 <h3 class="text-center mt-3" style="color:#86bc42;">Edit E-Book</h3>
-<form enctype="multipart/form-data" asp-controller="Books" asp-action="Edit" method="post" class="m-3">
-    <input hidden asp-for="book.BookId" />
-    <input hidden asp-for="ExistingImageUrl" />
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group row">
-        <label asp-for="book.BookName" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="book.BookName" class="form-control" placeholder="Book Name" />
-            <span asp-validation-for="book.BookName" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label asp-for="book.Description" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <input asp-for="book.Description" class="form-control" placeholder="Description" />
-            <span asp-validation-for="book.Description" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label asp-for="book.TechnologyId" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <select asp-for="book.TechnologyId" class="form-control" asp-items="@(new SelectList(@ViewBag.technologyList, "TechnologyId","TechnologyName"))"></select>
-            <span asp-validation-for="book.TechnologyId" class="text-danger"></span>
-        </div>
-    </div>
 
-    <div class="form-group row">
-        <label asp-for="Image" class="col-sm-2 col-form-label"></label>
-        <div class="col-sm-10">
-            <div class="custom-file">
-                <input asp-for="Image" class="form-control custom-file-input" />
-                <label class="custom-file-label">Choose File...</label>
+<div class="container">
+
+
+    <form enctype="multipart/form-data" asp-controller="Books" asp-action="Edit" method="post" class="m-3">
+        <input hidden asp-for="book.BookId" />
+        <input hidden asp-for="ExistingImageUrl" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group row">
+            <label asp-for="book.BookName" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="book.BookName" class="form-control" placeholder="Book Name" />
+                <span asp-validation-for="book.BookName" class="text-danger"></span>
             </div>
         </div>
-    </div>
+        <div class="form-group row">
+            <label asp-for="book.Description" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="book.Description" class="form-control" placeholder="Description" />
+                <span asp-validation-for="book.Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="book.TechnologyId" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <select asp-for="book.TechnologyId" class="form-control" asp-items="@(new SelectList(@ViewBag.technologyList, "TechnologyId","TechnologyName"))"></select>
+                <span asp-validation-for="book.TechnologyId" class="text-danger"></span>
+            </div>
+        </div>
 
-    <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Existing E-Book</label>
-        <div class="col-sm-5">
-            <img class="imageThumbnail" src="@photoPath" asp-append-version="true" />
+        <div class="form-group row">
+            <label asp-for="Image" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <div class="custom-file">
+                    <input asp-for="Image" id="upload-dialog" class="form-control custom-file-input" value="Choose PDF" />
+                    <label class="custom-file-label">Choose File..</label>
+                </div>
+            </div>
         </div>
-    </div> 
-    
-    <div class="form-group row">
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" title="Update the Existing book">Update</button>
-            <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1" title="Go To Index Page">Cancel</a>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10" style="display:flex;">
+                <label class="col-sm-5 col-form-label">Old E-Book</label>
+                <label id="changeBookLbl" class="col-sm-5 col-form-label">New E-Book</label>
+            </div>
         </div>
-    </div>
-    @section Scripts{
-        <script>
-            $(document).ready(function () {
-                $('.custom-file-input').on("change", function () {
-                    var fileLabel = $(this).next('.custom-file-label');
-                    var files = $(this)[0].files;
-                    if (files.length > 1) {
-                        fileLabel.html(files.length + ' files selected');
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10" style="display:flex;">
+                <div class="col-sm-5">
+                    <img class="imageThumbnail" width="150" src="@photoPath" asp-append-version="true" />
+                </div>
+                <div id="changePDFLoader" class="col-sm-5">
+                    <div id="pdf-loader">Loading Preview ..</div>
+                    <canvas id="pdf-preview" width="150"></canvas>
+
+                    <input asp-for="book.ImageUrl" id="txtImgUrl" type="hidden" class="form-control"  />
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary" title="Update the Existing book">Update</button>
+                <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1" title="Go To Index Page">Cancel</a>
+            </div>
+        </div>
+        @section Scripts{
+            <script>
+                $(document).ready(function () {
+                    document.querySelector("#pdf-loader").style.display = 'none';
+                    document.querySelector("#changePDFLoader").style.display = 'none';
+                     document.querySelector("#changeBookLbl").style.display = 'none';
+                    
+                    var _PDF_DOC,
+                        _CANVAS = document.querySelector('#pdf-preview'),
+                        _OBJECT_URL;
+
+                    function showPDF(pdf_url) {
+                        PDFJS.getDocument({ url: pdf_url }).then(function (pdf_doc) {
+                            
+                            _PDF_DOC = pdf_doc;
+
+                            // Show the first page
+                            showPage(1);
+
+                            // destroy previous object url
+                            URL.revokeObjectURL(_OBJECT_URL);
+                        }).catch(function (error) {
+                            // trigger Cancel on error
+                            //document.querySelector("#cancel-pdf").click();
+
+                            // error reason
+                            alert(error.message);
+                        });;
                     }
-                    else if (files.length == 1) {
-                        fileLabel.html(files[0].name);
+
+                    function showPage(page_no) {
+                        // fetch the page
+                        _PDF_DOC.getPage(page_no).then(function (page) {
+                            // set the scale of viewport
+                            var scale_required = _CANVAS.width / page.getViewport(1).width;
+
+                            // get viewport of the page at required scale
+                            var viewport = page.getViewport(scale_required);
+
+                            // set canvas height
+                            _CANVAS.height = viewport.height;
+
+                            var renderContext = {
+                                canvasContext: _CANVAS.getContext('2d'),
+                                viewport: viewport
+                            };
+                          
+                            // render the page contents in the canvas
+                            page.render(renderContext).then(function () {
+                                document.querySelector("#pdf-preview").style.display = 'inline-block';
+                                document.querySelector("#pdf-loader").style.display = 'none';
+                                document.querySelector("#changePDFLoader").style.display = 'inline-block';
+                                document.querySelector("#changeBookLbl").style.display = 'inline-block';
+                                 var image = document.getElementById("pdf-preview").toDataURL("image/png");
+
+                //get raw image data
+                                image = image.replace('data:image/png;base64,', '');
+                                
+                                document.querySelector("#txtImgUrl").setAttribute("value", image);          
+                            });
+                        });
                     }
+
+                    /* Selected File has changed */
+                    document.querySelector("#upload-dialog").addEventListener('change', function () {
+                        document.querySelector("#changePDFLoader").style.display = 'inline-block';
+                        // user selected file
+                        var file = this.files[0];
+
+                        // allowed MIME types
+                        var mime_types = ['application/pdf'];
+
+                        // Validate whether PDF
+                        if (mime_types.indexOf(file.type) == -1) {
+                            alert('Error : Incorrect file type');
+                            return;
+                        }
+
+                        // validate file size
+                        if (file.size > 10 * 1024 * 1024) {
+                            alert('Error : Exceeded size 10MB');
+                            return;
+                        }
+
+                        // Show the PDF preview loader
+                        document.querySelector("#pdf-loader").style.display = 'inline-block';
+                        document.querySelector("#changeBookLbl").style.display = 'inline-block';
+                        // object url of PDF
+                        _OBJECT_URL = URL.createObjectURL(file)
+
+                        // send the object url of the pdf to the PDF preview function
+                        showPDF(_OBJECT_URL);
+                    });
+
                 });
-            });
-        </script>
-    }
-</form>
+            </script>
+        }
+    </form>
 
+</div>

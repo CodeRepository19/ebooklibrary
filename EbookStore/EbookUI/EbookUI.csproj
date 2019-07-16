@@ -24,8 +24,6 @@
     <PackageReference Include="PDF.Core" Version="5.2.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
   </ItemGroup>
-
-
   <ItemGroup>
     <ProjectReference Include="..\EbookInfraIOC\EbookInfraIOC.csproj" />
   </ItemGroup>
