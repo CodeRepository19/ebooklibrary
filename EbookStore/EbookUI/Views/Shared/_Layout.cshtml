@@ -85,13 +85,21 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Create">Add E-Book</a>
-                        </li>*@
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Create">Add E-Book</a>
+                            </li>*@
                     </ul>
-                    <form class="form-inline my-2 my-lg-0 pull-right" asp-controller="Books" asp-action="SearchBook">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="SearchString">
-                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">Search</button>
+
+                    <form class="form-inline my-2 my-lg-0 d-inline w-50" asp-controller="Books" asp-action="SearchBook">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Books" name="SearchString">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
                     </form>
+
                 </div>
             </div>
         </nav>
