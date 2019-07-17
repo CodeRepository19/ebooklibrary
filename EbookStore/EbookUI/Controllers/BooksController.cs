@@ -160,6 +160,7 @@ namespace EbookUI.Controllers
                 byte[] bytes = Convert.FromBase64String(objbookDetails.book.ImageUrl);
 
                 Image pdfImage;
+
                 using (MemoryStream ms = new MemoryStream(bytes))
                     pdfImage = Image.FromStream(ms);
 
