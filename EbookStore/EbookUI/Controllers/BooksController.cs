@@ -134,7 +134,8 @@ namespace EbookUI.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(objNewBook);
+            TechnologyList();
+            return View();
         }
 
         private string ProcessUploadFile(BookViewModel objbookDetails)
