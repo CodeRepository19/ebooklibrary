@@ -17,34 +17,31 @@ namespace EbookUI.Controllers
 {
     public class BooksController : Controller
     {
-        private readonly IHostingEnvironment hostingEnvironment;
-        private readonly IBookRepository repositotyObj;
+        private readonly IHostingEnvironment objHostingEnvironment;
+        private readonly IBookRepository objRepositoty;
 
-        public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository ctx)
+        public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository repositoty)
         {
-            this.hostingEnvironment = hostingEnvironment;
-            repositotyObj = ctx;
+            this.objHostingEnvironment = hostingEnvironment;
+            objRepositoty = repositoty;
         }
 
         public IActionResult Index()
         {
-            return View(repositotyObj.GetBooks());
+            return View(objRepositoty.GetBooks());
         }
 
 
         public async Task<IActionResult> SearchBook(string searchString)
         {
-            var Books = from m in repositotyObj.GetBooks()
+            var Books = from m in objRepositoty.GetBooks()
                         select m;
 
             if (!String.IsNullOrEmpty(searchString))
-            {
                 Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
-            }
             else
-            {
-                return View("Error/500");
-            }
+                //return View("Error/500");
+                Index();
 
             if (Books.ToList().Count == 0)
             {
@@ -58,51 +55,47 @@ namespace EbookUI.Controllers
 
 
         // GET: Courses/Details/5
-        public IActionResult Details(int id)
+        public IActionResult Details(int Id)
         {
 
-            if (id == 0)
-            {
+            if (Id == 0)
                 return NotFound();
-            }
 
-            BookViewModel objNewBook = GetBookDetails(id);
-            if (objNewBook == null)
+            BookViewModel objBookDetails = GetBookDetails(Id);
+            if (objBookDetails == null)
                 return NotFound();
             else
-                return View(objNewBook);
+                return View(objBookDetails);
         }
 
-        private BookViewModel GetBookDetails(int id)
+        private BookViewModel GetBookDetails(int intBookId)
         {
-            BookViewModel objNewBook = null;
-            var bookDetails = repositotyObj.GetBookDetailsById(id);
+            BookViewModel objBookDetails = null;
+            var bookDetails = objRepositoty.GetBookDetailsById(intBookId);
             if (bookDetails == null)
-            {
-                return objNewBook;
-            }
+                return objBookDetails;
 
-            var technologyDetails = repositotyObj.GetTechnologyDetailsById(bookDetails.TechnologyId);
-
-
+            var technologyDetails = objRepositoty.GetTechnologyDetailsById(bookDetails.TechnologyId);
 
             if (bookDetails != null && technologyDetails != null)
             {
-                objNewBook = new BookViewModel
+                objBookDetails = new BookViewModel
                 {
                     book = new Book(),
                     technology = new Technology()
                 };
-                objNewBook.book.BookId = bookDetails.BookId;
-                objNewBook.book.BookName = bookDetails.BookName;
-                objNewBook.book.Description = bookDetails.Description;
-                objNewBook.book.ImageUrl = bookDetails.ImageUrl;
-                objNewBook.book.TechnologyId = bookDetails.TechnologyId;
-                objNewBook.technology.TechnologyName = technologyDetails.TechnologyName;
-                objNewBook.book.ImageUrl = bookDetails.ImageUrl;
-                objNewBook.ExistingImageUrl = bookDetails.ImageUrl;
+
+                objBookDetails.book.BookId = bookDetails.BookId;
+                objBookDetails.book.BookName = bookDetails.BookName;
+                objBookDetails.book.Description = bookDetails.Description;
+                objBookDetails.book.ImageUrl = bookDetails.ImageUrl;
+                objBookDetails.book.TechnologyId = bookDetails.TechnologyId;
+                objBookDetails.technology.TechnologyName = technologyDetails.TechnologyName;
+                objBookDetails.book.ImageUrl = bookDetails.ImageUrl;
+                objBookDetails.ExistingImageUrl = bookDetails.ImageUrl;
             }
-            return objNewBook;
+
+            return objBookDetails;
         }
         // GET: Courses/Create
         [Authorize]
@@ -114,8 +107,8 @@ namespace EbookUI.Controllers
 
         private IEnumerable<Technology> TechnologyList()
         {
-            ViewBag.technologyList = repositotyObj.GetTechnologys();
-            return repositotyObj.GetTechnologys();
+            ViewBag.technologyList = objRepositoty.GetTechnologys();
+            return objRepositoty.GetTechnologys();
         }
 
         // POST: Courses/Create
@@ -137,7 +130,7 @@ namespace EbookUI.Controllers
                     ImageUrl = uniqueFileNmae
                 };
 
-                repositotyObj.Add(objNewBook);
+                objRepositoty.Add(objNewBook);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -150,8 +143,8 @@ namespace EbookUI.Controllers
             string uniqueImageFileName = null;
             if (objbookDetails.Image != null)
             {
-                string UploadBookFolder = Path.Combine(hostingEnvironment.WebRootPath, "uploadBooks");
-                string UploadImageFolder = Path.Combine(hostingEnvironment.WebRootPath, "uploadImages");
+                string UploadBookFolder = Path.Combine(objHostingEnvironment.WebRootPath, "uploadBooks");
+                string UploadImageFolder = Path.Combine(objHostingEnvironment.WebRootPath, "uploadImages");
 
                 uniquePdfFileName = Guid.NewGuid().ToString() + "_" + objbookDetails.Image.FileName;
 
@@ -161,24 +154,20 @@ namespace EbookUI.Controllers
                 string filePath = Path.Combine(UploadBookFolder, splitFileName[0].ToString() + ".pdf");
 
                 using (var FileStream = new FileStream(filePath, FileMode.Create))
-                {
                     objbookDetails.Image.CopyTo(FileStream);
-                }
 
 
                 byte[] bytes = Convert.FromBase64String(objbookDetails.book.ImageUrl);
 
-                Image image;
+                Image pdfImage;
                 using (MemoryStream ms = new MemoryStream(bytes))
-                {
-                    image = Image.FromStream(ms);
-                }
+                    pdfImage = Image.FromStream(ms);
 
-                image.Save(UploadImageFolder+ "\\" + uniqueImageFileName, System.Drawing.Imaging.ImageFormat.Png);
+                pdfImage.Save(UploadImageFolder + "\\" + uniqueImageFileName, System.Drawing.Imaging.ImageFormat.Png);
 
                 //var pdf = PdfDocument.FromFile(filePath);
                 //var opdf = pdf.CopyPage(0);
-               // opdf.RasterizeToImageFiles(UploadImageFolder + "\\" + uniqueImageFileName, 250, 150);
+                // opdf.RasterizeToImageFiles(UploadImageFolder + "\\" + uniqueImageFileName, 250, 150);
             }
 
             return uniqueImageFileName;
@@ -186,16 +175,14 @@ namespace EbookUI.Controllers
 
         // GET: books/Edit/5
         [Authorize]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int Id)
         {
             TechnologyList();
 
-            if (id == 0)
-            {
+            if (Id == 0)
                 return NotFound();
-            }
 
-            BookViewModel objNewBook = GetBookDetails(id);
+            BookViewModel objNewBook = GetBookDetails(Id);
 
             if (objNewBook != null)
             {
@@ -215,9 +202,7 @@ namespace EbookUI.Controllers
         public IActionResult Edit(int id, BookViewModel objbookDetails)
         {
             if (id != objbookDetails.book.BookId)
-            {
                 return NotFound();
-            }
 
 
             if (ModelState.IsValid)
@@ -232,8 +217,8 @@ namespace EbookUI.Controllers
                             var splitPath = URLPath.Split(".");
                             var bookPath = splitPath[0].ToString() + ".pdf";
 
-                            string imageFilePath = Path.Combine(hostingEnvironment.WebRootPath, "uploadImages", objbookDetails.ExistingImageUrl);
-                            string bookFilePath = Path.Combine(hostingEnvironment.WebRootPath, "uploadBooks", bookPath);
+                            string imageFilePath = Path.Combine(objHostingEnvironment.WebRootPath, "uploadImages", objbookDetails.ExistingImageUrl);
+                            string bookFilePath = Path.Combine(objHostingEnvironment.WebRootPath, "uploadBooks", bookPath);
                             System.IO.File.Delete(imageFilePath);
                             System.IO.File.Delete(bookFilePath);
                         }
@@ -252,29 +237,26 @@ namespace EbookUI.Controllers
                         ImageUrl = objbookDetails.book.ImageUrl
                     };
 
-                    repositotyObj.Update(objEditBook);
+                    objRepositoty.Update(objEditBook);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!BookExists(objbookDetails.book.BookId))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
 
             return View(objbookDetails.book);
         }
 
-        private bool BookExists(int id)
+        private bool BookExists(int intBookId)
         {
-            var details = repositotyObj.GetBookDetailsById(id);
-            if (details != null)
+            var ExistingBookDetails = objRepositoty.GetBookDetailsById(intBookId);
+            if (ExistingBookDetails != null)
                 return true;
             else
                 return false;

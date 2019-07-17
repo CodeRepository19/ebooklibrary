@@ -38,11 +38,11 @@
         <p style="font-size:15px;"><strong>Technology:</strong> &nbsp;&nbsp;@Model.technology.TechnologyName</p> <hr />
         <p style="font-size:15px;"><strong>Description:</strong><br /><br />@Model.book.Description</p>
         @*Actions on Book*@
-        <div class="card-footer text-center">
-            <a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-sm m-1" title="Go To E-Books Page">Back</a>
-            <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary btn-sm m-1" title="Edit @Model.book.BookName book">Edit</a>
-            <a href="@bookPath" class="btn btn-primary btn-sm m-1" download="@bookdownload">Download</a>
-        </div>
+    <div class="card-footer text-center">
+        <a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-sm m-1" title="Go To E-Books Page">Back</a>
+        <a href="@bookPath" class="btn btn-primary btn-sm m-1" download="@bookdownload">Download</a>
+        <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary btn-sm m-1" title="Edit @Model.book.BookName book">Edit</a>
+    </div>
     </div>
 
         @*Book PDF View*@

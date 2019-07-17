@@ -48,7 +48,7 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10" style="display:flex;">
-                <label class="col-sm-5 col-form-label">Old E-Book</label>
+                <label class="col-sm-5 col-form-label">E-Book</label>
                 <label id="changeBookLbl" class="col-sm-5 col-form-label">New E-Book</label>
             </div>
         </div>
@@ -62,8 +62,7 @@
                 <div id="changePDFLoader" class="col-sm-5">
                     <div id="pdf-loader">Loading Preview ..</div>
                     <canvas id="pdf-preview" width="150"></canvas>
-
-                    <input asp-for="book.ImageUrl" id="txtImgUrl" type="hidden" class="form-control"  />
+                    <input asp-for="book.ImageUrl" id="txtImgUrl" type="hidden" class="form-control" />
                 </div>
             </div>
         </div>
@@ -74,20 +73,21 @@
                 <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1" title="Go To Index Page">Cancel</a>
             </div>
         </div>
+
         @section Scripts{
             <script>
                 $(document).ready(function () {
                     document.querySelector("#pdf-loader").style.display = 'none';
                     document.querySelector("#changePDFLoader").style.display = 'none';
-                     document.querySelector("#changeBookLbl").style.display = 'none';
-                    
+                    document.querySelector("#changeBookLbl").style.display = 'none';
+
                     var _PDF_DOC,
                         _CANVAS = document.querySelector('#pdf-preview'),
                         _OBJECT_URL;
 
                     function showPDF(pdf_url) {
                         PDFJS.getDocument({ url: pdf_url }).then(function (pdf_doc) {
-                            
+
                             _PDF_DOC = pdf_doc;
 
                             // Show the first page
@@ -120,19 +120,19 @@
                                 canvasContext: _CANVAS.getContext('2d'),
                                 viewport: viewport
                             };
-                          
+
                             // render the page contents in the canvas
                             page.render(renderContext).then(function () {
                                 document.querySelector("#pdf-preview").style.display = 'inline-block';
                                 document.querySelector("#pdf-loader").style.display = 'none';
                                 document.querySelector("#changePDFLoader").style.display = 'inline-block';
                                 document.querySelector("#changeBookLbl").style.display = 'inline-block';
-                                 var image = document.getElementById("pdf-preview").toDataURL("image/png");
+                                var image = document.getElementById("pdf-preview").toDataURL("image/png");
 
-                //get raw image data
+                                //get raw image data
                                 image = image.replace('data:image/png;base64,', '');
-                                
-                                document.querySelector("#txtImgUrl").setAttribute("value", image);          
+
+                                document.querySelector("#txtImgUrl").setAttribute("value", image);
                             });
                         });
                     }
@@ -168,16 +168,16 @@
                         showPDF(_OBJECT_URL);
                     });
 
-                      $('.custom-file-input').on("change", function () {
-                    var fileLabel = $(this).next('.custom-file-label');
-                    var files = $(this)[0].files;
-                    if (files.length > 1) {
-                        fileLabel.html(files.length + ' files selected');
-                    }
-                    else if (files.length == 1) {
-                        fileLabel.html(files[0].name);
-                    }
-                });
+                    $('.custom-file-input').on("change", function () {
+                        var fileLabel = $(this).next('.custom-file-label');
+                        var files = $(this)[0].files;
+                        if (files.length > 1) {
+                            fileLabel.html(files.length + ' files selected');
+                        }
+                        else if (files.length == 1) {
+                            fileLabel.html(files[0].name);
+                        }
+                    });
 
                 });
             </script>
