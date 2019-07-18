@@ -29,7 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\uploadImages\" />
-    <Folder Include="wwwroot\uploadBooks\" />
   </ItemGroup>
 
 </Project>
