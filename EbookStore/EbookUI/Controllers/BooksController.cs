@@ -1,6 +1,7 @@
 ﻿using EbookApplication.ViewModels;
 using EbookDomain.Interfaces;
 using EbookDomain.Models;
+using IronPdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace EbookUI.Controllers
             this.objHostingEnvironment = hostingEnvironment;
             objRepositoty = repositoty;
         }
+
         public IActionResult Index()
         {
             return View(objRepositoty.GetBooks());
@@ -31,7 +33,7 @@ namespace EbookUI.Controllers
 
         public async Task<IActionResult> SearchBook(string searchString)
         {
-            var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.Equals(searchString, StringComparison.OrdinalIgnoreCase)) select m.TechnologyId;
+            var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1) select m.TechnologyId;
 
             if (tehonlolgyId.ToList().Count > 0)
             {
@@ -86,6 +88,7 @@ namespace EbookUI.Controllers
         // GET: Courses/Details/5
         public IActionResult Details(int Id)
         {
+
             if (Id == 0)
                 return NotFound();
 
@@ -125,7 +128,6 @@ namespace EbookUI.Controllers
 
             return objBookDetails;
         }
-
         // GET: Courses/Create
         [Authorize]
         public IActionResult Create()
@@ -234,6 +236,7 @@ namespace EbookUI.Controllers
         {
             if (id != objbookDetails.book.BookId)
                 return NotFound();
+
 
             if (ModelState.IsValid)
             {
