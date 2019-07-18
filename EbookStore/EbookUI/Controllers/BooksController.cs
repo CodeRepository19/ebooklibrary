@@ -1,7 +1,6 @@
 ﻿using EbookApplication.ViewModels;
 using EbookDomain.Interfaces;
 using EbookDomain.Models;
-using IronPdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +32,7 @@ namespace EbookUI.Controllers
 
         public async Task<IActionResult> SearchBook(string searchString)
         {
-            var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1) select m.TechnologyId;
+            var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.Equals(searchString, StringComparison.OrdinalIgnoreCase)) select m.TechnologyId;
 
             if (tehonlolgyId.ToList().Count > 0)
             {
