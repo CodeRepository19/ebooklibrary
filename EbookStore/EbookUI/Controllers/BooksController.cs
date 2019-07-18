@@ -31,26 +31,57 @@ namespace EbookUI.Controllers
             return View(objRepositoty.GetBooks());
         }
 
-
         public async Task<IActionResult> SearchBook(string searchString)
         {
-            var Books = from m in objRepositoty.GetBooks()
-                        select m;
+            var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1) select m.TechnologyId;
 
-            if (!String.IsNullOrEmpty(searchString))
-                Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
-            else
-                //return View("Error/500");
-                Index();
-
-            if (Books.ToList().Count == 0)
+            if (tehonlolgyId.ToList().Count > 0)
             {
-                return RedirectToAction("HandleErrorCode",
-                          "Error",
-                          new { statusCode = 264 });
+                int techID = Convert.ToInt32(tehonlolgyId.ToList()[0]);
+
+                var Books = from m in objRepositoty.GetBooks().Where(a => a.TechnologyId == techID) select m;
+
+                if (techID > 0)
+                {
+                    //  Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
+                    Books = Books.Where(s => s.TechnologyId == techID);
+                }
+                else
+                    //return View("Error/500");
+                    Index();
+
+                if (Books.ToList().Count == 0)
+                {
+                    return RedirectToAction("HandleErrorCode",
+                              "Error",
+                              new { statusCode = 264 });
+                }
+                else
+                    return await Task.FromResult(View("Index", Books.ToList()));
             }
             else
-                return await Task.FromResult(View("Index", Books.ToList()));
+            {
+                var Books = from m in objRepositoty.GetBooks() select m;
+                if (!String.IsNullOrEmpty(searchString))
+                {
+
+                    Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
+                }
+                else
+                    //return View("Error/500");
+                    Index();
+
+                if (Books.ToList().Count == 0)
+                {
+                    return RedirectToAction("HandleErrorCode",
+                              "Error",
+                              new { statusCode = 264 });
+                }
+                else
+                    return await Task.FromResult(View("Index", Books.ToList()));
+            }
+
+
         }
 
 
