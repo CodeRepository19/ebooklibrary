@@ -44,5 +44,16 @@ namespace EbookDomain.Interfaces
         /// <returns>It is a list of Technologies</returns>
         IEnumerable<Technology> GetTechnologys();
         Technology GetTechnologyDetailsById(int technologyId);
+        /// <summary>
+        /// This method will return the list of all the reviews
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<Reviewes> GetReviews();
+        /// <summary>
+        /// This will add the review of the Book to the review table
+        /// </summary>
+        /// <param name="reviewDetails"></param>
+        /// <returns></returns>
+        Reviewes Add(Reviewes reviewDetails);
     }
 }

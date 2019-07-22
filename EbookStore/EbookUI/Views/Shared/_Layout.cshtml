@@ -29,6 +29,7 @@
     </environment>
     <script src="~/js/pdf.js"></script>
     <script src="~/js/pdf.worker.js"></script>
+    <script src="~/js/site.js"></script>
     <script>
 
         //Script for Scroll top event
@@ -50,7 +51,9 @@
 </head>
 <body>
     <a id="button"></a>
-    <div class="container-fluid topheader">
+    
+    @*Top Header*@
+    @*<div class="container-fluid topheader">
         <div class="row" style="padding:10px;">
             <div class="col-md-2 col-sm-12">
                 <a href="mailto:info@Ebook.com">
@@ -67,14 +70,15 @@
                 <a href="http://instagram.com" target="_blank"><i class="fa fa-instagram"></i></a>
             </div>
         </div>
-    </div>
+    </div>*@
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container-fluid">
 
-                <a class="navbar-brand" asp-area="" asp-controller="Books" asp-action="Index">
+                @*<a class="navbar-brand" asp-area="" asp-controller="Books" asp-action="Index">
                     <img src="~/Images/ebooklogo.png" height="50" width="80" />
-                </a>
+                </a>*@
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +93,7 @@
                             </li>*@
                     </ul>
 
-                    <form class="form-inline my-2 my-lg-0 d-inline w-50" asp-controller="Books" asp-action="SearchBook">
+                    @*<form class="form-inline my-2 my-lg-0 d-inline w-50" asp-controller="Books" asp-action="SearchBook">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search Books" name="SearchString" autocomplete="off">
                             <div class="input-group-append">
@@ -98,14 +102,14 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form>*@
 
                 </div>
             </div>
         </nav>
     </header>
     <div class="container-fluid" style="padding-bottom:100px;">
-        <partial name="_CookieConsentPartial" />
+        @*<partial name="_CookieConsentPartial" />*@
         <main role="main">
             @RenderBody()
         </main>
@@ -114,7 +118,7 @@
     <footer class="footer text-muted">
         <div class="container-fluid">
             <div class=" container text-center">
-                <span> © 2019 EBook Library., All Rights Reserved.</span>
+                <span> © 2019 SP Soft EBook Library., All Rights Reserved.</span>
             </div>
         </div>
     </footer>

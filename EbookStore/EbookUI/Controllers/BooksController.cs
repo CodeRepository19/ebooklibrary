@@ -11,6 +11,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace EbookUI.Controllers
 {
@@ -27,7 +29,10 @@ namespace EbookUI.Controllers
 
         public IActionResult Index()
         {
-            return View(objRepositoty.GetBooks());
+            if (User.Identity.IsAuthenticated)
+                return View(objRepositoty.GetBooks().OrderByDescending(s => s.CreatedDate));
+            else
+                return View(objRepositoty.GetBooks().OrderByDescending(s => s.CreatedDate).Take(5));
         }
 
         public async Task<IActionResult> SearchBook(string searchString)
@@ -79,15 +84,11 @@ namespace EbookUI.Controllers
                 else
                     return await Task.FromResult(View("Index", Books.ToList()));
             }
-
-
         }
-
 
         // GET: Courses/Details/5
         public IActionResult Details(int Id)
         {
-
             if (Id == 0)
                 return NotFound();
 
@@ -127,6 +128,7 @@ namespace EbookUI.Controllers
 
             return objBookDetails;
         }
+
         // GET: Courses/Create
         [Authorize]
         public IActionResult Create()
@@ -152,16 +154,24 @@ namespace EbookUI.Controllers
             if (ModelState.IsValid)
             {
                 string uniqueFileNmae = ProcessUploadFile(objbookDetails);
-                objNewBook = new Book
+                if (uniqueFileNmae != null)
                 {
-                    BookName = objbookDetails.book.BookName,
-                    Description = objbookDetails.book.Description,
-                    TechnologyId = objbookDetails.book.TechnologyId,
-                    ImageUrl = uniqueFileNmae
-                };
+                    objNewBook = new Book
+                    {
+                        BookName = objbookDetails.book.BookName,
+                        Description = objbookDetails.book.Description,
+                        TechnologyId = objbookDetails.book.TechnologyId,
+                        ImageUrl = uniqueFileNmae,
+                        CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        CreatedDate = DateTime.Now,
+                        StatusId=1
+                        
+                    };
 
-                objRepositoty.Add(objNewBook);
-                return RedirectToAction(nameof(Index));
+                    objRepositoty.Add(objNewBook);
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
 
             TechnologyList();
@@ -204,6 +214,29 @@ namespace EbookUI.Controllers
 
             return uniqueImageFileName;
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveReview(BookViewModel objReviewDetails)
+        {
+            Reviewes objNewReview = null;
+
+            if (ModelState.IsValid)
+            {
+                objNewReview = new Reviewes
+                {
+                    ReviewText = objReviewDetails.review.ReviewText,
+                    Rating = objReviewDetails.review.Rating,
+                    BookId = objReviewDetails.review.BookId,
+                };
+                objRepositoty.Add(objNewReview);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
+
 
         // GET: books/Edit/5
         [Authorize]
@@ -266,7 +299,8 @@ namespace EbookUI.Controllers
                         BookName = objbookDetails.book.BookName,
                         Description = objbookDetails.book.Description,
                         TechnologyId = objbookDetails.book.TechnologyId,
-                        ImageUrl = objbookDetails.book.ImageUrl
+                        ImageUrl = objbookDetails.book.ImageUrl,
+                        StatusId = 1
                     };
 
                     objRepositoty.Update(objEditBook);

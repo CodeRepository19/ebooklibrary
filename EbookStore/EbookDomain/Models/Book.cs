@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace EbookDomain.Models
@@ -45,6 +47,23 @@ namespace EbookDomain.Models
         public int TechnologyId { get; set; }
 
         public Technology technology { get; set; }
+        public ICollection<Reviewes> reviewes { get; set; }
 
+        public string CreatedBy { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime? CreatedDate { get; set; }
+
+        public string ApprovedBy { get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime? ApprovedDate { get; set; }
+
+        public int StatusId { get; set; }
+
+        public ApprovalStatus approvalStatus { get; set; }
+
+        [MaxLength(500)]
+        public string Remarks { get; set; }
     }
 }

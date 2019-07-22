@@ -1,14 +1,34 @@
 ﻿@model IEnumerable<EbookDomain.Models.Book>
-    @{
+@{
     ViewData["Title"] = "E-Books";
-    }
-    <div class="container-fluid">
+}
+<div class="container-fluid">
 
-        <h3 class="text-center mt-3" style="color:#86bc42;">E-Books</h3>
+    <h3 class="text-center m-3" style="color:#86bc42;">E-Books</h3>
 
-        <div class="row">
-            @foreach (var item in Model)
-            {
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-5">
+            <form class="form-inline my-2 my-lg-0 d-inline" asp-controller="Books" asp-action="SearchBook">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search Books" name="SearchString" autocomplete="off">
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div><br />
+
+    <h5 class="m-3">Recent Books</h5>
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
             var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
 
             // We Manipulate the Image path to ge the bookpath
@@ -19,18 +39,14 @@
             // File name For the downloaded book
             var bookdownload = @item.BookName + ".pdf";
 
-            <div class=" col-md-2 border p-md-2 m-3">
-                <div class="text-center" style="overflow:hidden;">
-                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-                        <img class="imageThumbnail" src="@photoPath" asp-append-version="true" />
-                    </a><hr />
-                    <div class="mt-2 mb-1" style="height:16px;overflow:hidden;">
-                        <h5 style="font-size:14px;font-weight:bold;line-height:15px;">@item.BookName</h5>
-                    </div>
-                    @*<a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId" class="btn btn-outline-primary btn-sm m-1" title="View @item.BookName">View</a>
-                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-outline-primary btn-sm m-1" title="Edit @item.BookName">Edit</a>*@
+            <div class="col-md-2 text-center">
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                    <img class="img-responsive" src="@photoPath" asp-append-version="true"/>
+                </a><hr />
+                <div style="height:16px;overflow:hidden;">
+                    <h5 style="font-size:13px;font-weight:bold;line-height:15px;">@item.BookName</h5>
                 </div>
             </div>
-            }
-        </div>
+        }
     </div>
+</div>

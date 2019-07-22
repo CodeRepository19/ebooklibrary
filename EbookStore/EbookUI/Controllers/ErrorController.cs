@@ -34,7 +34,7 @@ namespace EbookUI.Controllers
                     ViewBag.RouteOfException = statusCodeData.OriginalPath;
                     break;
                 case 264:
-                    ViewBag.ErrorMessage = "We couldn't find anything for ewfwesdfdsafasdfsadf Try different or less specific keywords.";   
+                    ViewBag.ErrorMessage = "We couldn't find anything try different or less specific keywords.";   
                     break;
             }
 
