@@ -17,7 +17,7 @@
     <div class="form-group row">
         <label asp-for="book.Description" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="book.Description" class="form-control" placeholder="Description" />
+            <textarea asp-for="book.Description" class="form-control" maxlength="5000" placeholder="Description"></textarea>
             <span asp-validation-for="book.Description" class="text-danger"></span>
         </div>
     </div>
@@ -39,6 +39,7 @@
                 <input asp-for="Image" id="upload-dialog" class="form-control custom-file-input" accept="application/pdf" />
                 <label class="custom-file-label">Choose File...</label>
             </div>
+            <small><p class="text-secondary"> <strong>Note:</strong> Please upload appropriate PDF file</p></small>
         </div>
     </div>
 
@@ -54,7 +55,7 @@
     <div class="form-group row">
         <div class="col-sm-2"></div>
         <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" title="Create a New E Book">Add</button>
+            <button type="submit" class="btn btn-primary" id="addbtn" title="Create a New E Book">Add</button>
             <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1" title="Go To Index Page">Cancel</a>
         </div>
     </div>
@@ -64,6 +65,8 @@
             $(document).ready(function () {
                 document.querySelector("#pdf-loader").style.display = 'none';
                 document.querySelector("#changePDFLoader").style.display = 'none';
+                 $("#addbtn").attr("disabled","disabled");
+                
                 // document.querySelector("#changeBookLbl").style.display = 'none';
 
                 var _PDF_DOC,
@@ -118,6 +121,7 @@
                             image = image.replace('data:image/png;base64,', '');
 
                             document.querySelector("#txtImgUrl").setAttribute("value", image);
+                            $("#addbtn").removeAttr("disabled");
                         });
                     });
                 }
@@ -163,6 +167,8 @@
                         fileLabel.html(files[0].name);
                     }
                 });
+
+               
 
             });
         </script>

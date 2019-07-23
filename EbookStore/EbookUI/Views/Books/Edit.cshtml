@@ -12,6 +12,11 @@
     <form enctype="multipart/form-data" asp-controller="Books" asp-action="Edit" method="post" class="m-3">
         <input hidden asp-for="book.BookId" />
         <input hidden asp-for="ExistingImageUrl" />
+        <input hidden asp-for="book.StatusId" />
+        <input hidden asp-for="book.CreatedBy" />
+        <input hidden asp-for="book.CreatedDate" />
+        <input hidden asp-for="book.ApprovedBy" />
+        <input hidden asp-for="book.ApprovedDate" />
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group row">
             <label asp-for="book.BookName" class="col-sm-2 col-form-label"></label>
@@ -23,7 +28,7 @@
         <div class="form-group row">
             <label asp-for="book.Description" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="book.Description" class="form-control" placeholder="Description" />
+                <textarea asp-for="book.Description" class="form-control" maxlength="5000" placeholder="Description"></textarea>
                 <span asp-validation-for="book.Description" class="text-danger"></span>
             </div>
         </div>
@@ -42,6 +47,7 @@
                     <input asp-for="Image" id="upload-dialog" class="form-control custom-file-input" />
                     <label class="custom-file-label">Choose File..</label>
                 </div>
+                <small><p class="text-secondary"> <strong>Note:</strong> Please upload appropriate PDF file</p></small>
             </div>
         </div>
 
@@ -70,7 +76,7 @@
         <div class="form-group row">
             <div class="col-sm-2"></div>
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary btn-sm" title="Update the Existing book">Update</button>
+                <button type="submit" class="btn btn-primary btn-sm" id="updbtn" title="Update the Existing book">Update</button>
                 <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1 btn-sm" title="Go To Index Page">Cancel</a>
             </div>
         </div>
@@ -81,7 +87,7 @@
                     document.querySelector("#pdf-loader").style.display = 'none';
                     document.querySelector("#changePDFLoader").style.display = 'none';
                     document.querySelector("#changeBookLbl").style.display = 'none';
-
+                     $("#updbtn").attr("disabled","disabled");
                     var _PDF_DOC,
                         _CANVAS = document.querySelector('#pdf-preview'),
                         _OBJECT_URL;
@@ -134,6 +140,7 @@
                                 image = image.replace('data:image/png;base64,', '');
 
                                 document.querySelector("#txtImgUrl").setAttribute("value", image);
+                                $("#updbtn").removeAttr("disabled");
                             });
                         });
                     }

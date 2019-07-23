@@ -11,6 +11,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace EbookUI.Controllers
 {
@@ -27,7 +29,41 @@ namespace EbookUI.Controllers
 
         public IActionResult Index()
         {
-            return View(objRepositoty.GetBooks());
+            if (User.Identity.IsAuthenticated)
+            {
+                //if(User.IsInRole("Admin"))
+                //{
+                //}
+                var ApprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
+                if (ApprovedBooksList.ToList().Count > 0)
+                {
+                    ViewBag.approvedsubtitle = "Approved Books";
+                }
+                else
+                    ViewBag.approvedsubtitle = "";
+
+                var UnapprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 1).OrderByDescending(s => s.ApprovedDate);
+                if (UnapprovedBooksList.ToList().Count > 0)
+                {
+                    ViewBag.unapprovedsubtitle = "Un Approved Books";
+                }
+                else
+                    ViewBag.unapprovedsubtitle = "";
+
+                return View(objRepositoty.GetBooks().OrderByDescending(s => s.ApprovedDate));
+            }
+            else
+            {
+                var BookList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate).Take(5);
+                if (BookList.ToList().Count > 0)
+                {
+                    ViewBag.approvedsubtitle = "Approved Books";
+                }
+                else
+                    ViewBag.approvedsubtitle = "";
+
+                return View(BookList);
+            }
         }
 
         public async Task<IActionResult> SearchBook(string searchString)
@@ -44,6 +80,22 @@ namespace EbookUI.Controllers
                 {
                     //  Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
                     Books = Books.Where(s => s.TechnologyId == techID);
+
+                    var ApprovedBooks = Books.Where(s => s.StatusId == 2);
+                    if (ApprovedBooks.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+
+                    var UnApprovedBooks = Books.Where(s => s.StatusId == 1);
+                    if (UnApprovedBooks.ToList().Count > 0)
+                    {
+                        ViewBag.unapprovedsubtitle = "Un Approved Books";
+                    }
+                    else
+                        ViewBag.unapprovedsubtitle = "";
                 }
                 else
                     //return View("Error/500");
@@ -65,6 +117,21 @@ namespace EbookUI.Controllers
                 {
 
                     Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
+                    var ApprovedBooks = Books.Where(s => s.StatusId == 2);
+                    if (ApprovedBooks.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+
+                    var UnApprovedBooks = Books.Where(s => s.StatusId == 1);
+                    if (UnApprovedBooks.ToList().Count > 0)
+                    {
+                        ViewBag.unapprovedsubtitle = "Un Approved Books";
+                    }
+                    else
+                        ViewBag.unapprovedsubtitle = "";
                 }
                 else
                     //return View("Error/500");
@@ -79,15 +146,11 @@ namespace EbookUI.Controllers
                 else
                     return await Task.FromResult(View("Index", Books.ToList()));
             }
-
-
         }
-
 
         // GET: Courses/Details/5
         public IActionResult Details(int Id)
         {
-
             if (Id == 0)
                 return NotFound();
 
@@ -95,7 +158,10 @@ namespace EbookUI.Controllers
             if (objBookDetails == null)
                 return NotFound();
             else
+            {
+                ApprovalStatusList();
                 return View(objBookDetails);
+            }
         }
 
         private BookViewModel GetBookDetails(int intBookId)
@@ -122,11 +188,18 @@ namespace EbookUI.Controllers
                 objBookDetails.book.TechnologyId = bookDetails.TechnologyId;
                 objBookDetails.technology.TechnologyName = technologyDetails.TechnologyName;
                 objBookDetails.book.ImageUrl = bookDetails.ImageUrl;
+                objBookDetails.book.CreatedBy = bookDetails.CreatedBy;
+                objBookDetails.book.CreatedDate = bookDetails.CreatedDate;
+                objBookDetails.book.ApprovedBy = bookDetails.ApprovedBy;
+                objBookDetails.book.ApprovedDate = bookDetails.ApprovedDate;
+                objBookDetails.book.Remarks = bookDetails.Remarks;
+                objBookDetails.book.StatusId = bookDetails.StatusId;
                 objBookDetails.ExistingImageUrl = bookDetails.ImageUrl;
             }
 
             return objBookDetails;
         }
+
         // GET: Courses/Create
         [Authorize]
         public IActionResult Create()
@@ -141,6 +214,12 @@ namespace EbookUI.Controllers
             return objRepositoty.GetTechnologys();
         }
 
+        private IEnumerable<ApprovalStatus> ApprovalStatusList()
+        {
+            ViewBag.approvalStatusList = objRepositoty.GetApprovalStatus();
+            return objRepositoty.GetApprovalStatus();
+        }
+
         // POST: Courses/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -152,16 +231,24 @@ namespace EbookUI.Controllers
             if (ModelState.IsValid)
             {
                 string uniqueFileNmae = ProcessUploadFile(objbookDetails);
-                objNewBook = new Book
+                if (uniqueFileNmae != null)
                 {
-                    BookName = objbookDetails.book.BookName,
-                    Description = objbookDetails.book.Description,
-                    TechnologyId = objbookDetails.book.TechnologyId,
-                    ImageUrl = uniqueFileNmae
-                };
+                    objNewBook = new Book
+                    {
+                        BookName = objbookDetails.book.BookName,
+                        Description = objbookDetails.book.Description,
+                        TechnologyId = objbookDetails.book.TechnologyId,
+                        ImageUrl = uniqueFileNmae,
+                        CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        CreatedDate = DateTime.Now,
+                        StatusId = 1
 
-                objRepositoty.Add(objNewBook);
-                return RedirectToAction(nameof(Index));
+                    };
+
+                    objRepositoty.Add(objNewBook);
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
 
             TechnologyList();
@@ -203,6 +290,50 @@ namespace EbookUI.Controllers
             }
 
             return uniqueImageFileName;
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveReview(BookViewModel objReviewDetails)
+        {
+            Reviewes objNewReview = null;
+
+            if (ModelState.IsValid)
+            {
+                objNewReview = new Reviewes
+                {
+                    ReviewText = objReviewDetails.review.ReviewText,
+                    Rating = objReviewDetails.review.Rating,
+                    BookId = objReviewDetails.review.BookId,
+                };
+                objRepositoty.Add(objNewReview);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ApprovalStatus(BookViewModel objbookDetails)
+        {
+            Book objEditBook = new Book
+            {
+                BookId = objbookDetails.book.BookId,
+                BookName = objbookDetails.book.BookName,
+                ImageUrl = objbookDetails.book.ImageUrl,
+                TechnologyId = objbookDetails.book.TechnologyId,
+                Description = objbookDetails.book.Description,
+                StatusId = objbookDetails.book.StatusId,
+                Remarks = objbookDetails.book.Remarks,
+                CreatedBy = objbookDetails.book.CreatedBy,
+                CreatedDate = objbookDetails.book.CreatedDate,
+                ApprovedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                ApprovedDate = DateTime.Now
+            };
+
+            objRepositoty.Update(objEditBook);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: books/Edit/5
@@ -256,9 +387,14 @@ namespace EbookUI.Controllers
                         }
 
                         objbookDetails.book.ImageUrl = ProcessUploadFile(objbookDetails);
+                        objbookDetails.book.StatusId = 1;
                     }
                     else
+                    {
                         objbookDetails.book.ImageUrl = objbookDetails.ExistingImageUrl;
+                        objbookDetails.book.StatusId = objbookDetails.book.StatusId;
+                    }
+
 
                     Book objEditBook = new Book
                     {
@@ -266,7 +402,13 @@ namespace EbookUI.Controllers
                         BookName = objbookDetails.book.BookName,
                         Description = objbookDetails.book.Description,
                         TechnologyId = objbookDetails.book.TechnologyId,
-                        ImageUrl = objbookDetails.book.ImageUrl
+                        ImageUrl = objbookDetails.book.ImageUrl,
+                        StatusId = objbookDetails.book.StatusId,
+                        Remarks = objbookDetails.book.Remarks,
+                        CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        CreatedDate = objbookDetails.book.CreatedDate,
+                        ApprovedBy = objbookDetails.book.ApprovedBy,
+                        ApprovedDate = objbookDetails.book.ApprovedDate
                     };
 
                     objRepositoty.Update(objEditBook);
@@ -292,6 +434,32 @@ namespace EbookUI.Controllers
                 return true;
             else
                 return false;
+        }
+
+        public async Task<IActionResult> ShowByLetter(string id)
+        {
+            var GBooks = from m in objRepositoty.GetBooks().Where(a => a.BookName.StartsWith(id)) select m;
+            GBooks = GBooks.ToList();
+
+            var ApprovedBooksList = GBooks.Where(s => s.StatusId == 2);
+            if (ApprovedBooksList.ToList().Count > 0)
+            {
+                ViewBag.approvedsubtitle = "Approved Books";
+            }
+            else
+                ViewBag.approvedsubtitle = "";
+
+            var UnapprovedBooksList = GBooks.Where(s => s.StatusId == 1);
+            if (UnapprovedBooksList.ToList().Count > 0)
+            {
+                ViewBag.unapprovedsubtitle = "Un Approved Books";
+            }
+            else
+                ViewBag.unapprovedsubtitle = "";
+
+            //return View(objRepositoty.GetBooks().OrderByDescending(s => s.ApprovedDate));
+
+            return await Task.FromResult(View("Index", GBooks));
         }
     }
 }

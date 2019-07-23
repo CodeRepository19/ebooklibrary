@@ -13,10 +13,16 @@ namespace EbookInfraData.Context
 
         public DbSet<Technology> Technologys { get; set; }
 
+        public DbSet<Reviewes> reviewes  { get; set; }
+
+        public DbSet<ApprovalStatus> approvalStatuses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book>().ToTable("Book");
             modelBuilder.Entity<Technology>().ToTable("Technology");
+            modelBuilder.Entity<Reviewes>().ToTable("Reviewes");
+            modelBuilder.Entity<ApprovalStatus>().ToTable("ApprovalStatus");
         }
     }
 }
