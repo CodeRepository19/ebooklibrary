@@ -41,7 +41,7 @@
         <div class="row">
             @foreach (var item in Model)
             {
-                if (User.Identity.Name == "prasad@prasad.com")
+                @if(User.IsInRole("Admin"))
                 {
                     if (item.StatusId == 1)
                     {
@@ -113,7 +113,7 @@
 
         </div>
 
-        @if (User.Identity.Name == "prasad@prasad.com")
+        @if(User.IsInRole("Admin"))
         {
         <h5 style="color:#86bc42;padding:2%;">@ViewBag.approvedsubtitle</h5>
         <div class="row">

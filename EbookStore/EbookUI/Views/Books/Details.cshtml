@@ -57,63 +57,63 @@
         }
     </div><br />
 
-    <div class="row">
-        <div class="col-md-6">
-            <button class="btn btn-success btn-green btn-sm" id="open-review-box">Leave a Review</button>
-            <div class="row" id="post-review-box" style="display:none;padding:3%;">
-                <div class="col-md-12">
-                    <form enctype="multipart/form-data" asp-controller="Books" asp-action="SaveReview" method="post">
+          <div class="row">
+              <div class="col-md-6">
+                  <button class="btn btn-success btn-green btn-sm" id="open-review-box">Leave a Review</button>
+                  <div class="row" id="post-review-box" style="display:none;padding:3%;">
+                      <div class="col-md-12">
+                          <form enctype="multipart/form-data" asp-controller="Books" asp-action="SaveReview" method="post">
 
-                        <textarea class="form-control" asp-for="review.ReviewText" cols="50" id="new-review" placeholder="Enter your review here..." rows="2"></textarea>
+                              <textarea class="form-control" asp-for="review.ReviewText" cols="50" id="new-review" placeholder="Enter your review here..." rows="2"></textarea>
 
-                        <label class="stars">
-                            <a href="javascript:void(0)" id="1"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                            <a href="javascript:void(0)" id="2"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                            <a href="javascript:void(0)" id="3"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                            <a href="javascript:void(0)" id="4"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                            <a href="javascript:void(0)" id="5"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                        </label>
-                        <input asp-for="review.Rating" id="RatingVal" type="hidden" class="form-control" />
-                        <input asp-for="review.BookId" type="hidden" value="@Model.book.BookId" class="form-control" />
-                        <div class="text-right" style="padding:1%;">
-                            <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
-                        </div>
+                              <label class="stars">
+                                  <a href="javascript:void(0)" id="1"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                                  <a href="javascript:void(0)" id="2"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                                  <a href="javascript:void(0)" id="3"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                                  <a href="javascript:void(0)" id="4"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                                  <a href="javascript:void(0)" id="5"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                              </label>
+                              <input asp-for="review.Rating" id="RatingVal" type="hidden" class="form-control" />
+                              <input asp-for="review.BookId" type="hidden" value="@Model.book.BookId" class="form-control" />
+                              <div class="text-right" style="padding:1%;">
+                                  <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
+                              </div>
 
-                    </form>
-                </div>
-            </div>
-        </div>
-        @if (User.Identity.Name == "prasad@prasad.com")
-        {
-            @if (@Model.book.StatusId == 1)
+                          </form>
+                      </div>
+                  </div>
+              </div>
+              @if(User.IsInRole("Admin"))
+              {
+              @if (@Model.book.StatusId == 1)
             {
-                <div class="col-md-6 text-right">
-                    <button class="btn btn-success btn-green btn-sm" id="open-approvestatus-box">Approve Status</button>
-                    <div class="row" id="post-approvestatus-box" style="display:none;padding:3%;">
-                        <div class="col-md-12">
-                            <form enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
-                                <input hidden asp-for="book.BookId" />
-                                <input hidden asp-for="book.BookName" />
-                                <input hidden asp-for="book.TechnologyId" />
-                                <input hidden asp-for="book.Description" />
-                                <input hidden asp-for="book.ImageUrl" />
-                                <input hidden asp-for="book.CreatedBy" />
-                                <input hidden asp-for="book.CreatedDate" />
-                                <select asp-for="book.StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.approvalStatusList, "StatusId","Status"))">
-                                    <option value="" hidden disabled selected>Select a Approve Status</option>
-                                </select>
-                                <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea>
-                                <div class="text-right" style="padding:1%;">
-                                    <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+              <div class="col-md-6 text-right">
+                  <button class="btn btn-success btn-green btn-sm" id="open-approvestatus-box">Approve Status</button>
+                  <div class="row" id="post-approvestatus-box" style="display:none;padding:3%;">
+                      <div class="col-md-12">
+                          <form enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
+                              <input hidden asp-for="book.BookId" />
+                              <input hidden asp-for="book.BookName" />
+                              <input hidden asp-for="book.TechnologyId" />
+                              <input hidden asp-for="book.Description" />
+                              <input hidden asp-for="book.ImageUrl" />
+                              <input hidden asp-for="book.CreatedBy" />
+                              <input hidden asp-for="book.CreatedDate" />
+                              <select asp-for="book.StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.approvalStatusList, "StatusId","Status"))">
+                                  <option value="" hidden disabled selected>Select a Approve Status</option>
+                              </select>
+                              <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea>
+                              <div class="text-right" style="padding:1%;">
+                                  <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div>
             }
-        }
+              }
 
-    </div>
+          </div>
 
     <script>
 

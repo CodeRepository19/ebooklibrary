@@ -28,7 +28,7 @@
         <div class="form-group row">
             <label asp-for="book.Description" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-10">
-                <input asp-for="book.Description" class="form-control" placeholder="Description" />
+                <textarea asp-for="book.Description" class="form-control" maxlength="5000" placeholder="Description"></textarea>
                 <span asp-validation-for="book.Description" class="text-danger"></span>
             </div>
         </div>
@@ -47,6 +47,7 @@
                     <input asp-for="Image" id="upload-dialog" class="form-control custom-file-input" />
                     <label class="custom-file-label">Choose File..</label>
                 </div>
+                <small><p class="text-secondary"> <strong>Note:</strong> Please upload appropriate PDF file</p></small>
             </div>
         </div>
 
