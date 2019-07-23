@@ -34,49 +34,33 @@ namespace EbookUI.Controllers
                 //if(User.IsInRole("Admin"))
                 //{
                 //}
-                if (User.Identity.Name == "prasad@prasad.com")
+                var ApprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
+                if (ApprovedBooksList.ToList().Count > 0)
                 {
-                    // return View(objRepositoty.GetBooks().OrderByDescending(s => s.CreatedDate));
-                    var ApprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.CreatedDate);
-                    if (ApprovedBooksList.ToList().Count > 0)
-                    {
-                        ViewBag.approvedsubtitle = "Approved Books";
-                    }
-                    else
-                        ViewBag.approvedsubtitle = "";
-
-                    var UnapprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 1).OrderByDescending(s => s.CreatedDate);
-                    if (UnapprovedBooksList.ToList().Count > 0)
-                    {
-                        ViewBag.unapprovedsubtitle = "Un Approved Books";
-                    }
-                    else
-                        ViewBag.unapprovedsubtitle = "";
-
-                    return View(objRepositoty.GetBooks().OrderByDescending(s => s.CreatedDate));
+                    ViewBag.approvedsubtitle = "Approved Books";
                 }
                 else
-                {
-                    var BookList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.CreatedDate);
-                    if (BookList.ToList().Count > 0)
-                    {
-                        ViewBag.subtitle = "Recent Books";
-                    }
-                    else
-                        ViewBag.subtitle = "";
+                    ViewBag.approvedsubtitle = "";
 
-                    return View(BookList);
+                var UnapprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 1).OrderByDescending(s => s.ApprovedDate);
+                if (UnapprovedBooksList.ToList().Count > 0)
+                {
+                    ViewBag.unapprovedsubtitle = "Un Approved Books";
                 }
+                else
+                    ViewBag.unapprovedsubtitle = "";
+
+                return View(objRepositoty.GetBooks().OrderByDescending(s => s.ApprovedDate));
             }
             else
             {
-                var BookList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.CreatedDate).Take(5);
+                var BookList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate).Take(5);
                 if (BookList.ToList().Count > 0)
                 {
-                    ViewBag.subtitle = "Recent Books";
+                    ViewBag.approvedsubtitle = "Approved Books";
                 }
                 else
-                    ViewBag.subtitle = "";
+                    ViewBag.approvedsubtitle = "";
 
                 return View(BookList);
             }
@@ -96,6 +80,22 @@ namespace EbookUI.Controllers
                 {
                     //  Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
                     Books = Books.Where(s => s.TechnologyId == techID);
+
+                    var ApprovedBooks = Books.Where(s => s.StatusId == 2);
+                    if (ApprovedBooks.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+
+                    var UnApprovedBooks = Books.Where(s => s.StatusId == 1);
+                    if (UnApprovedBooks.ToList().Count > 0)
+                    {
+                        ViewBag.unapprovedsubtitle = "Un Approved Books";
+                    }
+                    else
+                        ViewBag.unapprovedsubtitle = "";
                 }
                 else
                     //return View("Error/500");
@@ -117,6 +117,21 @@ namespace EbookUI.Controllers
                 {
 
                     Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
+                    var ApprovedBooks = Books.Where(s => s.StatusId == 2);
+                    if (ApprovedBooks.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+
+                    var UnApprovedBooks = Books.Where(s => s.StatusId == 1);
+                    if (UnApprovedBooks.ToList().Count > 0)
+                    {
+                        ViewBag.unapprovedsubtitle = "Un Approved Books";
+                    }
+                    else
+                        ViewBag.unapprovedsubtitle = "";
                 }
                 else
                     //return View("Error/500");
@@ -380,7 +395,7 @@ namespace EbookUI.Controllers
                         objbookDetails.book.StatusId = objbookDetails.book.StatusId;
                     }
 
-                    
+
                     Book objEditBook = new Book
                     {
                         BookId = objbookDetails.book.BookId,
