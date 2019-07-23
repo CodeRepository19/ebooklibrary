@@ -76,7 +76,7 @@
         <div class="form-group row">
             <div class="col-sm-2"></div>
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary btn-sm" title="Update the Existing book">Update</button>
+                <button type="submit" class="btn btn-primary btn-sm" id="updbtn" title="Update the Existing book">Update</button>
                 <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1 btn-sm" title="Go To Index Page">Cancel</a>
             </div>
         </div>
@@ -87,7 +87,7 @@
                     document.querySelector("#pdf-loader").style.display = 'none';
                     document.querySelector("#changePDFLoader").style.display = 'none';
                     document.querySelector("#changeBookLbl").style.display = 'none';
-
+                     $("#updbtn").attr("disabled","disabled");
                     var _PDF_DOC,
                         _CANVAS = document.querySelector('#pdf-preview'),
                         _OBJECT_URL;
@@ -140,6 +140,7 @@
                                 image = image.replace('data:image/png;base64,', '');
 
                                 document.querySelector("#txtImgUrl").setAttribute("value", image);
+                                $("#updbtn").removeAttr("disabled");
                             });
                         });
                     }
