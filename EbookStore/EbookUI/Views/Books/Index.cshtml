@@ -10,6 +10,18 @@
         <h3 class="text-center m-3" style="color:#86bc42;">E-Books</h3>
 
         <div class="row">
+            <div class="container text-center">
+                @{
+                for (char c = 'A'; c <= 'Z'; c++)
+                {
+                    <a name=@c asp-controller="Books" asp-action="ShowByLetter" asp-route-id="@c" class="grocery">&nbsp;@c&nbsp;</a>
+                }
+
+                }
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <form class="form-inline my-2 my-lg-0 d-inline" asp-controller="Books" asp-action="SearchBook">
@@ -26,18 +38,18 @@
             <div class="col-md-3"></div>
         </div><br />
 
-    <div class="row">
-        @foreach (var item in Model)
+        <div class="row">
+            @foreach (var item in Model)
             {
                 if (User.Identity.Name == "prasad@prasad.com")
                 {
                     if (item.StatusId == 1)
                     {
-        @if(IsTitle == false)
+            @if(IsTitle == false)
         {
-        <div class="col-md-12">
-            <h5 style="color:#86bc42;padding:2%;">@ViewBag.unapprovedsubtitle</h5>
-        </div>
+            <div class="col-md-12">
+                <h5 style="color:#86bc42;padding:2%;">@ViewBag.unapprovedsubtitle</h5>
+            </div>
             IsTitle = true;
        }
                         var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
@@ -50,14 +62,14 @@
                         // File name For the downloaded book
                         var bookdownload = @item.BookName + ".pdf";
 
-        <div class="col-md-2 text-center">
-            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-                <img class="img-responsive" src="@photoPath" asp-append-version="true" />
-            </a><hr />
-            <div style="height:16px;overflow:hidden;">
-                <h5 style="font-size:13px;font-weight:bold;line-height:15px;">@item.BookName</h5>
+            <div class="col-md-2 text-center">
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                    <img class="img-responsive" src="@photoPath" asp-append-version="true" />
+                </a><hr />
+                <div style="height:16px;overflow:hidden;">
+                    <h5 style="font-size:13px;font-weight:bold;line-height:15px;">@item.BookName</h5>
+                </div>
             </div>
-        </div>
 
                     }
                 }
@@ -65,13 +77,13 @@
                 {
             if (item.StatusId == 1)
                     {
-        @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == item.CreatedBy)
+            @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == item.CreatedBy)
         {
-        @if(IsTitle == false)
+            @if(IsTitle == false)
         {
-    <div class="col-md-12">
-        <h5 style="color:#86bc42;padding:2%;">@ViewBag.unapprovedsubtitle</h5>
-    </div>
+            <div class="col-md-12">
+                <h5 style="color:#86bc42;padding:2%;">@ViewBag.unapprovedsubtitle</h5>
+            </div>
             IsTitle = true;
        }
                     var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
@@ -84,14 +96,14 @@
                     // File name For the downloaded book
                     var bookdownload = @item.BookName + ".pdf";
 
-        <div class="col-md-2 text-center">
-            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-                <img class="img-responsive" src="@photoPath" asp-append-version="true" />
-            </a><hr />
-            <div style="height:16px;overflow:hidden;">
-                <h5 style="font-size:13px;font-weight:bold;line-height:15px;">@item.BookName</h5>
+            <div class="col-md-2 text-center">
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                    <img class="img-responsive" src="@photoPath" asp-append-version="true" />
+                </a><hr />
+                <div style="height:16px;overflow:hidden;">
+                    <h5 style="font-size:13px;font-weight:bold;line-height:15px;">@item.BookName</h5>
+                </div>
             </div>
-        </div>
         }
                     }
 
@@ -99,7 +111,7 @@
 
             }
 
-    </div>
+        </div>
 
         @if (User.Identity.Name == "prasad@prasad.com")
         {

@@ -435,5 +435,31 @@ namespace EbookUI.Controllers
             else
                 return false;
         }
+
+        public async Task<IActionResult> ShowByLetter(string id)
+        {
+            var GBooks = from m in objRepositoty.GetBooks().Where(a => a.BookName.StartsWith(id)) select m;
+            GBooks = GBooks.ToList();
+
+            var ApprovedBooksList = GBooks.Where(s => s.StatusId == 2);
+            if (ApprovedBooksList.ToList().Count > 0)
+            {
+                ViewBag.approvedsubtitle = "Approved Books";
+            }
+            else
+                ViewBag.approvedsubtitle = "";
+
+            var UnapprovedBooksList = GBooks.Where(s => s.StatusId == 1);
+            if (UnapprovedBooksList.ToList().Count > 0)
+            {
+                ViewBag.unapprovedsubtitle = "Un Approved Books";
+            }
+            else
+                ViewBag.unapprovedsubtitle = "";
+
+            //return View(objRepositoty.GetBooks().OrderByDescending(s => s.ApprovedDate));
+
+            return await Task.FromResult(View("Index", GBooks));
+        }
     }
 }
