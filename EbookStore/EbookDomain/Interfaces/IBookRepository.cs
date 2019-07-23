@@ -55,5 +55,6 @@ namespace EbookDomain.Interfaces
         /// <param name="reviewDetails"></param>
         /// <returns></returns>
         Reviewes Add(Reviewes reviewDetails);
+        IEnumerable<ApprovalStatus> GetApprovalStatus();
     }
 }

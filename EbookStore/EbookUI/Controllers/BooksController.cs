@@ -30,9 +30,56 @@ namespace EbookUI.Controllers
         public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
-                return View(objRepositoty.GetBooks().OrderByDescending(s => s.CreatedDate));
+            {
+                //if(User.IsInRole("Admin"))
+                //{
+                //}
+                if (User.Identity.Name == "prasad@prasad.com")
+                {
+                    // return View(objRepositoty.GetBooks().OrderByDescending(s => s.CreatedDate));
+                    var ApprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.CreatedDate);
+                    if (ApprovedBooksList.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+
+                    var UnapprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 1).OrderByDescending(s => s.CreatedDate);
+                    if (UnapprovedBooksList.ToList().Count > 0)
+                    {
+                        ViewBag.unapprovedsubtitle = "Un Approved Books";
+                    }
+                    else
+                        ViewBag.unapprovedsubtitle = "";
+
+                    return View(objRepositoty.GetBooks().OrderByDescending(s => s.CreatedDate));
+                }
+                else
+                {
+                    var BookList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.CreatedDate);
+                    if (BookList.ToList().Count > 0)
+                    {
+                        ViewBag.subtitle = "Recent Books";
+                    }
+                    else
+                        ViewBag.subtitle = "";
+
+                    return View(BookList);
+                }
+            }
             else
-                return View(objRepositoty.GetBooks().OrderByDescending(s => s.CreatedDate).Take(5));
+            {
+                var BookList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.CreatedDate).Take(5);
+                if (BookList.ToList().Count > 0)
+                {
+                    ViewBag.subtitle = "Recent Books";
+                }
+                else
+                    ViewBag.subtitle = "";
+
+                return View(BookList);
+            }
         }
 
         public async Task<IActionResult> SearchBook(string searchString)
@@ -96,7 +143,10 @@ namespace EbookUI.Controllers
             if (objBookDetails == null)
                 return NotFound();
             else
+            {
+                ApprovalStatusList();
                 return View(objBookDetails);
+            }
         }
 
         private BookViewModel GetBookDetails(int intBookId)
@@ -123,6 +173,12 @@ namespace EbookUI.Controllers
                 objBookDetails.book.TechnologyId = bookDetails.TechnologyId;
                 objBookDetails.technology.TechnologyName = technologyDetails.TechnologyName;
                 objBookDetails.book.ImageUrl = bookDetails.ImageUrl;
+                objBookDetails.book.CreatedBy = bookDetails.CreatedBy;
+                objBookDetails.book.CreatedDate = bookDetails.CreatedDate;
+                objBookDetails.book.ApprovedBy = bookDetails.ApprovedBy;
+                objBookDetails.book.ApprovedDate = bookDetails.ApprovedDate;
+                objBookDetails.book.Remarks = bookDetails.Remarks;
+                objBookDetails.book.StatusId = bookDetails.StatusId;
                 objBookDetails.ExistingImageUrl = bookDetails.ImageUrl;
             }
 
@@ -141,6 +197,12 @@ namespace EbookUI.Controllers
         {
             ViewBag.technologyList = objRepositoty.GetTechnologys();
             return objRepositoty.GetTechnologys();
+        }
+
+        private IEnumerable<ApprovalStatus> ApprovalStatusList()
+        {
+            ViewBag.approvalStatusList = objRepositoty.GetApprovalStatus();
+            return objRepositoty.GetApprovalStatus();
         }
 
         // POST: Courses/Create
@@ -164,8 +226,8 @@ namespace EbookUI.Controllers
                         ImageUrl = uniqueFileNmae,
                         CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
                         CreatedDate = DateTime.Now,
-                        StatusId=1
-                        
+                        StatusId = 1
+
                     };
 
                     objRepositoty.Add(objNewBook);
@@ -237,6 +299,27 @@ namespace EbookUI.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult ApprovalStatus(BookViewModel objbookDetails)
+        {
+            Book objEditBook = new Book
+            {
+                BookId = objbookDetails.book.BookId,
+                BookName = objbookDetails.book.BookName,
+                ImageUrl = objbookDetails.book.ImageUrl,
+                TechnologyId = objbookDetails.book.TechnologyId,
+                Description = objbookDetails.book.Description,
+                StatusId = objbookDetails.book.StatusId,
+                Remarks = objbookDetails.book.Remarks,
+                CreatedBy = objbookDetails.book.CreatedBy,
+                CreatedDate = objbookDetails.book.CreatedDate,
+                ApprovedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                ApprovedDate = DateTime.Now
+            };
+
+            objRepositoty.Update(objEditBook);
+            return RedirectToAction(nameof(Index));
+        }
 
         // GET: books/Edit/5
         [Authorize]
@@ -289,10 +372,15 @@ namespace EbookUI.Controllers
                         }
 
                         objbookDetails.book.ImageUrl = ProcessUploadFile(objbookDetails);
+                        objbookDetails.book.StatusId = 1;
                     }
                     else
+                    {
                         objbookDetails.book.ImageUrl = objbookDetails.ExistingImageUrl;
+                        objbookDetails.book.StatusId = objbookDetails.book.StatusId;
+                    }
 
+                    
                     Book objEditBook = new Book
                     {
                         BookId = objbookDetails.book.BookId,
@@ -300,7 +388,12 @@ namespace EbookUI.Controllers
                         Description = objbookDetails.book.Description,
                         TechnologyId = objbookDetails.book.TechnologyId,
                         ImageUrl = objbookDetails.book.ImageUrl,
-                        StatusId = 1
+                        StatusId = objbookDetails.book.StatusId,
+                        Remarks = objbookDetails.book.Remarks,
+                        CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                        CreatedDate = objbookDetails.book.CreatedDate,
+                        ApprovedBy = objbookDetails.book.ApprovedBy,
+                        ApprovedDate = objbookDetails.book.ApprovedDate
                     };
 
                     objRepositoty.Update(objEditBook);

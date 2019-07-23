@@ -12,6 +12,11 @@
     <form enctype="multipart/form-data" asp-controller="Books" asp-action="Edit" method="post" class="m-3">
         <input hidden asp-for="book.BookId" />
         <input hidden asp-for="ExistingImageUrl" />
+        <input hidden asp-for="book.StatusId" />
+        <input hidden asp-for="book.CreatedBy" />
+        <input hidden asp-for="book.CreatedDate" />
+        <input hidden asp-for="book.ApprovedBy" />
+        <input hidden asp-for="book.ApprovedDate" />
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="form-group row">
             <label asp-for="book.BookName" class="col-sm-2 col-form-label"></label>

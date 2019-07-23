@@ -74,6 +74,11 @@ namespace EbookInfraData.Repository
         {
             return _ctx.Technologys.Find(technologyId);
         }
-             
+
+        public IEnumerable<ApprovalStatus> GetApprovalStatus()
+        {
+            return _ctx.approvalStatuses;
+        }
+
     }
 }
