@@ -22,16 +22,16 @@ namespace EbookDomain.Models
         /// The Below line contains "[Required]" which is called DataAnnotation used to Validate the column "BookName" Input data in Presentaion Layer
         /// </summary>
         [Required]
-        [RegularExpression(@"^[a-zA-Z]+[ a-zA-Z-_]*$", ErrorMessage = "Use Characters only")]
-        [MaxLength(50, ErrorMessage = "Book Name Should be maximum of 50 Characters")]
-        [MinLength(4, ErrorMessage = "Book Name Should be minimum of 4 Characters")]
+        [RegularExpression(@"^[a-zA-Z][a-zA-Z0-9\d .]*$", ErrorMessage = "Sorry, only letters(a-z), number(0-9), space and period(.) are allowed")]
+        [MaxLength(50, ErrorMessage = "Book Name should be maximum of 50 characters")]
+        [MinLength(4, ErrorMessage = "Book Name should be minimum of 4 characters")]
         // This will make Display the Column Name "Book Name"  instead of actual Column "BookName"
         [Display(Name = "Book Name")]
         public string BookName { get; set; }
 
         [Required]
-        [MaxLength(5000, ErrorMessage = "Description Should be maximum of 5000 Characters")]
-        [MinLength(10, ErrorMessage = "Description Should be minimum of 10 Characters")]
+        [MaxLength(5000, ErrorMessage = "Description should be maximum of 5000 characters")]
+        [MinLength(10, ErrorMessage = "Description should be minimum of 10 characters")]
         // This will make Display the Column Name "Description"  instead of actual Column "Description"
         [Display(Name = "Description")]
         public string Description { get; set; }
@@ -67,10 +67,14 @@ namespace EbookDomain.Models
         [MaxLength(500, ErrorMessage = "Remarks Should be minimum of 10 Characters")]
         public string Remarks { get; set; }
 
+        [RegularExpression(@"^[a-zA-Z][a-zA-Z .]*$", ErrorMessage = "Sorry, only letters(a-z), space and period(.) are allowed")]
         [Required]
         public string Author { get; set; }
 
         [Required, DataType(DataType.Date)]
+        //[RegularExpression(@"^(((0[1-9]|1[012])\/(?!00|29)([012]\d)|(0[13-9]|1[012])\/(29|30)|(0[13578]|1[02])\/31)\/(18|19|20)\d{2}|02\/29\/((18|19|20)(0[48]|[2468][048]|[13579][26])|2000))$", ErrorMessage = "Please enter or select valid date")]
+        //[Range(typeof(DateTime), "1/1/1900", "12/31/9999")]
+        [Display(Name = "Published Date")]
         public string PublishedDate { get; set; }
 
     }

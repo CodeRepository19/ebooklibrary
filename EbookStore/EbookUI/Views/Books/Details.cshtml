@@ -38,16 +38,15 @@
             </div>
 
             <div class="card-body col-md-9" style="margin-left:-3%;">
-                <p style="font-size:15px;"><strong>Uploaded By:</strong> &nbsp;&nbsp;@Model.book.CreatedBy</p> <hr />
+                @if (User.IsInRole("Admin"))
+                {
+                    <p style="font-size:15px;"><strong>Uploaded By:</strong> &nbsp;&nbsp;@PostedBy</p> <hr />
+                }
                 <p style="font-size:15px;"><strong>Author:</strong> &nbsp;&nbsp;@Model.book.Author</p> <hr />
                 <p style="font-size:15px;"><strong>Published On:</strong> &nbsp;&nbsp;@Model.book.PublishedDate</p> <hr />
                 <p style="font-size:15px;"><strong>Technology:</strong> &nbsp;&nbsp;@Model.technology.TechnologyName</p> <hr />
                 <p style="font-size:15px;"><strong>Description:</strong><br /><br />@Model.book.Description</p>
-                <p style="font-size:15px;"><strong>Author:</strong><br /><br />@Model.book.Author</p>
-                @if (User.IsInRole("Admin"))
-                {
-                    <p style="font-size:15px;"><strong>Posted By:</strong><br /><br />@PostedBy</p>
-                }
+
             </div>
 
         </div>
