@@ -1,9 +1,28 @@
-﻿/* Apply styles for Entire body start*/
+﻿/* Apply styles for Entire Html tag Start*/
+html {
+    height: 100%;
+}
+/* Apply styles for Entire Html tag End*/
+
+
+/* Apply styles for Entire body start*/
 body {
     font-size: 13px;
     font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    min-height: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
 }
+
+    body::after {
+        content: '';
+        display: block;
+        height: 50px; 
+    }
+
 /* Apply styles for Entire body End*/
+
 
 /* Top Header styles start*/
 
@@ -26,9 +45,7 @@ body {
     }
 
 
-.ehcolor
-{
-  
+.ehcolor {
     font-family: inherit;
     color: #de1717;
     padding-top: 50px;
@@ -152,12 +169,11 @@ body {
 /* Sticky footer styles start*/
 
 .footer {
-    position: fixed;
-    left: 0;
+    position: absolute;
     bottom: 0;
     width: 100%;
+    padding:5px;
     background-color: #242c42;
-    padding: 1%;
 }
 
     .footer a {
@@ -201,6 +217,6 @@ body {
 /* Sticky footer styles End*/
 
 
-.rating{
-    color:red;
+.rating {
+    color: red;
 }

@@ -9,13 +9,13 @@ namespace EbookDomain.Models
         public int TechnologyId { get; set; }
 
         [Required]
-        [MaxLength(50, ErrorMessage = "Technology Name cannot be greater than 50")]
-        [MinLength(4, ErrorMessage = "Technology Name cannot be less than 4")]
+        [MaxLength(50, ErrorMessage = "Technology name should be maximum of 50 characters")]
+        [MinLength(4, ErrorMessage = "Technology name should be minimum of 4 characters")]
         public string TechnologyName { get; set; }
 
         [Required]
-        [MaxLength(50, ErrorMessage = "Technology Domain Name cannot be greater than 50")]
-        [MinLength(4, ErrorMessage = "Technology Domain Name cannot be less than 4")]
+        [MaxLength(50, ErrorMessage = "Technology domain should be maximum of 50 characters")]
+        [MinLength(4, ErrorMessage = "Technology domain should be minimum of 4 characters")]
         public string TechnologyDomain { get; set; }
 
         public ICollection<Book> Books { get; set; }

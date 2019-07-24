@@ -30,7 +30,7 @@ namespace EbookDomain.Models
         public string BookName { get; set; }
 
         [Required]
-        [MaxLength(500, ErrorMessage = "Description Should be maximum of 500 Characters")]
+        [MaxLength(5000, ErrorMessage = "Description Should be maximum of 5000 Characters")]
         [MinLength(10, ErrorMessage = "Description Should be minimum of 10 Characters")]
         // This will make Display the Column Name "Description"  instead of actual Column "Description"
         [Display(Name = "Description")]

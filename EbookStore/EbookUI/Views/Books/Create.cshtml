@@ -5,15 +5,14 @@
 }
 
 <style>
-    .col-form-label{
-    margin-right:-10%;
-}
+    .col-form-label {
+        margin-right: -10%;
+    }
 </style>
 
 <h3 class="text-center m-4 text-muted">Add E-Book</h3>
 
 <div class="row">
-    <div class="col-md-2"></div>
     <div class="col-md-8">
 
         <form enctype="multipart/form-data" asp-controller="Books" asp-action="Create" method="post" class="m-3">
@@ -23,7 +22,7 @@
             <div class="form-group row">
                 <label asp-for="book.BookName" class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-9">
-                    <input asp-for="book.BookName" class="form-control" placeholder="Book Name" />
+                    <input asp-for="book.BookName" type="text" class="form-control" placeholder="Book Name" autocomplete="off" />
                     <span asp-validation-for="book.BookName" class="text-danger"></span>
                 </div>
             </div>
@@ -49,7 +48,7 @@
             <div class="form-group row">
                 <label asp-for="book.Author" class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-9">
-                    <input asp-for="book.Author" class="form-control" placeholder="Author Name" />
+                    <input asp-for="book.Author" type="text" class="form-control" placeholder="Author Name" autocomplete="off" />
                     <span asp-validation-for="book.Author" class="text-danger"></span>
                 </div>
             </div>
@@ -89,123 +88,8 @@
                     <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1" title="Go To Index Page">Cancel</a>
                 </div>
             </div>
-
-            @section Scripts{
-                <script>
-                    $(document).ready(function () {
-                        document.querySelector("#pdf-loader").style.display = 'none';
-                        document.querySelector("#changePDFLoader").style.display = 'none';
-                        $("#addbtn").attr("disabled", "disabled");
-
-                        // document.querySelector("#changeBookLbl").style.display = 'none';
-
-                        var _PDF_DOC,
-                            _CANVAS = document.querySelector('#pdf-preview'),
-                            _OBJECT_URL;
-
-                        function showPDF(pdf_url) {
-                            PDFJS.getDocument({ url: pdf_url }).then(function (pdf_doc) {
-
-                                _PDF_DOC = pdf_doc;
-
-                                // Show the first page
-                                showPage(1);
-
-                                // destroy previous object url
-                                URL.revokeObjectURL(_OBJECT_URL);
-                            }).catch(function (error) {
-                                // trigger Cancel on error
-                                //document.querySelector("#cancel-pdf").click();
-
-                                // error reason
-                                alert(error.message);
-                            });;
-                        }
-
-                        function showPage(page_no) {
-                            // fetch the page
-                            _PDF_DOC.getPage(page_no).then(function (page) {
-                                // set the scale of viewport
-                                var scale_required = _CANVAS.width / page.getViewport(1).width;
-
-                                // get viewport of the page at required scale
-                                var viewport = page.getViewport(scale_required);
-
-                                // set canvas height
-                                _CANVAS.height = viewport.height;
-
-                                var renderContext = {
-                                    canvasContext: _CANVAS.getContext('2d'),
-                                    viewport: viewport
-                                };
-
-                                // render the page contents in the canvas
-                                page.render(renderContext).then(function () {
-                                    document.querySelector("#pdf-preview").style.display = 'inline-block';
-                                    document.querySelector("#pdf-loader").style.display = 'none';
-                                    document.querySelector("#changePDFLoader").style.display = 'inline-block';
-                                    //document.querySelector("#changeBookLbl").style.display = 'inline-block';
-                                    var image = document.getElementById("pdf-preview").toDataURL("image/png");
-
-                                    //get raw image data
-                                    image = image.replace('data:image/png;base64,', '');
-
-                                    document.querySelector("#txtImgUrl").setAttribute("value", image);
-                                    $("#addbtn").removeAttr("disabled");
-                                });
-                            });
-                        }
-
-                        /* Selected File has changed */
-                        document.querySelector("#upload-dialog").addEventListener('change', function () {
-                            document.querySelector("#changePDFLoader").style.display = 'inline-block';
-                            // user selected file
-                            var file = this.files[0];
-
-                            // allowed MIME types
-                            var mime_types = ['application/pdf'];
-
-                            // Validate whether PDF
-                            if (mime_types.indexOf(file.type) == -1) {
-                                alert('Error : Incorrect file type');
-                                return;
-                            }
-
-                            // validate file size
-                            if (file.size > 10 * 1024 * 1024) {
-                                alert('Error : Exceeded size 10MB');
-                                return;
-                            }
-
-                            // Show the PDF preview loader
-                            document.querySelector("#pdf-loader").style.display = 'inline-block';
-                            //document.querySelector("#changeBookLbl").style.display = 'inline-block';
-                            // object url of PDF
-                            _OBJECT_URL = URL.createObjectURL(file)
-
-                            // send the object url of the pdf to the PDF preview function
-                            showPDF(_OBJECT_URL);
-                        });
-
-                        $('.custom-file-input').on("change", function () {
-                            var fileLabel = $(this).next('.custom-file-label');
-                            var files = $(this)[0].files;
-                            if (files.length > 1) {
-                                fileLabel.html(files.length + ' files selected');
-                            }
-                            else if (files.length == 1) {
-                                fileLabel.html(files[0].name);
-                            }
-                        });
-
-
-
-                    });
-                </script>
-            }
         </form>
 
     </div>
-    <div class="col-md-2"></div>
-
+    <div class="col-md-4"></div>
 </div>
