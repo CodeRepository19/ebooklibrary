@@ -40,7 +40,6 @@
         <div class="card-body col-md-9 text-left">
             <p style="font-size:15px;"><strong>Technology:</strong> &nbsp;&nbsp;@Model.technology.TechnologyName</p> <hr />
             <p style="font-size:15px;"><strong>Description:</strong><br /><br />@Model.book.Description</p>
-
         </div>
 
     </div>
@@ -83,74 +82,73 @@
                       </div>
                   </div>
               </div>
-              @if(User.IsInRole("Admin"))
-              {
-              @if (@Model.book.StatusId == 1)
-            {
-              <div class="col-md-6 text-right">
-                  <button class="btn btn-success btn-green btn-sm" id="open-approvestatus-box">Approve Status</button>
-                  <div class="row" id="post-approvestatus-box" style="display:none;padding:3%;">
-                      <div class="col-md-12">
-                          <form enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
-                              <input hidden asp-for="book.BookId" />
-                              <input hidden asp-for="book.BookName" />
-                              <input hidden asp-for="book.TechnologyId" />
-                              <input hidden asp-for="book.Description" />
-                              <input hidden asp-for="book.ImageUrl" />
-                              <input hidden asp-for="book.CreatedBy" />
-                              <input hidden asp-for="book.CreatedDate" />
-                              <select asp-for="book.StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.approvalStatusList, "StatusId","Status"))">
-                                  <option value="" hidden disabled selected>Select a Approve Status</option>
-                              </select>
-                              <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea>
-                              <div class="text-right" style="padding:1%;">
-                                  <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
+                  @if (User.IsInRole("Admin"))
+                  {
+                      @if (@Model.book.StatusId == 1)
+                      {
+                          <div class="col-md-6 text-right">
+                              <button class="btn btn-success btn-green btn-sm" id="open-approvestatus-box">Approve Status</button>
+                              <div class="row" id="post-approvestatus-box" style="display:none;padding:3%;">
+                                  <div class="col-md-12">
+                                      <form class="pull-right" enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
+                                          <input hidden asp-for="book.BookId" />
+                                          <input hidden asp-for="book.BookName" />
+                                          <input hidden asp-for="book.TechnologyId" />
+                                          <input hidden asp-for="book.Description" />
+                                          <input hidden asp-for="book.ImageUrl" />
+                                          <input hidden asp-for="book.CreatedBy" />
+                                          <input hidden asp-for="book.CreatedDate" />
+                                          <select asp-for="book.StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.approvalStatusList, "StatusId","Status"))">
+                                              <option value="" hidden disabled selected>Select a Approve Status</option>
+                                          </select>
+                                          <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea>
+                                          <div class="text-right" style="padding-top:2%;">
+                                              <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
+                                          </div>
+                                      </form>
+                                  </div>
                               </div>
-                          </form>
-                      </div>
-                  </div>
+                          </div>
+                      }
+                  }
+
               </div>
-            }
-              }
 
+              <script>
+                  $(document).ready(function () {
+
+                      var rating; // Global Variable
+
+                      // Hide and show the ReviewDiv tag
+                      $("#open-review-box").click(function () {
+                          $("#post-review-box").slideToggle(1000);
+                      });
+
+
+                      // Hide and show the Approve Status tag
+                      $("#open-approvestatus-box").click(function () {
+                          $("#post-approvestatus-box").slideToggle(1000);
+                      });
+
+
+                      // To select rating and get the value
+                      $("a").click(function () {
+                          $(this).siblings().removeClass("rating");
+                          $(this).prevAll().addClass("rating");
+                          $(this).addClass("rating");
+                          rating = 0;
+                          rating = $("#RatingVal").val(rating);
+                      });
+
+                      // to get the dropdown selected value
+                      $('#book_StatusId').on("change", function () {
+                          var statusId = $(this).val();
+                          if (statusId == 3) {
+                              $("#remarks").show();
+                          }
+                          else
+                              $("#remarks").hide();
+                      });
+                  });
+              </script>
           </div>
-
-    <script>
-
-        $(document).ready(function () {
-
-            var rating; // Global Variable
-
-            // Hide and show the ReviewDiv tag
-            $("#open-review-box").click(function () {
-                $("#post-review-box").slideToggle(1000);
-            });
-
-
-            // Hide and show the Approve Status tag
-            $("#open-approvestatus-box").click(function () {
-                $("#post-approvestatus-box").slideToggle(1000);
-            });
-
-
-            // To select rating and get the value
-            $("a").click(function () {
-                $(this).siblings().removeClass("rating");
-                $(this).prevAll().addClass("rating");
-                $(this).addClass("rating");
-                rating = 0;
-                rating = $("#RatingVal").val(rating);
-            });
-
-            // to get the dropdown selected value
-            $('#book_StatusId').on("change", function () {
-                var statusId = $(this).val();
-                if (statusId == 3) {
-                    $("#remarks").show();
-                }
-                else
-                    $("#remarks").hide();
-            });
-        });
-    </script>
-</div>
