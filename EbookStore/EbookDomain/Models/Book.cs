@@ -64,7 +64,8 @@ namespace EbookDomain.Models
 
         public ApprovalStatus approvalStatus { get; set; }
 
-        [MaxLength(500, ErrorMessage = "Remarks Should be minimum of 10 Characters")]
+        [MaxLength(500, ErrorMessage = "Description should be maximum of 500 characters")]
+        [MinLength(10, ErrorMessage = "Description should be minimum of 10 characters")]
         public string Remarks { get; set; }
 
         [RegularExpression(@"^[a-zA-Z][a-zA-Z .]*$", ErrorMessage = "Sorry, only letters(a-z), space and period(.) are allowed")]
