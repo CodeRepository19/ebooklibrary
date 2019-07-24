@@ -30,10 +30,8 @@
                 </form>
             </div>
             <div class="col-md-3"></div>
-        </div><br />
+        </div>
 
-        @if (SignInManager.IsSignedIn(User))
-        {
             <div class="container text-center m-3">
                 <div class="btn-group btn-group-sm">
                     @{
@@ -44,7 +42,6 @@
                     }
                 </div>
             </div> <br />
-        }
 
         <div class="row">
             @foreach (var item in Model)

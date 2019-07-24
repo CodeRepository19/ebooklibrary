@@ -22,15 +22,16 @@ namespace EbookDomain.Models
         /// The Below line contains "[Required]" which is called DataAnnotation used to Validate the column "BookName" Input data in Presentaion Layer
         /// </summary>
         [Required]
-        [MaxLength(50, ErrorMessage = "Book Name cannot be greater than 50")]
-        [MinLength(4, ErrorMessage = "Book Name cannot be less than 4")]
+        [RegularExpression(@"^[a-zA-Z]+[ a-zA-Z-_]*$", ErrorMessage = "Use Characters only")]
+        [MaxLength(50, ErrorMessage = "Book Name Should be maximum of 50 Characters")]
+        [MinLength(4, ErrorMessage = "Book Name Should be minimum of 4 Characters")]
         // This will make Display the Column Name "Book Name"  instead of actual Column "BookName"
         [Display(Name = "Book Name")]
         public string BookName { get; set; }
 
         [Required]
-        [MaxLength(500, ErrorMessage = "Description cannot be greater than 500")]
-        [MinLength(10, ErrorMessage = "Description cannot be less than 10")]
+        [MaxLength(500, ErrorMessage = "Description Should be maximum of 500 Characters")]
+        [MinLength(10, ErrorMessage = "Description Should be minimum of 10 Characters")]
         // This will make Display the Column Name "Description"  instead of actual Column "Description"
         [Display(Name = "Description")]
         public string Description { get; set; }
@@ -63,7 +64,14 @@ namespace EbookDomain.Models
 
         public ApprovalStatus approvalStatus { get; set; }
 
-        [MaxLength(500)]
+        [MaxLength(500, ErrorMessage = "Remarks Should be minimum of 10 Characters")]
         public string Remarks { get; set; }
+
+        [Required]
+        public string Author { get; set; }
+
+        [Required, DataType(DataType.Date)]
+        public string PublishedDate { get; set; }
+
     }
 }
