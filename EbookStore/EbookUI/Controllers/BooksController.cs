@@ -199,6 +199,8 @@ namespace EbookUI.Controllers
                 objBookDetails.book.PublishedDate = bookDetails.PublishedDate;
             }
 
+
+
             return objBookDetails;
         }
 
@@ -237,14 +239,14 @@ namespace EbookUI.Controllers
                 {
                     objNewBook = new Book
                     {
-                        BookName = objbookDetails.book.BookName,
-                        Description = objbookDetails.book.Description,
+                        BookName = objbookDetails.book.BookName.Trim(),
+                        Description = objbookDetails.book.Description.Trim(),
                         TechnologyId = objbookDetails.book.TechnologyId,
                         ImageUrl = uniqueFileNmae,
                         CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
                         CreatedDate = DateTime.Now,
                         StatusId = 1,
-                        Author = objbookDetails.book.Author,
+                        Author = objbookDetails.book.Author.Trim(),
                         PublishedDate = objbookDetails.book.PublishedDate
                     };
 
@@ -404,17 +406,17 @@ namespace EbookUI.Controllers
                     Book objEditBook = new Book
                     {
                         BookId = objbookDetails.book.BookId,
-                        BookName = objbookDetails.book.BookName,
-                        Description = objbookDetails.book.Description,
+                        BookName = objbookDetails.book.BookName.Trim(),
+                        Description = objbookDetails.book.Description.Trim(),
                         TechnologyId = objbookDetails.book.TechnologyId,
-                        ImageUrl = objbookDetails.book.ImageUrl,
+                        ImageUrl = objbookDetails.book.ImageUrl.Trim(),
                         StatusId = objbookDetails.book.StatusId,
-                        Remarks = objbookDetails.book.Remarks,
+                        Remarks = objbookDetails.book.Remarks.Trim(),
                         CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
                         CreatedDate = objbookDetails.book.CreatedDate,
-                        ApprovedBy = objbookDetails.book.ApprovedBy,
+                        ApprovedBy = objbookDetails.book.ApprovedBy.Trim(),
                         ApprovedDate = objbookDetails.book.ApprovedDate,
-                        Author = objbookDetails.book.Author,
+                        Author = objbookDetails.book.Author.Trim(),
                         PublishedDate = objbookDetails.book.PublishedDate
                     };
 
