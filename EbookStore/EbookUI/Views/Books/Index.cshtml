@@ -6,7 +6,8 @@
 @model IEnumerable<EbookDomain.Models.Book>
 @{
     ViewData["Title"] = "E-Books";
-    var IsTitle = false;
+    var IsUnApprovalTitle = false;
+    var IsApprovalTitle = false;
 }
 
     <div class="container">
@@ -52,14 +53,14 @@
                 {
                     if (item.StatusId == 1)
                     {
-                        @if (IsTitle == false)
+                        @if (IsUnApprovalTitle == false)
                         {
                             <div class="col-md-12">
                                 <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-down" aria-hidden="true"></i> @ViewBag.unapprovedsubtitle</h6><hr />
                             </div>
 
 
-                            IsTitle = true;
+                            IsUnApprovalTitle = true;
                         }
                         var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
 
@@ -84,12 +85,12 @@
                     {
                         @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == item.CreatedBy)
                         {
-                            @if (IsTitle == false)
+                            @if (IsUnApprovalTitle == false)
                             {
                                 <div class="col-md-12">
                                     <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-down" aria-hidden="true"></i> @ViewBag.unapprovedsubtitle</h6><hr />
                                 </div>
-                                IsTitle = true;
+                                IsUnApprovalTitle = true;
                             }
                             var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
 
@@ -124,14 +125,22 @@
 
         @if (User.IsInRole("Admin"))
         {
-            <div class="col-md-12">
+            @*<div class="col-md-12">
                 <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
-            </div>
+            </div>*@
             <div class="row">
                 @foreach (var item in Model)
                 {
                     if (item.StatusId == 2)
                     {
+                        @if (IsApprovalTitle == false)
+                        {
+                            <div class="col-md-12">
+                                <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
+                            </div>
+                            IsApprovalTitle = true;
+                        }
+
                         var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
 
                         // We Manipulate the Image path to ge the bookpath
@@ -153,31 +162,39 @@
         }
         else
         {
-            <div class="col-md-12">
+            @*<div class="col-md-12">
                 <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
-            </div>
-            <div class="row">
-                @foreach (var item in Model)
+            </div>*@
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            if (item.StatusId == 2)
+            {
+                @if (IsApprovalTitle == false)
                 {
-                    if (item.StatusId == 2)
-                    {
-                        var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
-
-                        // We Manipulate the Image path to ge the bookpath
-                        var Path = "/uploadBooks/" + (item.ImageUrl ?? "noimage.jpg");
-                        var splitPath = Path.Split(".");
-                        var bookPath = splitPath[0].ToString() + ".pdf";
-
-                        // File name For the downloaded book
-                        var bookdownload = @item.BookName + ".pdf";
-
-                        <div class="col-md-1 m-3">
-                            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-                                <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
-                            </a>
-                        </div>
-                    }
+                    <div class="col-md-12">
+                        <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
+                    </div>
+                    IsApprovalTitle = true;
                 }
-            </div>
+
+                var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
+
+                // We Manipulate the Image path to ge the bookpath
+                var Path = "/uploadBooks/" + (item.ImageUrl ?? "noimage.jpg");
+                var splitPath = Path.Split(".");
+                var bookPath = splitPath[0].ToString() + ".pdf";
+
+                // File name For the downloaded book
+                var bookdownload = @item.BookName + ".pdf";
+
+                <div class="col-md-1 m-3">
+                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                        <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
+                    </a>
+                </div>
+            }
+        }
+    </div>
         }
     </div>
