@@ -70,8 +70,8 @@
                         <input hidden asp-for="book.Author" />
                         <input hidden asp-for="book.PublishedDate" />
 
-                        <input asp-for="book.StatusId" type="radio" value="1" id="approved" />&nbsp;Approved
-                        &nbsp;&nbsp;<input asp-for="book.StatusId" type="radio" value="2" id="rejected" />&nbsp;Rejected
+                        <input asp-for="book.StatusId" type="radio" value="2" checked="checked" id="approved" />&nbsp;Approved
+                        &nbsp;&nbsp;<input asp-for="book.StatusId" type="radio" value="3" id="rejected" />&nbsp;Rejected
                         <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea>
                         <button class="btn btn-success btn-sm pull-right ml-3" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
                     </form>
