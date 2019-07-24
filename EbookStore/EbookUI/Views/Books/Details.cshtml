@@ -1,5 +1,7 @@
 ﻿@model EbookApplication.ViewModels.BookViewModel
 @using System.Security.Claims;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> UserManager;
 
 @{
     ViewData["Title"] = "Book Details";
@@ -14,6 +16,8 @@
     var bookdownload = @Model.book.BookName + ".pdf";
 
     var UserId = @Model.book.CreatedBy;
+    var PostedBy = await UserManager.FindByIdAsync(UserId);
+
 }
 
 <h3 class="text-center m-4 text-muted">Book Details</h3>
@@ -39,6 +43,11 @@
                 <p style="font-size:15px;"><strong>Published On:</strong> &nbsp;&nbsp;@Model.book.PublishedDate</p> <hr />
                 <p style="font-size:15px;"><strong>Technology:</strong> &nbsp;&nbsp;@Model.technology.TechnologyName</p> <hr />
                 <p style="font-size:15px;"><strong>Description:</strong><br /><br />@Model.book.Description</p>
+                <p style="font-size:15px;"><strong>Author:</strong><br /><br />@Model.book.Author</p>
+                @if (User.IsInRole("Admin"))
+                {
+                    <p style="font-size:15px;"><strong>Posted By:</strong><br /><br />@PostedBy</p>
+                }
             </div>
 
         </div>
