@@ -195,6 +195,8 @@ namespace EbookUI.Controllers
                 objBookDetails.book.Remarks = bookDetails.Remarks;
                 objBookDetails.book.StatusId = bookDetails.StatusId;
                 objBookDetails.ExistingImageUrl = bookDetails.ImageUrl;
+                objBookDetails.book.Author = bookDetails.Author;
+                objBookDetails.book.PublishedDate = bookDetails.PublishedDate;
             }
 
             return objBookDetails;
@@ -241,8 +243,9 @@ namespace EbookUI.Controllers
                         ImageUrl = uniqueFileNmae,
                         CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
                         CreatedDate = DateTime.Now,
-                        StatusId = 1
-
+                        StatusId = 1,
+                        Author = objbookDetails.book.Author,
+                        PublishedDate = objbookDetails.book.PublishedDate
                     };
 
                     objRepositoty.Add(objNewBook);
@@ -329,7 +332,9 @@ namespace EbookUI.Controllers
                 CreatedBy = objbookDetails.book.CreatedBy,
                 CreatedDate = objbookDetails.book.CreatedDate,
                 ApprovedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                ApprovedDate = DateTime.Now
+                ApprovedDate = DateTime.Now,
+                Author = objbookDetails.book.Author,
+                PublishedDate = objbookDetails.book.PublishedDate
             };
 
             objRepositoty.Update(objEditBook);
@@ -408,7 +413,9 @@ namespace EbookUI.Controllers
                         CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
                         CreatedDate = objbookDetails.book.CreatedDate,
                         ApprovedBy = objbookDetails.book.ApprovedBy,
-                        ApprovedDate = objbookDetails.book.ApprovedDate
+                        ApprovedDate = objbookDetails.book.ApprovedDate,
+                        Author = objbookDetails.book.Author,
+                        PublishedDate = objbookDetails.book.PublishedDate
                     };
 
                     objRepositoty.Update(objEditBook);

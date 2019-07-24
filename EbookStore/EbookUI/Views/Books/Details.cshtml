@@ -17,138 +17,142 @@
 }
 
 @*Page Header*@
-<h3 class="text-center mt-3" style="color:#86bc42;">Book Details</h3>
+<h3 class="text-center m-4 text-muted">Book Details</h3>
 
 
-<div class="container mt-3">
+<div class="row">
 
-    @*Book Title*@
-    <div class="card-header text-left">
-        <h3>@Model.book.BookName</h3>
-    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-9">
 
-    <div class="row">
+        <div class="card-header text-left">
+            <h3>@Model.book.BookName</h3>
+        </div>
 
-        @*Book Image*@
-        <div class="col-md-3">
-            <div class="card-body">
-                <img src="@photoPath" asp-append-version="true" />
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="card-body">
+                    <img src="@photoPath" asp-append-version="true" />
+                </div>
             </div>
+
+            <div class="card-body col-md-9" style="margin-left:-3%;">
+                <p style="font-size:15px;"><strong>Technology:</strong> &nbsp;&nbsp;@Model.technology.TechnologyName</p> <hr />
+                <p style="font-size:15px;"><strong>Description:</strong><br /><br />@Model.book.Description</p>
+            </div>
+
         </div>
 
-        @*Book Technalogy and Description*@
-        <div class="card-body col-md-9 text-left">
-            <p style="font-size:15px;"><strong>Technology:</strong> &nbsp;&nbsp;@Model.technology.TechnologyName</p> <hr />
-            <p style="font-size:15px;"><strong>Description:</strong><br /><br />@Model.book.Description</p>
+        @*Actions on Book*@
+        <div class="card-footer text-center">
+            <a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-sm m-1" title="Go To E-Books Page">Back</a>
+            <a href="@bookPath" class="btn btn-primary btn-sm m-1" target="_blank" title="Read Book">Read Book</a>
+            <a href="@bookPath" class="btn btn-primary btn-sm m-1" download="@bookdownload" title="Download @Model.book.BookName">Download</a>
+
+            @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == UserId)
+            {
+                <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary btn-sm m-1" title="Edit @Model.book.BookName E-Book">Edit</a>
+            }
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-6">
+                <button class="btn btn-success btn-green btn-sm" id="open-review-box">Leave a Review</button>
+                <div class="row" id="post-review-box" style="display:none;padding:3%;">
+                    <div class="col-md-12">
+                        <form enctype="multipart/form-data" asp-controller="Books" asp-action="SaveReview" method="post">
+
+                            <textarea class="form-control" asp-for="review.ReviewText" cols="50" id="new-review" placeholder="Enter your review here..." rows="2"></textarea>
+
+                            <label class="stars">
+                                <a href="javascript:void(0)" id="1"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                                <a href="javascript:void(0)" id="2"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                                <a href="javascript:void(0)" id="3"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                                <a href="javascript:void(0)" id="4"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                                <a href="javascript:void(0)" id="5"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+                            </label>
+                            <input asp-for="review.Rating" id="RatingVal" type="hidden" class="form-control" />
+                            <input asp-for="review.BookId" type="hidden" value="@Model.book.BookId" class="form-control" />
+                            <div class="text-right" style="padding:1%;">
+                                <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @if (User.IsInRole("Admin"))
+            {
+                @if (@Model.book.StatusId == 1)
+                {
+                    <div class="col-md-6 text-right">
+                        <button class="btn btn-success btn-green btn-sm" id="open-approvestatus-box">Approve Status</button>
+                        <div class="row" id="post-approvestatus-box" style="display:none;padding:3%;">
+                            <div class="col-md-12">
+                                <form class="pull-right" enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
+                                    <input hidden asp-for="book.BookId" />
+                                    <input hidden asp-for="book.BookName" />
+                                    <input hidden asp-for="book.TechnologyId" />
+                                    <input hidden asp-for="book.Description" />
+                                    <input hidden asp-for="book.ImageUrl" />
+                                    <input hidden asp-for="book.CreatedBy" />
+                                    <input hidden asp-for="book.CreatedDate" />
+                                    <select asp-for="book.StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.approvalStatusList, "StatusId","Status"))">
+                                        <option value="" hidden disabled selected>Select a Approve Status</option>
+                                    </select>
+                                    <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea>
+                                    <div class="text-right" style="padding-top:2%;">
+                                        <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
         </div>
+
+        <script>
+            $(document).ready(function () {
+
+                var rating; // Global Variable
+
+                // Hide and show the ReviewDiv tag
+                $("#open-review-box").click(function () {
+                    $("#post-review-box").slideToggle(1000);
+                });
+
+
+                // Hide and show the Approve Status tag
+                $("#open-approvestatus-box").click(function () {
+                    $("#post-approvestatus-box").slideToggle(1000);
+                });
+
+
+                // To select rating and get the value
+                $("a").click(function () {
+                    $(this).siblings().removeClass("rating");
+                    $(this).prevAll().addClass("rating");
+                    $(this).addClass("rating");
+                    rating = 0;
+                    rating = $("#RatingVal").val(rating);
+                });
+
+                // to get the dropdown selected value
+                $('#book_StatusId').on("change", function () {
+                    var statusId = $(this).val();
+                    if (statusId == 3) {
+                        $("#remarks").show();
+                    }
+                    else
+                        $("#remarks").hide();
+                });
+            });
+        </script>
 
     </div>
+    <div class="col-md-1"></div>
 
-    @*Actions on Book*@
-    <div class="card-footer text-center">
-        <a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-sm m-1" title="Go To E-Books Page">Back</a>
-        <a href="@bookPath" class="btn btn-primary btn-sm m-1" target="_blank" title="Read Book">Read Book</a>
-        <a href="@bookPath" class="btn btn-primary btn-sm m-1" download="@bookdownload" title="Download @Model.book.BookName">Download</a>
-
-        @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == UserId)
-        {
-            <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary btn-sm m-1" title="Edit @Model.book.BookName E-Book">Edit</a>
-        }
-    </div><br />
-
-          <div class="row">
-              <div class="col-md-6">
-                  <button class="btn btn-success btn-green btn-sm" id="open-review-box">Leave a Review</button>
-                  <div class="row" id="post-review-box" style="display:none;padding:3%;">
-                      <div class="col-md-12">
-                          <form enctype="multipart/form-data" asp-controller="Books" asp-action="SaveReview" method="post">
-
-                              <textarea class="form-control" asp-for="review.ReviewText" cols="50" id="new-review" placeholder="Enter your review here..." rows="2"></textarea>
-
-                              <label class="stars">
-                                  <a href="javascript:void(0)" id="1"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                                  <a href="javascript:void(0)" id="2"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                                  <a href="javascript:void(0)" id="3"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                                  <a href="javascript:void(0)" id="4"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                                  <a href="javascript:void(0)" id="5"><i class="fa fa-star-o" aria-hidden="true"></i></a>
-                              </label>
-                              <input asp-for="review.Rating" id="RatingVal" type="hidden" class="form-control" />
-                              <input asp-for="review.BookId" type="hidden" value="@Model.book.BookId" class="form-control" />
-                              <div class="text-right" style="padding:1%;">
-                                  <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
-                              </div>
-
-                          </form>
-                      </div>
-                  </div>
-              </div>
-                  @if (User.IsInRole("Admin"))
-                  {
-                      @if (@Model.book.StatusId == 1)
-                      {
-                          <div class="col-md-6 text-right">
-                              <button class="btn btn-success btn-green btn-sm" id="open-approvestatus-box">Approve Status</button>
-                              <div class="row" id="post-approvestatus-box" style="display:none;padding:3%;">
-                                  <div class="col-md-12">
-                                      <form class="pull-right" enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
-                                          <input hidden asp-for="book.BookId" />
-                                          <input hidden asp-for="book.BookName" />
-                                          <input hidden asp-for="book.TechnologyId" />
-                                          <input hidden asp-for="book.Description" />
-                                          <input hidden asp-for="book.ImageUrl" />
-                                          <input hidden asp-for="book.CreatedBy" />
-                                          <input hidden asp-for="book.CreatedDate" />
-                                          <select asp-for="book.StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.approvalStatusList, "StatusId","Status"))">
-                                              <option value="" hidden disabled selected>Select a Approve Status</option>
-                                          </select>
-                                          <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea>
-                                          <div class="text-right" style="padding-top:2%;">
-                                              <button class="btn btn-success btn-sm" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
-                                          </div>
-                                      </form>
-                                  </div>
-                              </div>
-                          </div>
-                      }
-                  }
-
-              </div>
-
-              <script>
-                  $(document).ready(function () {
-
-                      var rating; // Global Variable
-
-                      // Hide and show the ReviewDiv tag
-                      $("#open-review-box").click(function () {
-                          $("#post-review-box").slideToggle(1000);
-                      });
-
-
-                      // Hide and show the Approve Status tag
-                      $("#open-approvestatus-box").click(function () {
-                          $("#post-approvestatus-box").slideToggle(1000);
-                      });
-
-
-                      // To select rating and get the value
-                      $("a").click(function () {
-                          $(this).siblings().removeClass("rating");
-                          $(this).prevAll().addClass("rating");
-                          $(this).addClass("rating");
-                          rating = 0;
-                          rating = $("#RatingVal").val(rating);
-                      });
-
-                      // to get the dropdown selected value
-                      $('#book_StatusId').on("change", function () {
-                          var statusId = $(this).val();
-                          if (statusId == 3) {
-                              $("#remarks").show();
-                          }
-                          else
-                              $("#remarks").hide();
-                      });
-                  });
-              </script>
-          </div>
+</div>
