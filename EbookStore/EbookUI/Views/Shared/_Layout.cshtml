@@ -20,6 +20,10 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
 
+    <script src="~/js/pdf.js"></script>
+    <script src="~/js/pdf.worker.js"></script>
+    <script src="~/js/site.js"></script>
+
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"
@@ -31,27 +35,7 @@
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </environment>
-    <script src="~/js/pdf.js"></script>
-    <script src="~/js/pdf.worker.js"></script>
-    <script src="~/js/site.js"></script>
-    <script>
 
-        //Script for Scroll top event
-        $(document).ready(function () {
-            var btn = $('#button');
-            $(window).scroll(function () {
-                if ($(window).scrollTop() > 400) {
-                    btn.addClass('show');
-                } else {
-                    btn.removeClass('show');
-                }
-            });
-            btn.on('click', function (e) {
-                e.preventDefault();
-                $('html, body').animate({ scrollTop: 0 }, '500');
-            });
-        });
-    </script>
 </head>
 <body>
     <a id="button"></a>
@@ -60,7 +44,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Books" asp-action="Index">
-                    <img src="~/Images/spsoft_logo.png" height="50"/>
+                    <img src="~/Images/spsoft_logo.png" height="50" />
                 </a>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"

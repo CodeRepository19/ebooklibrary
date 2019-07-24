@@ -239,14 +239,14 @@ namespace EbookUI.Controllers
                 {
                     objNewBook = new Book
                     {
-                        BookName = objbookDetails.book.BookName.Trim(),
-                        Description = objbookDetails.book.Description.Trim(),
+                        BookName = objbookDetails.book.BookName != null ? objbookDetails.book.BookName.Trim() : objbookDetails.book.BookName,
+                        Description = objbookDetails.book.Description != null ? objbookDetails.book.Description.Trim() : objbookDetails.book.Description,
                         TechnologyId = objbookDetails.book.TechnologyId,
                         ImageUrl = uniqueFileNmae,
                         CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
                         CreatedDate = DateTime.Now,
                         StatusId = 1,
-                        Author = objbookDetails.book.Author.Trim(),
+                        Author = objbookDetails.book.Author != null ? objbookDetails.book.Author.Trim() : objbookDetails.book.Author,
                         PublishedDate = objbookDetails.book.PublishedDate
                     };
 
@@ -406,17 +406,17 @@ namespace EbookUI.Controllers
                     Book objEditBook = new Book
                     {
                         BookId = objbookDetails.book.BookId,
-                        BookName = objbookDetails.book.BookName.Trim(),
-                        Description = objbookDetails.book.Description.Trim(),
+                        BookName = objbookDetails.book.BookName != null ? objbookDetails.book.BookName.Trim() : objbookDetails.book.BookName,
+                        Description = objbookDetails.book.Description != null ? objbookDetails.book.Description.Trim() : objbookDetails.book.Description,
                         TechnologyId = objbookDetails.book.TechnologyId,
-                        ImageUrl = objbookDetails.book.ImageUrl.Trim(),
+                        ImageUrl = objbookDetails.book.ImageUrl != null ? objbookDetails.book.ImageUrl.Trim() : objbookDetails.book.ImageUrl,
                         StatusId = objbookDetails.book.StatusId,
-                        Remarks = objbookDetails.book.Remarks,
+                        Remarks = objbookDetails.book.Remarks != null ? objbookDetails.book.Remarks.Trim() : objbookDetails.book.Remarks,
                         CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
                         CreatedDate = objbookDetails.book.CreatedDate,
-                        ApprovedBy = objbookDetails.book.ApprovedBy,
+                        ApprovedBy = objbookDetails.book.ApprovedBy != null ? objbookDetails.book.ApprovedBy.Trim() : objbookDetails.book.ApprovedBy,
                         ApprovedDate = objbookDetails.book.ApprovedDate,
-                        Author = objbookDetails.book.Author.Trim(),
+                        Author = objbookDetails.book.Author != null ? objbookDetails.book.Author.Trim() : objbookDetails.book.Author,
                         PublishedDate = objbookDetails.book.PublishedDate
                     };
 

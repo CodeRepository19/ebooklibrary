@@ -8,8 +8,8 @@ namespace EbookDomain.Models
         public int ReviewId { get; set; }
 
         [Required]
-        [MaxLength(50, ErrorMessage = "Review Text cannot be greater than 150")]
-        [MinLength(4, ErrorMessage = "Review Text cannot be less than 4")]
+        [MaxLength(50, ErrorMessage = "Review Text should be maximum of 50 characters")]
+        [MinLength(4, ErrorMessage = "Review Text should be minimum of 4 characters")]
         public string ReviewText { get; set; }
 
         [Required]
