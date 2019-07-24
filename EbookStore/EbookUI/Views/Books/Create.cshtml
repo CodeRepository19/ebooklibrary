@@ -17,7 +17,7 @@
 
         <form enctype="multipart/form-data" asp-controller="Books" asp-action="Create" method="post" class="m-3">
 
-            <div asp-validation-summary="All" class="text-danger"></div>
+            @*<div asp-validation-summary="All" class="text-danger"></div>*@
 
             <div class="form-group row">
                 <label asp-for="book.BookName" class="col-sm-3 col-form-label"></label>
