@@ -64,7 +64,7 @@ namespace EbookDomain.Models
 
         public ApprovalStatus approvalStatus { get; set; }
 
-        [MaxLength(500, ErrorMessage = "Remarks Should be minimum of 10 Characters")]
+        [MaxLength(500, ErrorMessage = "Remarks should be maximum of 500 characters")]
         public string Remarks { get; set; }
 
         [RegularExpression(@"^[a-zA-Z][a-zA-Z .]*$", ErrorMessage = "Sorry, only letters(a-z), space and period(.) are allowed")]
@@ -72,8 +72,8 @@ namespace EbookDomain.Models
         public string Author { get; set; }
 
         [Required, DataType(DataType.Date)]
+        [RegularExpression(@"((18|19|20)[0-9]{2}[\-.](0[13578]|1[02])[\-.](0[1-9]|[12][0-9]|3[01]))|(18|19|20)[0-9]{2}[\-.](0[469]|11)[\-.](0[1-9]|[12][0-9]|30)|(18|19|20)[0-9]{2}[\-.](02)[\-.](0[1-9]|1[0-9]|2[0-8])|(((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)[\-.](02)[\-.]29", ErrorMessage = "Please enter or select valid date")]
         [Display(Name = "Published Date")]
         public string PublishedDate { get; set; }
-
     }
 }

@@ -411,10 +411,10 @@ namespace EbookUI.Controllers
                         TechnologyId = objbookDetails.book.TechnologyId,
                         ImageUrl = objbookDetails.book.ImageUrl.Trim(),
                         StatusId = objbookDetails.book.StatusId,
-                        Remarks = objbookDetails.book.Remarks.Trim(),
+                        Remarks = objbookDetails.book.Remarks,
                         CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
                         CreatedDate = objbookDetails.book.CreatedDate,
-                        ApprovedBy = objbookDetails.book.ApprovedBy.Trim(),
+                        ApprovedBy = objbookDetails.book.ApprovedBy,
                         ApprovedDate = objbookDetails.book.ApprovedDate,
                         Author = objbookDetails.book.Author.Trim(),
                         PublishedDate = objbookDetails.book.PublishedDate
