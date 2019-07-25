@@ -59,12 +59,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Home">Home</a>
                         </li>
-                        @if (SignInManager.IsSignedIn(User))
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Books">Books</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="#">Events</a>
+                        </li>
+                        @*@if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Books">Books</a>
                             </li>
-                        }
+                        }*@
                     </ul>
                 </div>
             </div>

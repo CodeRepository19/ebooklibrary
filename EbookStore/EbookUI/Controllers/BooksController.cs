@@ -20,7 +20,7 @@ namespace EbookUI.Controllers
     {
         private readonly IHostingEnvironment objHostingEnvironment;
         private readonly IBookRepository objRepositoty;
-
+        
         public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository repositoty)
         {
             this.objHostingEnvironment = hostingEnvironment;
@@ -29,25 +29,29 @@ namespace EbookUI.Controllers
 
         public IActionResult Home()
         {
-            var BVM = new BookViewModel();
-
-            BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
-            if (BVM.ApprovedList.ToList().Count > 0)
-            {
-                ViewBag.approvedsubtitle = "Books";
-            }
-            else
-                ViewBag.approvedsubtitle = "";
-
-            return View(BVM);
+            TempData["Home"] = "true";
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Index()
         {
             var BVM = new BookViewModel();
-            if (User.Identity.IsAuthenticated)
+            if ((string)TempData["Home"] == "false" || (string)TempData["Home"] == null)
             {
-                return RedirectToAction(nameof(Books), BVM);
+                if (User.Identity.IsAuthenticated)
+                {
+                    return RedirectToAction(nameof(Books), BVM);
+                }
+                else
+                {
+                    BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+                }
             }
             else
             {
@@ -58,6 +62,8 @@ namespace EbookUI.Controllers
                 }
                 else
                     ViewBag.approvedsubtitle = "";
+
+                TempData["Home"] = "false";
             }
 
             return View(BVM);
@@ -108,13 +114,14 @@ namespace EbookUI.Controllers
             }
             else
             {
-                BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
-                if (BVM.ApprovedList.ToList().Count > 0)
-                {
-                    ViewBag.approvedsubtitle = "Approved Books";
-                }
-                else
-                    ViewBag.approvedsubtitle = "";
+                //BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
+                //if (BVM.ApprovedList.ToList().Count > 0)
+                //{
+                //    ViewBag.approvedsubtitle = "Approved Books";
+                //}
+                //else
+                //    ViewBag.approvedsubtitle = "";
+                return Redirect("/Identity/Account/Login");
             }
 
             return View(BVM);
