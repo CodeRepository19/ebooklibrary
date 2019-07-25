@@ -19,7 +19,7 @@
                 <div class="row mt-2">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
-                        <form class="form-inline my-2 my-lg-0 d-inline" asp-controller="Books" asp-action="SearchBook">
+                        <form class="form-inline my-2 my-lg-0 d-inline" asp-controller="Books" asp-action="SearchBookLanding">
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Search Books" name="SearchString" autocomplete="off">
                                 <div class="input-group-append">
@@ -39,7 +39,7 @@
                         @{
                             for (char c = 'A'; c <= 'Z'; c++)
                             {
-                                <a name=@c asp-controller="Books" asp-action="ShowByLetter" asp-route-id="@c" class="grocery border btn btn-default">&nbsp;@c&nbsp;</a>
+                                <a name=@c asp-controller="Books" asp-action="ShowByLetterLanding" asp-route-id="@c" class="grocery border btn btn-default">&nbsp;@c&nbsp;</a>
                             }
                         }
                     </div>
