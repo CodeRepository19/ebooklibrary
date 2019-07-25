@@ -68,14 +68,13 @@ namespace EbookDomain.Models
         [MinLength(10, ErrorMessage = "Description should be minimum of 10 characters")]
         public string Remarks { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z][a-zA-Z .]*$", ErrorMessage = "Sorry, only letters(a-z), space and period(.) are allowed")]
+        [RegularExpression(@"^[a-zA-Z][a-zA-Z .]*$", ErrorMessage = "Please enter only letters (a-z), space and period (.) are allowed")]
         [Required]
         public string Author { get; set; }
 
-        [Required, DataType(DataType.Date)]
-        [RegularExpression(@"((18|19|20)[0-9]{2}[\-.](0[13578]|1[02])[\-.](0[1-9]|[12][0-9]|3[01]))|(18|19|20)[0-9]{2}[\-.](0[469]|11)[\-.](0[1-9]|[12][0-9]|30)|(18|19|20)[0-9]{2}[\-.](02)[\-.](0[1-9]|1[0-9]|2[0-8])|(((18|19|20)(04|08|[2468][048]|[13579][26]))|2000)[\-.](02)[\-.]29", ErrorMessage = "Please enter or select valid date")]
-        //[Range(typeof(DateTime), "1/1/1900", "12/31/9999")]
-        [Display(Name = "Published Date")]
+        [Required]
+        [RegularExpression(@"(19[0-9][0-9]|20[01][0-9])", ErrorMessage = "Please enter a valid year")]
+        [Display(Name = "Published On")]
         public string PublishedDate { get; set; }
 
     }
