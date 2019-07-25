@@ -65,12 +65,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="#">Events</a>
                         </li>
-                        @*@if (SignInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Books">Books</a>
-                            </li>
-                        }*@
                     </ul>
                 </div>
             </div>
@@ -89,7 +83,7 @@
             </div>
         </div>
     </footer>
-
+    
     @RenderSection("Scripts", required: false)
 </body>
 </html>
