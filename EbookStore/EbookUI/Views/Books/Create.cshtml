@@ -10,10 +10,10 @@
     }
 </style>
 
-<h3 class="text-center m-4 text-muted">Add E-Book</h3>
 
 <div class="row">
     <div class="col-md-8">
+        <h3 class="text-center m-4 text-muted">Add E-Book</h3>
 
         <form enctype="multipart/form-data" asp-controller="Books" asp-action="Create" method="post" class="m-3">
 
@@ -24,24 +24,6 @@
                 <div class="col-sm-9">
                     <input asp-for="book.BookName" type="text" class="form-control" placeholder="Book Name" autocomplete="off" />
                     <span asp-validation-for="book.BookName" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label asp-for="book.Description" class="col-sm-3 col-form-label"></label>
-                <div class="col-sm-9">
-                    <textarea asp-for="book.Description" class="form-control" cols="40" rows="1" placeholder="Description"></textarea>
-                    <span asp-validation-for="book.Description" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label asp-for="book.TechnologyId" class="col-sm-3 col-form-label"></label>
-                <div class="col-sm-9">
-                    <select asp-for="book.TechnologyId" class="form-control" asp-items="@(new SelectList(@ViewBag.technologyList, "TechnologyId","TechnologyName"))">
-                        <option value="" hidden disabled selected>Select a Technology</option>
-                    </select>
-                    <span asp-validation-for="book.TechnologyId" class="text-danger"></span>
                 </div>
             </div>
 
@@ -58,6 +40,24 @@
                 <div class="col-sm-9">
                     <input asp-for="book.PublishedDate" class="form-control" placeholder="Published Date" />
                     <span asp-validation-for="book.PublishedDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="book.TechnologyId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-9">
+                    <select asp-for="book.TechnologyId" class="form-control" asp-items="@(new SelectList(@ViewBag.technologyList, "TechnologyId","TechnologyName"))">
+                        <option value="" hidden disabled selected>Select a Technology</option>
+                    </select>
+                    <span asp-validation-for="book.TechnologyId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="book.Description" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-9">
+                    <textarea asp-for="book.Description" class="form-control" cols="40" rows="1" placeholder="Description"></textarea>
+                    <span asp-validation-for="book.Description" class="text-danger"></span>
                 </div>
             </div>
 
@@ -85,7 +85,7 @@
                 <div class="col-sm-3"></div>
                 <div class="col-sm-9">
                     <button type="submit" class="btn btn-primary" id="addbtn" title="Create a New E Book">Add</button>
-                    <a asp-controller="Books" asp-action="Index" class="btn btn-primary m-1" title="Go To Index Page">Cancel</a>
+                    <a asp-controller="Books" asp-action="Books" class="btn btn-primary m-1" title="Go To Index Page">Cancel</a>
                 </div>
             </div>
         </form>

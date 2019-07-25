@@ -24,5 +24,9 @@ namespace EbookApplication.ViewModels
 
         public string ExistingImageUrl { get; set; }
 
+        public IEnumerable<Book> PendingList { get; set; }
+
+        public IEnumerable<Book> ApprovedList { get; set; }
+
     }
 }

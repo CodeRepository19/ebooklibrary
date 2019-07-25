@@ -75,11 +75,12 @@ namespace EbookUI
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Books}/{action=Index}/{id?}");
+            routes.MapRoute(
+                name: "default",
+                template: "{controller=Books}/{action=Index}/{id?}");
             });
 
             CreateUserRoles(service).Wait();

@@ -6,11 +6,18 @@
 @model EbookApplication.ViewModels.BookViewModel
 @{
     ViewData["Title"] = "E-Books";
+    var IsPendingTitle = false;
     var IsApprovalTitle = false;
 }
 
     <div class="container-fluid">
-
+        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Create">Add Book</a>
+                </li>
+            </ul>
+        </div>
         <div class="row">
 
             <div class="col-md-8">
@@ -45,6 +52,37 @@
                     </div>
                 </div>
 
+                @*Pending Books List*@
+                <div class="row">
+                    @foreach (var item in Model.PendingList)
+                    {
+                        @if (IsPendingTitle == false)
+                        {
+                            <div class="col-md-12">
+                                <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-down" aria-hidden="true"></i> @ViewBag.pendingsubtitle</h6><hr />
+                            </div>
+
+                            IsPendingTitle = true;
+                        }
+
+                        var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
+
+                        // We Manipulate the Image path to ge the bookpath
+                        var Path = "/uploadBooks/" + (item.ImageUrl ?? "noimage.jpg");
+                        var splitPath = Path.Split(".");
+                        var bookPath = splitPath[0].ToString() + ".pdf";
+
+                        // File name For the downloaded book
+                        var bookdownload = @item.BookName + ".pdf";
+
+                        <div class="col-md-2">
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                                <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
+                            </a>
+                        </div>
+                    }
+                </div>
+
                 @*Approval Books List*@
                 <div class="row">
                     @foreach (var item in Model.ApprovedList)
@@ -75,11 +113,10 @@
                     }
                 </div>
 
+                <div class="col-md-4"></div>
+
             </div>
 
-            <div class="col-md-4"></div>
         </div>
+
     </div>
-
-
-

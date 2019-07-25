@@ -27,43 +27,97 @@ namespace EbookUI.Controllers
             objRepositoty = repositoty;
         }
 
+        public IActionResult Home()
+        {
+            var BVM = new BookViewModel();
+
+            BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
+            if (BVM.ApprovedList.ToList().Count > 0)
+            {
+                ViewBag.approvedsubtitle = "Books";
+            }
+            else
+                ViewBag.approvedsubtitle = "";
+
+            return View(BVM);
+        }
+
         public IActionResult Index()
         {
+            var BVM = new BookViewModel();
             if (User.Identity.IsAuthenticated)
             {
-                //if(User.IsInRole("Admin"))
-                //{
-                //}
-                var ApprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
-                if (ApprovedBooksList.ToList().Count > 0)
-                {
-                    ViewBag.approvedsubtitle = "Approved Books";
-                }
-                else
-                    ViewBag.approvedsubtitle = "";
-
-                var UnapprovedBooksList = objRepositoty.GetBooks().Where(s => s.StatusId == 1).OrderByDescending(s => s.ApprovedDate);
-                if (UnapprovedBooksList.ToList().Count > 0)
-                {
-                    ViewBag.unapprovedsubtitle = "Un Approved Books";
-                }
-                else
-                    ViewBag.unapprovedsubtitle = "";
-
-                return View(objRepositoty.GetBooks().OrderByDescending(s => s.ApprovedDate));
+                return RedirectToAction(nameof(Books), BVM);
             }
             else
             {
-                var BookList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate).Take(5);
-                if (BookList.ToList().Count > 0)
+                BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
+                if (BVM.ApprovedList.ToList().Count > 0)
+                {
+                    ViewBag.approvedsubtitle = "Books";
+                }
+                else
+                    ViewBag.approvedsubtitle = "";
+            }
+
+            return View(BVM);
+        }
+
+        public IActionResult Books()
+        {
+            var BVM = new BookViewModel();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "My Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+
+                    BVM.PendingList = objRepositoty.GetBooks().Where(s => s.StatusId == 1).OrderByDescending(s => s.CreatedDate);
+                    if (BVM.PendingList.ToList().Count > 0)
+                    {
+                        ViewBag.pendingsubtitle = "Pending Books";
+                    }
+                    else
+                        ViewBag.pendingsubtitle = "";
+                }
+                else
+                {
+                    BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "My Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+
+                    BVM.PendingList = objRepositoty.GetBooks().Where(s => (s.StatusId == 1 || s.StatusId == 3) && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.CreatedDate);
+                    if (BVM.PendingList.ToList().Count > 0)
+                    {
+                        ViewBag.pendingsubtitle = "My Pending / Rejected Books";
+                    }
+                    else
+                        ViewBag.pendingsubtitle = "";
+                }
+            }
+            else
+            {
+                BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
+                if (BVM.ApprovedList.ToList().Count > 0)
                 {
                     ViewBag.approvedsubtitle = "Approved Books";
                 }
                 else
                     ViewBag.approvedsubtitle = "";
-
-                return View(BookList);
             }
+
+            return View(BVM);
         }
 
         public async Task<IActionResult> SearchBook(string searchString)
@@ -212,18 +266,6 @@ namespace EbookUI.Controllers
             return View();
         }
 
-        private IEnumerable<Technology> TechnologyList()
-        {
-            ViewBag.technologyList = objRepositoty.GetTechnologys();
-            return objRepositoty.GetTechnologys();
-        }
-
-        private IEnumerable<ApprovalStatus> ApprovalStatusList()
-        {
-            ViewBag.approvalStatusList = objRepositoty.GetApprovalStatus();
-            return objRepositoty.GetApprovalStatus();
-        }
-
         // POST: Courses/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -258,89 +300,6 @@ namespace EbookUI.Controllers
 
             TechnologyList();
             return View();
-        }
-
-        private string ProcessUploadFile(BookViewModel objbookDetails)
-        {
-            string uniquePdfFileName = null;
-            string uniqueImageFileName = null;
-            if (objbookDetails.Image != null)
-            {
-                string UploadBookFolder = Path.Combine(objHostingEnvironment.WebRootPath, "uploadBooks");
-                string UploadImageFolder = Path.Combine(objHostingEnvironment.WebRootPath, "uploadImages");
-
-                uniquePdfFileName = Guid.NewGuid().ToString() + "_" + objbookDetails.Image.FileName;
-
-                var splitFileName = uniquePdfFileName.Split("_");
-                uniqueImageFileName = splitFileName[0].ToString() + ".png";
-
-                string filePath = Path.Combine(UploadBookFolder, splitFileName[0].ToString() + ".pdf");
-
-                using (var FileStream = new FileStream(filePath, FileMode.Create))
-                    objbookDetails.Image.CopyTo(FileStream);
-
-
-                byte[] bytes = Convert.FromBase64String(objbookDetails.book.ImageUrl);
-
-                Image pdfImage;
-
-                using (MemoryStream ms = new MemoryStream(bytes))
-                    pdfImage = Image.FromStream(ms);
-
-                pdfImage.Save(UploadImageFolder + "\\" + uniqueImageFileName, System.Drawing.Imaging.ImageFormat.Png);
-
-                //var pdf = PdfDocument.FromFile(filePath);
-                //var opdf = pdf.CopyPage(0);
-                // opdf.RasterizeToImageFiles(UploadImageFolder + "\\" + uniqueImageFileName, 250, 150);
-            }
-
-            return uniqueImageFileName;
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult SaveReview(BookViewModel objReviewDetails)
-        {
-            Reviewes objNewReview = null;
-
-            if (ModelState.IsValid)
-            {
-                objNewReview = new Reviewes
-                {
-                    ReviewText = objReviewDetails.review.ReviewText,
-                    Rating = objReviewDetails.review.Rating,
-                    BookId = objReviewDetails.review.BookId,
-                };
-                objRepositoty.Add(objNewReview);
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult ApprovalStatus(BookViewModel objbookDetails)
-        {
-            Book objEditBook = new Book
-            {
-                BookId = objbookDetails.book.BookId,
-                BookName = objbookDetails.book.BookName,
-                ImageUrl = objbookDetails.book.ImageUrl,
-                TechnologyId = objbookDetails.book.TechnologyId,
-                Description = objbookDetails.book.Description,
-                StatusId = objbookDetails.book.StatusId,
-                Remarks = objbookDetails.book.Remarks,
-                CreatedBy = objbookDetails.book.CreatedBy,
-                CreatedDate = objbookDetails.book.CreatedDate,
-                ApprovedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                ApprovedDate = DateTime.Now,
-                Author = objbookDetails.book.Author,
-                PublishedDate = objbookDetails.book.PublishedDate
-            };
-
-            objRepositoty.Update(objEditBook);
-            return RedirectToAction(nameof(Index));
         }
 
         // GET: books/Edit/5
@@ -443,6 +402,100 @@ namespace EbookUI.Controllers
                 return true;
             else
                 return false;
+        }
+
+        private string ProcessUploadFile(BookViewModel objbookDetails)
+        {
+            string uniquePdfFileName = null;
+            string uniqueImageFileName = null;
+            if (objbookDetails.Image != null)
+            {
+                string UploadBookFolder = Path.Combine(objHostingEnvironment.WebRootPath, "uploadBooks");
+                string UploadImageFolder = Path.Combine(objHostingEnvironment.WebRootPath, "uploadImages");
+
+                uniquePdfFileName = Guid.NewGuid().ToString() + "_" + objbookDetails.Image.FileName;
+
+                var splitFileName = uniquePdfFileName.Split("_");
+                uniqueImageFileName = splitFileName[0].ToString() + ".png";
+
+                string filePath = Path.Combine(UploadBookFolder, splitFileName[0].ToString() + ".pdf");
+
+                using (var FileStream = new FileStream(filePath, FileMode.Create))
+                    objbookDetails.Image.CopyTo(FileStream);
+
+
+                byte[] bytes = Convert.FromBase64String(objbookDetails.book.ImageUrl);
+
+                Image pdfImage;
+
+                using (MemoryStream ms = new MemoryStream(bytes))
+                    pdfImage = Image.FromStream(ms);
+
+                pdfImage.Save(UploadImageFolder + "\\" + uniqueImageFileName, System.Drawing.Imaging.ImageFormat.Png);
+
+                //var pdf = PdfDocument.FromFile(filePath);
+                //var opdf = pdf.CopyPage(0);
+                // opdf.RasterizeToImageFiles(UploadImageFolder + "\\" + uniqueImageFileName, 250, 150);
+            }
+
+            return uniqueImageFileName;
+        }
+
+        private IEnumerable<Technology> TechnologyList()
+        {
+            ViewBag.technologyList = objRepositoty.GetTechnologys();
+            return objRepositoty.GetTechnologys();
+        }
+
+        private IEnumerable<ApprovalStatus> ApprovalStatusList()
+        {
+            ViewBag.approvalStatusList = objRepositoty.GetApprovalStatus();
+            return objRepositoty.GetApprovalStatus();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveReview(BookViewModel objReviewDetails)
+        {
+            Reviewes objNewReview = null;
+
+            if (ModelState.IsValid)
+            {
+                objNewReview = new Reviewes
+                {
+                    ReviewText = objReviewDetails.review.ReviewText,
+                    Rating = objReviewDetails.review.Rating,
+                    BookId = objReviewDetails.review.BookId,
+                };
+                objRepositoty.Add(objNewReview);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ApprovalStatus(BookViewModel objbookDetails)
+        {
+            Book objEditBook = new Book
+            {
+                BookId = objbookDetails.book.BookId,
+                BookName = objbookDetails.book.BookName,
+                ImageUrl = objbookDetails.book.ImageUrl,
+                TechnologyId = objbookDetails.book.TechnologyId,
+                Description = objbookDetails.book.Description,
+                StatusId = objbookDetails.book.StatusId,
+                Remarks = objbookDetails.book.Remarks,
+                CreatedBy = objbookDetails.book.CreatedBy,
+                CreatedDate = objbookDetails.book.CreatedDate,
+                ApprovedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                ApprovedDate = DateTime.Now,
+                Author = objbookDetails.book.Author,
+                PublishedDate = objbookDetails.book.PublishedDate
+            };
+
+            objRepositoty.Update(objEditBook);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> ShowByLetter(string id)
