@@ -24,6 +24,8 @@
             <input hidden asp-for="book.StatusId" />
 
             @*<div asp-validation-summary="All" class="text-danger"></div>*@
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
             <div class="form-group row">
                 <label asp-for="book.BookName" class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-9">
@@ -110,3 +112,5 @@
     <div class="col-md-4"></div>
 
 </div>
+
+<script src="~/js/site.js"></script>

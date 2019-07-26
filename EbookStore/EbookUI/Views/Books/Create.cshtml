@@ -16,6 +16,7 @@
         <h3 class="text-center m-4 text-muted">Add E-Book</h3>
 
         <form enctype="multipart/form-data" asp-controller="Books" asp-action="Create" method="post" class="m-3">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
             <div class="form-group row">
                 <label asp-for="book.BookName" class="col-sm-3 col-form-label"></label>
@@ -91,3 +92,5 @@
     </div>
     <div class="col-md-4"></div>
 </div>
+
+<script src="~/js/site.js"></script>

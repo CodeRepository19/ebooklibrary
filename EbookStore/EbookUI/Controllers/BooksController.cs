@@ -20,7 +20,7 @@ namespace EbookUI.Controllers
     {
         private readonly IHostingEnvironment objHostingEnvironment;
         private readonly IBookRepository objRepositoty;
-        
+
         public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository repositoty)
         {
             this.objHostingEnvironment = hostingEnvironment;
@@ -172,13 +172,13 @@ namespace EbookUI.Controllers
                     else
                         ViewBag.approvedsubtitle = "";
 
-                    BVM.PendingList = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1 && s.StatusId == 1); 
+                    BVM.PendingList = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1 && s.StatusId == 1);
                     if (BVM.PendingList.ToList().Count > 0)
                     {
                         ViewBag.pendingsubtitle = "Pending Books";
                     }
                     else
-                        ViewBag.pendingsubtitle = "";                    
+                        ViewBag.pendingsubtitle = "";
                 }
                 else
                     //return View("Error/500");
@@ -237,7 +237,7 @@ namespace EbookUI.Controllers
                         ViewBag.approvedsubtitle = "My Approved Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";                    
+                        ViewBag.approvedsubtitle = "";
                 }
                 else
                     //return View("Error/500");
@@ -325,29 +325,36 @@ namespace EbookUI.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(BookViewModel objbookDetails) //[Bind("BookId,BookName,Description,ImageUrl,TechnologyId")] Book book)
         {
-            Book objNewBook = null;
-            if (ModelState.IsValid)
+            if (!objRepositoty.GetBooks().Any(a => a.BookName == objbookDetails.book.BookName && a.Author == objbookDetails.book.Author.Trim() && a.TechnologyId == objbookDetails.book.TechnologyId && a.PublishedDate == objbookDetails.book.PublishedDate))
             {
-                string uniqueFileNmae = ProcessUploadFile(objbookDetails);
-                if (uniqueFileNmae != null)
+                Book objNewBook = null;
+                if (ModelState.IsValid)
                 {
-                    objNewBook = new Book
+                    string uniqueFileNmae = ProcessUploadFile(objbookDetails);
+                    if (uniqueFileNmae != null)
                     {
-                        BookName = objbookDetails.book.BookName != null ? objbookDetails.book.BookName.Trim() : objbookDetails.book.BookName,
-                        Description = objbookDetails.book.Description != null ? objbookDetails.book.Description.Trim() : objbookDetails.book.Description,
-                        TechnologyId = objbookDetails.book.TechnologyId,
-                        ImageUrl = uniqueFileNmae,
-                        CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                        CreatedDate = DateTime.Now,
-                        StatusId = 1,
-                        Author = objbookDetails.book.Author != null ? objbookDetails.book.Author.Trim() : objbookDetails.book.Author,
-                        PublishedDate = objbookDetails.book.PublishedDate
-                    };
+                        objNewBook = new Book
+                        {
+                            BookName = objbookDetails.book.BookName != null ? objbookDetails.book.BookName.Trim() : objbookDetails.book.BookName,
+                            Description = objbookDetails.book.Description != null ? objbookDetails.book.Description.Trim() : objbookDetails.book.Description,
+                            TechnologyId = objbookDetails.book.TechnologyId,
+                            ImageUrl = uniqueFileNmae,
+                            CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                            CreatedDate = DateTime.Now,
+                            StatusId = 1,
+                            Author = objbookDetails.book.Author != null ? objbookDetails.book.Author.Trim() : objbookDetails.book.Author,
+                            PublishedDate = objbookDetails.book.PublishedDate
+                        };
 
-                    objRepositoty.Add(objNewBook);
-                    return RedirectToAction(nameof(Index));
+                        objRepositoty.Add(objNewBook);
+                        return RedirectToAction(nameof(Index));
+                    }
+
                 }
-
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Book already exists.");
             }
 
             TechnologyList();
@@ -385,72 +392,91 @@ namespace EbookUI.Controllers
             if (id != objbookDetails.book.BookId)
                 return NotFound();
 
-
-            if (ModelState.IsValid)
+            if (!BookExists(objbookDetails))
             {
-                try
+                Book objEditBook = null;
+                if (ModelState.IsValid)
                 {
-                    if (objbookDetails.Image != null)
+                    try
                     {
-                        if (objbookDetails.ExistingImageUrl != null)
+                        if (objbookDetails.Image != null)
                         {
-                            var URLPath = objbookDetails.ExistingImageUrl;
-                            var splitPath = URLPath.Split(".");
-                            var bookPath = splitPath[0].ToString() + ".pdf";
+                            if (objbookDetails.ExistingImageUrl != null)
+                            {
+                                var URLPath = objbookDetails.ExistingImageUrl;
+                                var splitPath = URLPath.Split(".");
+                                var bookPath = splitPath[0].ToString() + ".pdf";
 
-                            string imageFilePath = Path.Combine(objHostingEnvironment.WebRootPath, "uploadImages", objbookDetails.ExistingImageUrl);
-                            string bookFilePath = Path.Combine(objHostingEnvironment.WebRootPath, "uploadBooks", bookPath);
-                            System.IO.File.Delete(imageFilePath);
-                            System.IO.File.Delete(bookFilePath);
+                                string imageFilePath = Path.Combine(objHostingEnvironment.WebRootPath, "uploadImages", objbookDetails.ExistingImageUrl);
+                                string bookFilePath = Path.Combine(objHostingEnvironment.WebRootPath, "uploadBooks", bookPath);
+                                System.IO.File.Delete(imageFilePath);
+                                System.IO.File.Delete(bookFilePath);
+                            }
+
+                            objbookDetails.book.ImageUrl = ProcessUploadFile(objbookDetails);
+                            objbookDetails.book.StatusId = 1;
+                        }
+                        else
+                        {
+                            objbookDetails.book.ImageUrl = objbookDetails.ExistingImageUrl;
+                            objbookDetails.book.StatusId = objbookDetails.book.StatusId;
                         }
 
-                        objbookDetails.book.ImageUrl = ProcessUploadFile(objbookDetails);
-                        objbookDetails.book.StatusId = 1;
+
+                        objEditBook = new Book
+                        {
+                            BookId = objbookDetails.book.BookId,
+                            BookName = objbookDetails.book.BookName != null ? objbookDetails.book.BookName.Trim() : objbookDetails.book.BookName,
+                            Description = objbookDetails.book.Description != null ? objbookDetails.book.Description.Trim() : objbookDetails.book.Description,
+                            TechnologyId = objbookDetails.book.TechnologyId,
+                            ImageUrl = objbookDetails.book.ImageUrl != null ? objbookDetails.book.ImageUrl.Trim() : objbookDetails.book.ImageUrl,
+                            StatusId = objbookDetails.book.StatusId,
+                            Remarks = objbookDetails.book.Remarks != null ? objbookDetails.book.Remarks.Trim() : objbookDetails.book.Remarks,
+                            CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                            CreatedDate = objbookDetails.book.CreatedDate,
+                            ApprovedBy = objbookDetails.book.ApprovedBy != null ? objbookDetails.book.ApprovedBy.Trim() : objbookDetails.book.ApprovedBy,
+                            ApprovedDate = objbookDetails.book.ApprovedDate,
+                            Author = objbookDetails.book.Author != null ? objbookDetails.book.Author.Trim() : objbookDetails.book.Author,
+                            PublishedDate = objbookDetails.book.PublishedDate
+                        };
+
+                        objRepositoty.Update(objEditBook);
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        objbookDetails.book.ImageUrl = objbookDetails.ExistingImageUrl;
-                        objbookDetails.book.StatusId = objbookDetails.book.StatusId;
+                        if (!BookExist(objbookDetails.book.BookId))
+                            return NotFound();
+                        else
+                            throw;
                     }
 
-
-                    Book objEditBook = new Book
-                    {
-                        BookId = objbookDetails.book.BookId,
-                        BookName = objbookDetails.book.BookName != null ? objbookDetails.book.BookName.Trim() : objbookDetails.book.BookName,
-                        Description = objbookDetails.book.Description != null ? objbookDetails.book.Description.Trim() : objbookDetails.book.Description,
-                        TechnologyId = objbookDetails.book.TechnologyId,
-                        ImageUrl = objbookDetails.book.ImageUrl != null ? objbookDetails.book.ImageUrl.Trim() : objbookDetails.book.ImageUrl,
-                        StatusId = objbookDetails.book.StatusId,
-                        Remarks = objbookDetails.book.Remarks != null ? objbookDetails.book.Remarks.Trim() : objbookDetails.book.Remarks,
-                        CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                        CreatedDate = objbookDetails.book.CreatedDate,
-                        ApprovedBy = objbookDetails.book.ApprovedBy != null ? objbookDetails.book.ApprovedBy.Trim() : objbookDetails.book.ApprovedBy,
-                        ApprovedDate = objbookDetails.book.ApprovedDate,
-                        Author = objbookDetails.book.Author != null ? objbookDetails.book.Author.Trim() : objbookDetails.book.Author,
-                        PublishedDate = objbookDetails.book.PublishedDate
-                    };
-
-                    objRepositoty.Update(objEditBook);
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BookExists(objbookDetails.book.BookId))
-                        return NotFound();
-                    else
-                        throw;
-                }
-
-                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Book already exists.");
             }
 
-            return View(objbookDetails.book);
+            TechnologyList();
+            return View(objbookDetails);
         }
 
-        private bool BookExists(int intBookId)
+        private bool BookExist(int intBookId)
         {
             var ExistingBookDetails = objRepositoty.GetBookDetailsById(intBookId);
             if (ExistingBookDetails != null)
+                return true;
+            else
+                return false;
+        }
+
+        private bool BookExists(BookViewModel objbookDetails)
+        {
+            //var Books = from m in objRepositoty.GetBooks() select m;
+            var Books1 = from m in objRepositoty.GetBooks() where (m.BookName == objbookDetails.book.BookName && m.Author == objbookDetails.book.Author.Trim() && m.TechnologyId == objbookDetails.book.TechnologyId && m.PublishedDate == objbookDetails.book.PublishedDate && m.BookId != objbookDetails.book.BookId) select m;
+            //Books.Where(a => a.BookId != objbookDetails.book.BookId && a.BookName == objbookDetails.book.BookName && a.Author == objbookDetails.book.Author.Trim() && a.TechnologyId == objbookDetails.book.TechnologyId && a.PublishedDate == objbookDetails.book.PublishedDate); // objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
+            if (Books1.ToList().Count > 0)
                 return true;
             else
                 return false;
@@ -555,7 +581,7 @@ namespace EbookUI.Controllers
             var GBooks = from m in objRepositoty.GetBooks().Where(a => a.BookName.StartsWith(id)) select m;
             GBooks = GBooks.ToList();
             var BVM = new BookViewModel();
-            BVM.ApprovedList = GBooks.Where(s => s.StatusId == 2); 
+            BVM.ApprovedList = GBooks.Where(s => s.StatusId == 2);
             if (BVM.ApprovedList.ToList().Count > 0)
             {
                 ViewBag.approvedsubtitle = "My Approved Books";
@@ -585,7 +611,7 @@ namespace EbookUI.Controllers
                 ViewBag.approvedsubtitle = "My Approved Books";
             }
             else
-                ViewBag.approvedsubtitle = "";            
+                ViewBag.approvedsubtitle = "";
 
             return await Task.FromResult(View("Index", BVM));
         }
