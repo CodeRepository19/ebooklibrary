@@ -10,113 +10,109 @@
     var IsApprovalTitle = false;
 }
 
-    <div class="container-fluid">
-        <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-            <ul class="navbar-nav flex-grow-1">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Create">Add Book</a>
-                </li>
-            </ul>
-        </div>
-        <div class="row">
+<div class="container-fluid">
+    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+        <ul class="navbar-nav flex-grow-1">
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Create">Add Book</a>
+            </li>
+        </ul>
+    </div>
 
-            <div class="col-md-8">
+    <div class="row mt-3">
 
-                @*Search*@
-                <div class="row mt-2">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6">
-                        <form class="form-inline my-2 my-lg-0 d-inline" asp-controller="Books" asp-action="SearchBook">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search Books" name="SearchString" autocomplete="off">
-                                <div class="input-group-append">
-                                    <button class="btn btn-secondary" type="submit">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
+        <div class="col-md-8" style="border-right:1px solid rgba(0, 0, 0, 0.1);">
+
+            @*Search*@
+            <div class="row mt-2">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form class="form-inline my-2 my-lg-0 d-inline" asp-controller="Books" asp-action="SearchBook">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for books by title / author / technalogy" name="SearchString" autocomplete="off">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
                             </div>
-                        </form>
-                    </div>
-                    <div class="col-md-3"></div>
-                </div>
-
-                @*Grossery*@
-                <div class="row text-center m-3">
-                    <div class="btn-group btn-group-sm">
-                        @{
-                            for (char c = 'A'; c <= 'Z'; c++)
-                            {
-                                <a name=@c asp-controller="Books" asp-action="ShowByLetter" asp-route-id="@c" class="grocery border btn btn-default">&nbsp;@c&nbsp;</a>
-                            }
-                        }
-                    </div>
-                </div>
-
-                @*Pending Books List*@
-                <div class="row">
-                    @foreach (var item in Model.PendingList)
-                    {
-                        @if (IsPendingTitle == false)
-                        {
-                            <div class="col-md-12">
-                                <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-down" aria-hidden="true"></i> @ViewBag.pendingsubtitle</h6><hr />
-                            </div>
-
-                            IsPendingTitle = true;
-                        }
-
-                        var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
-
-                        // We Manipulate the Image path to ge the bookpath
-                        var Path = "/uploadBooks/" + (item.ImageUrl ?? "noimage.jpg");
-                        var splitPath = Path.Split(".");
-                        var bookPath = splitPath[0].ToString() + ".pdf";
-
-                        // File name For the downloaded book
-                        var bookdownload = @item.BookName + ".pdf";
-
-                        <div class="col-md-2">
-                            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-                                <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
-                            </a>
                         </div>
-                    }
+                    </form>
                 </div>
-
-                @*Approval Books List*@
-                <div class="row">
-                    @foreach (var item in Model.ApprovedList)
-                    {
-                        @if (IsApprovalTitle == false)
-                        {
-                            <div class="col-md-12">
-                                <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
-                            </div>
-                            IsApprovalTitle = true;
-                        }
-
-                        var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
-
-                        // We Manipulate the Image path to ge the bookpath
-                        var Path = "/uploadBooks/" + (item.ImageUrl ?? "noimage.jpg");
-                        var splitPath = Path.Split(".");
-                        var bookPath = splitPath[0].ToString() + ".pdf";
-
-                        // File name For the downloaded book
-                        var bookdownload = @item.BookName + ".pdf";
-
-                        <div class="col-md-2">
-                            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-                                <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
-                            </a>
-                        </div>
-                    }
-                </div>
-
-                <div class="col-md-4"></div>
-
+                <div class="col-md-2"></div>
             </div>
 
+            @*Grossery*@
+            <div class="row m-3">
+                <div class="btn-group btn-group-sm">
+                    @{
+                        for (char c = 'A'; c <= 'Z'; c++)
+                        {
+                            <a name=@c asp-controller="Books" asp-action="ShowByLetter" asp-route-id="@c" class="grocery letters border btn btn-default">&nbsp;@c&nbsp;</a>
+                        }
+                    }
+                </div>
+            </div>
+
+            @*Pending Books List*@
+            <div class="row">
+                @foreach (var item in Model.PendingList)
+                {
+                    @if (IsPendingTitle == false)
+                    {
+                        <div class="col-md-12">
+                            <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-down" aria-hidden="true"></i> @ViewBag.pendingsubtitle</h6><hr />
+                        </div>
+
+                        IsPendingTitle = true;
+                    }
+
+                    var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
+
+
+                    <div class="col-md-2">
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                            <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
+                        </a>
+                    </div>
+                }
+            </div>
+
+            @*Approval Books List*@
+            <div class="row">
+                @foreach (var item in Model.ApprovedList)
+                {
+                    @if (IsApprovalTitle == false)
+                    {
+                        <div class="col-md-12">
+                            <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
+                        </div>
+                        IsApprovalTitle = true;
+                    }
+
+                    var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
+
+                    <div class="col-md-2">
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                            <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
+                        </a>
+                    </div>
+                }
+            </div>
         </div>
 
+        <div class="col-md-4" style="width:100%;height:500px;overflow-y:scroll;">
+            <h6 class="text-muted" style="font-weight:bold;padding:6px;"><i class="fa fa-newspaper-o" aria-hidden="true"></i> SpSoft Events</h6><hr />
+            <div>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                ontrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+                The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
+
+            </div>
+        </div>
+
+
     </div>
+
+</div>
