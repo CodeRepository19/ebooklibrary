@@ -231,7 +231,6 @@ $(document).ready(function () {
 });
 
 // Script for Details Page
-
 $(document).ready(function () {
     $("#rejected").click(function () {
         $("#remarks").show();
@@ -243,37 +242,12 @@ $(document).ready(function () {
     });
 });
 
-//$(document).ready(function () {
-
-//    var rating; // Global Variable
-
-//    // Hide and show the ReviewDiv tag
-//    $("#open-review-box").click(function () {
-//        $("#post-review-box").slideToggle(1000);
-//    });
-
-
-//    // Hide and show the Approve Status tag
-//    $("#open-approvestatus-box").click(function () {
-//        $("#post-approvestatus-box").slideToggle(1000);
-//    });
-
-//    // To select rating and get the value
-//    $("a").click(function () {
-//        $(this).siblings().removeClass("rating");
-//        $(this).prevAll().addClass("rating");
-//        $(this).addClass("rating");
-//        rating = 0;
-//        rating = $("#RatingVal").val(rating);
-//    });
-
-//    // to get the dropdown selected value
-//    $('#book_StatusId').on("change", function () {
-//        var statusId = $(this).val();
-//        if (statusId == 3) {
-//            $("#remarks").show();
-//        }
-//        else
-//            $("#remarks").hide();
-//    });
-//});
+// Script for Automatic scroll div tag in index page.
+$(document).ready(function () {
+    $('#demo2').scrollbox({
+        linear: true,
+        step: 1,
+        delay: 0,
+        speed: 100
+    });
+});

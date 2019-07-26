@@ -18,11 +18,17 @@ body {
     body::after {
         content: '';
         display: block;
-        height: 50px; 
+        height: 50px;
     }
 
 /* Apply styles for Entire body End*/
 
+.grocery:hover {
+    color: #fff;
+    background-color: #6c757d;
+    cursor: pointer;
+    border-radius: 55px;
+}
 
 /* Top Header styles start*/
 
@@ -172,7 +178,7 @@ body {
     position: absolute;
     bottom: 0;
     width: 100%;
-    padding:5px;
+    padding: 5px;
     background-color: #242c42;
 }
 
@@ -205,9 +211,9 @@ body {
     width: 21%;
 }
 
-.fa-angle-right, .fa-envelope-o, .fa-phone, .fa-map-marker, .fa-facebook, .fa-google-plus, .fa-twitter, .fa-dribbble, .fa-pinterest, .fa-instagram {
+/*.fa-angle-right, .fa-envelope-o, .fa-phone, .fa-map-marker, .fa-facebook, .fa-google-plus, .fa-twitter, .fa-dribbble, .fa-pinterest, .fa-instagram {
     color: #86bc42;
-}
+}*/
 
 .btn-custom {
     color: #fff;
@@ -220,3 +226,51 @@ body {
 .rating {
     color: red;
 }
+
+.letters {
+    padding: 0.25rem 0.4rem !important;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+/* Carousel styles start*/
+.imgdiv {
+    display: inline-block;
+    margin-left: -4px;
+}
+
+    .imgdiv img {
+        /*width: 100%;*/
+        /*height: auto;*/
+        width:150px;
+        height:150px;
+    }
+
+body .carousel-indicators li {
+    background-color: red;
+}
+
+body .carousel-indicators {
+    bottom: 0;
+}
+
+body .carousel-control-prev-icon,
+body .carousel-control-next-icon {
+    background-color: red;
+}
+
+body .no-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+/* Carousel styles end*/
+
+
+/* Dynamic Data Moving styles start*/
+.scroll-text {
+    height: 670px;
+    overflow: hidden;
+}
+
+/* Dynamic Data Moving styles end*/
