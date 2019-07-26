@@ -18,14 +18,10 @@
         <form enctype="multipart/form-data" asp-controller="Books" asp-action="Edit" method="post" class="m-3">
 
             <input hidden asp-for="book.BookId" />
-            <input hidden asp-for="ExistingImageUrl" />
-            <input hidden asp-for="book.StatusId" />
             <input hidden asp-for="book.CreatedBy" />
             <input hidden asp-for="book.CreatedDate" />
-            <input hidden asp-for="book.ApprovedBy" />
-            <input hidden asp-for="book.ApprovedDate" />
-            <input hidden asp-for="book.Author" />
-            <input hidden asp-for="book.PublishedDate" />
+            <input hidden asp-for="ExistingImageUrl" />
+            <input hidden asp-for="book.StatusId" />
 
             @*<div asp-validation-summary="All" class="text-danger"></div>*@
             <div class="form-group row">
@@ -47,7 +43,7 @@
             <div class="form-group row">
                 <label asp-for="book.PublishedDate" class="col-sm-3 col-form-label"></label>
                 <div class="col-sm-9">
-                    <input asp-for="book.PublishedDate" asp-format="{0:dd/MM/yyyy}" class="form-control" placeholder="Published Date" />
+                    <input asp-for="book.PublishedDate" class="form-control" placeholder="Published Date" />
                     <span asp-validation-for="book.PublishedDate" class="text-danger"></span>
                 </div>
             </div>

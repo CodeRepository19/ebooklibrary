@@ -20,7 +20,7 @@ namespace EbookUI.Controllers
     {
         private readonly IHostingEnvironment objHostingEnvironment;
         private readonly IBookRepository objRepositoty;
-
+        
         public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository repositoty)
         {
             this.objHostingEnvironment = hostingEnvironment;
@@ -29,25 +29,29 @@ namespace EbookUI.Controllers
 
         public IActionResult Home()
         {
-            var BVM = new BookViewModel();
-
-            BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
-            if (BVM.ApprovedList.ToList().Count > 0)
-            {
-                ViewBag.approvedsubtitle = "Books";
-            }
-            else
-                ViewBag.approvedsubtitle = "";
-
-            return View(BVM);
+            TempData["Home"] = "true";
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Index()
         {
             var BVM = new BookViewModel();
-            if (User.Identity.IsAuthenticated)
+            if ((string)TempData["Home"] == "false" || (string)TempData["Home"] == null)
             {
-                return RedirectToAction(nameof(Books), BVM);
+                if (User.Identity.IsAuthenticated)
+                {
+                    return RedirectToAction(nameof(Books), BVM);
+                }
+                else
+                {
+                    BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+                }
             }
             else
             {
@@ -58,6 +62,8 @@ namespace EbookUI.Controllers
                 }
                 else
                     ViewBag.approvedsubtitle = "";
+
+                TempData["Home"] = "false";
             }
 
             return View(BVM);
@@ -108,13 +114,7 @@ namespace EbookUI.Controllers
             }
             else
             {
-                BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
-                if (BVM.ApprovedList.ToList().Count > 0)
-                {
-                    ViewBag.approvedsubtitle = "Approved Books";
-                }
-                else
-                    ViewBag.approvedsubtitle = "";
+                return Redirect("/Identity/Account/Login");
             }
 
             return View(BVM);
@@ -123,37 +123,32 @@ namespace EbookUI.Controllers
         public async Task<IActionResult> SearchBook(string searchString)
         {
             var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.Equals(searchString, StringComparison.OrdinalIgnoreCase)) select m.TechnologyId;
-
+            var BVM = new BookViewModel();
             if (tehonlolgyId.ToList().Count > 0)
             {
                 int techID = Convert.ToInt32(tehonlolgyId.ToList()[0]);
 
                 var Books = from m in objRepositoty.GetBooks().Where(a => a.TechnologyId == techID) select m;
-
                 if (techID > 0)
                 {
-                    //  Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
-                    Books = Books.Where(s => s.TechnologyId == techID);
-
-                    var ApprovedBooks = Books.Where(s => s.StatusId == 2);
-                    if (ApprovedBooks.ToList().Count > 0)
+                    BVM.ApprovedList = Books.Where(s => s.TechnologyId == techID && s.StatusId == 2); // objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
                     {
-                        ViewBag.approvedsubtitle = "Approved Books";
+                        ViewBag.approvedsubtitle = "My Approved Books";
                     }
                     else
                         ViewBag.approvedsubtitle = "";
 
-                    var UnApprovedBooks = Books.Where(s => s.StatusId == 1);
-                    if (UnApprovedBooks.ToList().Count > 0)
+                    BVM.PendingList = Books.Where(s => s.TechnologyId == techID && s.StatusId == 1);
+                    if (BVM.PendingList.ToList().Count > 0)
                     {
-                        ViewBag.unapprovedsubtitle = "Un Approved Books";
+                        ViewBag.pendingsubtitle = "Pending Books";
                     }
                     else
-                        ViewBag.unapprovedsubtitle = "";
+                        ViewBag.pendingsubtitle = "";
                 }
                 else
-                    //return View("Error/500");
-                    Index();
+                    return RedirectToAction(nameof(Books));
 
                 if (Books.ToList().Count == 0)
                 {
@@ -162,34 +157,32 @@ namespace EbookUI.Controllers
                               new { statusCode = 264 });
                 }
                 else
-                    return await Task.FromResult(View("Index", Books.ToList()));
+                    return await Task.FromResult(View("Books", BVM));
             }
             else
             {
                 var Books = from m in objRepositoty.GetBooks() select m;
                 if (!String.IsNullOrEmpty(searchString))
                 {
-
-                    Books = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1);
-                    var ApprovedBooks = Books.Where(s => s.StatusId == 2);
-                    if (ApprovedBooks.ToList().Count > 0)
+                    BVM.ApprovedList = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1 && s.StatusId == 2); // objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
                     {
-                        ViewBag.approvedsubtitle = "Approved Books";
+                        ViewBag.approvedsubtitle = "My Approved Books";
                     }
                     else
                         ViewBag.approvedsubtitle = "";
 
-                    var UnApprovedBooks = Books.Where(s => s.StatusId == 1);
-                    if (UnApprovedBooks.ToList().Count > 0)
+                    BVM.PendingList = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1 && s.StatusId == 1); 
+                    if (BVM.PendingList.ToList().Count > 0)
                     {
-                        ViewBag.unapprovedsubtitle = "Un Approved Books";
+                        ViewBag.pendingsubtitle = "Pending Books";
                     }
                     else
-                        ViewBag.unapprovedsubtitle = "";
+                        ViewBag.pendingsubtitle = "";                    
                 }
                 else
                     //return View("Error/500");
-                    Index();
+                    return RedirectToAction(nameof(Books));
 
                 if (Books.ToList().Count == 0)
                 {
@@ -198,7 +191,66 @@ namespace EbookUI.Controllers
                               new { statusCode = 264 });
                 }
                 else
-                    return await Task.FromResult(View("Index", Books.ToList()));
+                    return await Task.FromResult(View("Books", BVM));
+            }
+        }
+
+        public async Task<IActionResult> SearchBookLanding(string searchString)
+        {
+            var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.Equals(searchString, StringComparison.OrdinalIgnoreCase)) select m.TechnologyId;
+            var BVM = new BookViewModel();
+            if (tehonlolgyId.ToList().Count > 0)
+            {
+                int techID = Convert.ToInt32(tehonlolgyId.ToList()[0]);
+
+                var Books = from m in objRepositoty.GetBooks().Where(a => a.TechnologyId == techID) select m;
+                if (techID > 0)
+                {
+                    BVM.ApprovedList = Books.Where(s => s.TechnologyId == techID && s.StatusId == 2); // objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "My Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+                }
+                else
+                    return RedirectToAction(nameof(Books));
+
+                if (Books.ToList().Count == 0)
+                {
+                    return RedirectToAction("HandleErrorCode",
+                              "Error",
+                              new { statusCode = 264 });
+                }
+                else
+                    return await Task.FromResult(View("Index", BVM));
+            }
+            else
+            {
+                var Books = from m in objRepositoty.GetBooks() select m;
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    BVM.ApprovedList = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1 && s.StatusId == 2); // objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "My Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";                    
+                }
+                else
+                    //return View("Error/500");
+                    return RedirectToAction(nameof(Index));
+
+                if (Books.ToList().Count == 0)
+                {
+                    return RedirectToAction("HandleErrorCode",
+                              "Error",
+                              new { statusCode = 264 });
+                }
+                else
+                    return await Task.FromResult(View("Index", BVM));
             }
         }
 
@@ -502,26 +554,40 @@ namespace EbookUI.Controllers
         {
             var GBooks = from m in objRepositoty.GetBooks().Where(a => a.BookName.StartsWith(id)) select m;
             GBooks = GBooks.ToList();
-
-            var ApprovedBooksList = GBooks.Where(s => s.StatusId == 2);
-            if (ApprovedBooksList.ToList().Count > 0)
+            var BVM = new BookViewModel();
+            BVM.ApprovedList = GBooks.Where(s => s.StatusId == 2); 
+            if (BVM.ApprovedList.ToList().Count > 0)
             {
-                ViewBag.approvedsubtitle = "Approved Books";
+                ViewBag.approvedsubtitle = "My Approved Books";
             }
             else
                 ViewBag.approvedsubtitle = "";
 
-            var UnapprovedBooksList = GBooks.Where(s => s.StatusId == 1);
-            if (UnapprovedBooksList.ToList().Count > 0)
+            BVM.PendingList = GBooks.Where(s => s.StatusId == 1);
+            if (BVM.PendingList.ToList().Count > 0)
             {
-                ViewBag.unapprovedsubtitle = "Un Approved Books";
+                ViewBag.pendingsubtitle = "Pending Books";
             }
             else
-                ViewBag.unapprovedsubtitle = "";
+                ViewBag.pendingsubtitle = "";
 
-            //return View(objRepositoty.GetBooks().OrderByDescending(s => s.ApprovedDate));
+            return await Task.FromResult(View("Books", BVM));
+        }
 
-            return await Task.FromResult(View("Index", GBooks));
+        public async Task<IActionResult> ShowByLetterLanding(string id)
+        {
+            var GBooks = from m in objRepositoty.GetBooks().Where(a => a.BookName.StartsWith(id)) select m;
+            GBooks = GBooks.ToList();
+            var BVM = new BookViewModel();
+            BVM.ApprovedList = GBooks.Where(s => s.StatusId == 2);
+            if (BVM.ApprovedList.ToList().Count > 0)
+            {
+                ViewBag.approvedsubtitle = "My Approved Books";
+            }
+            else
+                ViewBag.approvedsubtitle = "";            
+
+            return await Task.FromResult(View("Index", BVM));
         }
     }
 }
