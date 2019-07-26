@@ -394,7 +394,6 @@ namespace EbookUI.Controllers
 
             if (!BookExists(objbookDetails))
             {
-                Book objEditBook = null;
                 if (ModelState.IsValid)
                 {
                     try
@@ -422,25 +421,26 @@ namespace EbookUI.Controllers
                             objbookDetails.book.StatusId = objbookDetails.book.StatusId;
                         }
 
+                        Book bookObj = objRepositoty.GetBooks().Where(x => x.BookId == objbookDetails.book.BookId).FirstOrDefault();
 
-                        objEditBook = new Book
+                        if (bookObj != null)
                         {
-                            BookId = objbookDetails.book.BookId,
-                            BookName = objbookDetails.book.BookName != null ? objbookDetails.book.BookName.Trim() : objbookDetails.book.BookName,
-                            Description = objbookDetails.book.Description != null ? objbookDetails.book.Description.Trim() : objbookDetails.book.Description,
-                            TechnologyId = objbookDetails.book.TechnologyId,
-                            ImageUrl = objbookDetails.book.ImageUrl != null ? objbookDetails.book.ImageUrl.Trim() : objbookDetails.book.ImageUrl,
-                            StatusId = objbookDetails.book.StatusId,
-                            Remarks = objbookDetails.book.Remarks != null ? objbookDetails.book.Remarks.Trim() : objbookDetails.book.Remarks,
-                            CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                            CreatedDate = objbookDetails.book.CreatedDate,
-                            ApprovedBy = objbookDetails.book.ApprovedBy != null ? objbookDetails.book.ApprovedBy.Trim() : objbookDetails.book.ApprovedBy,
-                            ApprovedDate = objbookDetails.book.ApprovedDate,
-                            Author = objbookDetails.book.Author != null ? objbookDetails.book.Author.Trim() : objbookDetails.book.Author,
-                            PublishedDate = objbookDetails.book.PublishedDate
+                            bookObj.BookId = objbookDetails.book.BookId;
+                            bookObj.BookName = objbookDetails.book.BookName != null ? objbookDetails.book.BookName.Trim() : objbookDetails.book.BookName;
+                            bookObj.Description = objbookDetails.book.Description != null ? objbookDetails.book.Description.Trim() : objbookDetails.book.Description;
+                            bookObj.TechnologyId = objbookDetails.book.TechnologyId;
+                            bookObj.ImageUrl = objbookDetails.book.ImageUrl != null ? objbookDetails.book.ImageUrl.Trim() : objbookDetails.book.ImageUrl;
+                            bookObj.StatusId = objbookDetails.book.StatusId;
+                            bookObj.Remarks = objbookDetails.book.Remarks != null ? objbookDetails.book.Remarks.Trim() : objbookDetails.book.Remarks;
+                            bookObj.CreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                            bookObj.CreatedDate = objbookDetails.book.CreatedDate;
+                            bookObj.ApprovedBy = objbookDetails.book.ApprovedBy != null ? objbookDetails.book.ApprovedBy.Trim() : objbookDetails.book.ApprovedBy;
+                            bookObj.ApprovedDate = objbookDetails.book.ApprovedDate;
+                            bookObj.Author = objbookDetails.book.Author != null ? objbookDetails.book.Author.Trim() : objbookDetails.book.Author;
+                            bookObj.PublishedDate = objbookDetails.book.PublishedDate;
                         };
 
-                        objRepositoty.Update(objEditBook);
+                        objRepositoty.Update(bookObj);
                     }
                     catch (DbUpdateConcurrencyException)
                     {
@@ -473,10 +473,8 @@ namespace EbookUI.Controllers
 
         private bool BookExists(BookViewModel objbookDetails)
         {
-            //var Books = from m in objRepositoty.GetBooks() select m;
-            var Books1 = from m in objRepositoty.GetBooks() where (m.BookName == objbookDetails.book.BookName && m.Author == objbookDetails.book.Author.Trim() && m.TechnologyId == objbookDetails.book.TechnologyId && m.PublishedDate == objbookDetails.book.PublishedDate && m.BookId != objbookDetails.book.BookId) select m;
-            //Books.Where(a => a.BookId != objbookDetails.book.BookId && a.BookName == objbookDetails.book.BookName && a.Author == objbookDetails.book.Author.Trim() && a.TechnologyId == objbookDetails.book.TechnologyId && a.PublishedDate == objbookDetails.book.PublishedDate); // objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
-            if (Books1.ToList().Count > 0)
+            var Books = from m in objRepositoty.GetBooks() where (m.BookName == objbookDetails.book.BookName && m.Author == objbookDetails.book.Author.Trim() && m.TechnologyId == objbookDetails.book.TechnologyId && m.PublishedDate == objbookDetails.book.PublishedDate && m.BookId != objbookDetails.book.BookId) select m;
+            if (Books.ToList().Count > 0)
                 return true;
             else
                 return false;

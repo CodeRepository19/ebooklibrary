@@ -20,74 +20,95 @@
 
 }
 
-<h3 class="text-center m-4 text-muted">Book Details</h3>
+<div class="container-fluid">
 
-<div class="row">
-    <div class="col-md-8">
+    <div class="row mt-3">
 
-        <div class="card-header text-left">
-            <h3>@Model.book.BookName</h3>
-        </div>
+        <div class="col-md-8" style="border-right:1px solid rgba(0, 0, 0, 0.1);">
+            <h3 class="text-center m-4 text-muted">Book Details</h3>
+            <div class="card-header text-left">
+                <h3>@Model.book.BookName</h3>
+            </div>
 
-        <div class="row">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card-body">
+                        <img src="@photoPath" asp-append-version="true" />
+                    </div>
+                </div>
 
-            <div class="col-md-3">
-                <div class="card-body">
-                    <img src="@photoPath" asp-append-version="true" />
+                <div class="card-body col-md-9" style="margin-left:-3%;">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <p style="font-size:15px;"><strong>Uploaded By:</strong> &nbsp;&nbsp;@PostedBy</p> <hr />
+                    }
+                    <p style="font-size:15px;"><strong>Author:</strong> &nbsp;&nbsp;@Model.book.Author</p> <hr />
+                    <p style="font-size:15px;"><strong>Published On:</strong> &nbsp;&nbsp;@Model.book.PublishedDate</p> <hr />
+                    <p style="font-size:15px;"><strong>Technology:</strong> &nbsp;&nbsp;@Model.technology.TechnologyName</p> <hr />
+                    <p style="font-size:15px;"><strong>Description:</strong><br /><br />@Model.book.Description</p>
+
                 </div>
             </div>
 
-            <div class="card-body col-md-9" style="margin-left:-3%;">
-                @if (User.IsInRole("Admin"))
+            <div class="card-footer text-center">
+                @*<a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-sm m-1" title="Go To E-Books Page">Back</a>*@
+                <a href="@bookPath" class="btn btn-primary btn-sm m-1" target="_blank" title="Read Book">Read Book</a>
+                <a href="@bookPath" class="btn btn-primary btn-sm m-1" download="@bookdownload" title="Download @Model.book.BookName">Download</a>
+
+                @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == UserId && Model.book.StatusId == 1)
                 {
-                    <p style="font-size:15px;"><strong>Uploaded By:</strong> &nbsp;&nbsp;@PostedBy</p> <hr />
+                    <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary btn-sm m-1" title="Edit @Model.book.BookName E-Book">Edit</a>
                 }
-                <p style="font-size:15px;"><strong>Author:</strong> &nbsp;&nbsp;@Model.book.Author</p> <hr />
-                <p style="font-size:15px;"><strong>Published On:</strong> &nbsp;&nbsp;@Model.book.PublishedDate</p> <hr />
-                <p style="font-size:15px;"><strong>Technology:</strong> &nbsp;&nbsp;@Model.technology.TechnologyName</p> <hr />
-                <p style="font-size:15px;"><strong>Description:</strong><br /><br />@Model.book.Description</p>
+            </div>
 
+            @if (User.IsInRole("Admin"))
+            {
+                @if (@Model.book.StatusId == 1)
+                {
+                    <div class="row p-3">
+                        <form enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
+                            <input hidden asp-for="book.BookId" />
+                            <input hidden asp-for="book.BookName" />
+                            <input hidden asp-for="book.TechnologyId" />
+                            <input hidden asp-for="book.Description" />
+                            <input hidden asp-for="book.ImageUrl" />
+                            <input hidden asp-for="book.CreatedBy" />
+                            <input hidden asp-for="book.CreatedDate" />
+                            <input hidden asp-for="book.Author" />
+                            <input hidden asp-for="book.PublishedDate" />
+
+                            <input asp-for="book.StatusId" type="radio" value="2" checked="checked" id="approved" />&nbsp;Approved
+                            &nbsp;&nbsp;<input asp-for="book.StatusId" type="radio" value="3" id="rejected" />&nbsp;Rejected
+                            <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea>
+                            <button class="btn btn-success btn-sm pull-right ml-3" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
+                        </form>
+                    </div>
+                }
+            }
+
+        </div>
+
+        <div class="col-md-4">
+            <h6 class="text-muted" style="font-weight:bold;padding:6px;"><i class="fa fa-newspaper-o" aria-hidden="true"></i> SpSoft Events</h6><hr />
+            <div class="border scroll-text" id="demo2" style="width:100%;height:570px;overflow-y:scroll;">
+                <ul class="fa-ul">
+                    <li><i class="fa-li fa fa-bell"></i>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                    <li><i class="fa-li fa fa-check-square"></i>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</li>
+                    <li><i class="fa-li fa fa-spinner fa-spin"></i>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</li>
+                    <li><i class="fa-li fa fa-square"></i>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </li>
+                    <li><i class="fa-li fa fa-list-alt"></i>The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</li>
+                    <li><i class="fa-li fa fa-bar-chart"></i>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. </li>
+                    <li><i class="fa-li fa fa-bar-bars"></i>Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</li>
+                    <li><i class="fa-li fa fa-area-chart"></i>ontrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. </li>
+                    <li><i class="fa-li fa fa-bicycle"></i>Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</li>
+                    <li><i class="fa-li fa fa-bell-slash"></i>Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. </li>
+                    <li><i class="fa-li fa fa-bolt"></i>This book is a treatise on the theory of ethics, very popular during the Renaissance. </li>
+                    <li><i class="fa-li fa fa-bookmark"></i>The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</li>
+                    <li><i class="fa-li fa fa-building"></i>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.</li>
+                    <li><i class="fa-li fa fa-phone"></i>Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</li>
+                </ul>
             </div>
         </div>
-
-        <div class="card-footer text-center">
-            @*<a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-sm m-1" title="Go To E-Books Page">Back</a>*@
-            <a href="@bookPath" class="btn btn-primary btn-sm m-1" target="_blank" title="Read Book">Read Book</a>
-            <a href="@bookPath" class="btn btn-primary btn-sm m-1" download="@bookdownload" title="Download @Model.book.BookName">Download</a>
-
-            @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == UserId && Model.book.StatusId == 1)
-            {
-                <a asp-controller="Books" asp-action="Edit" asp-route-id="@Model.book.BookId" class="btn btn-primary btn-sm m-1" title="Edit @Model.book.BookName E-Book">Edit</a>
-            }
-        </div>
-
-        @if (User.IsInRole("Admin"))
-        {
-            @if (@Model.book.StatusId == 1)
-            {
-                <div class="row p-3">
-                    <form enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
-                        <input hidden asp-for="book.BookId" />
-                        <input hidden asp-for="book.BookName" />
-                        <input hidden asp-for="book.TechnologyId" />
-                        <input hidden asp-for="book.Description" />
-                        <input hidden asp-for="book.ImageUrl" />
-                        <input hidden asp-for="book.CreatedBy" />
-                        <input hidden asp-for="book.CreatedDate" />
-                        <input hidden asp-for="book.Author" />
-                        <input hidden asp-for="book.PublishedDate" />
-
-                        <input asp-for="book.StatusId" type="radio" value="2" checked="checked" id="approved" />&nbsp;Approved
-                        &nbsp;&nbsp;<input asp-for="book.StatusId" type="radio" value="3" id="rejected" />&nbsp;Rejected
-                        <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea>
-                        <button class="btn btn-success btn-sm pull-right ml-3" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
-                    </form>
-                </div>
-            }
-        }
-
-    </div>
-    <div class="col-md-4">
 
     </div>
 </div>
