@@ -49,7 +49,7 @@
 
                     <div style="display:flex">
                        
-                        <div class="ml-2">
+                        <div>
 
                             @if (User.IsInRole("Admin"))
                             {
@@ -58,7 +58,7 @@
                                     <p style="font-size:15px;">
                                         <strong>Approval Status:&nbsp;&nbsp;&nbsp;</strong>
                                     </p>
-                                    <div class="row">
+                                    <div class="ml-1 row">
                                         <form enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
                                             <input hidden asp-for="book.BookId" />
                                             <input hidden asp-for="book.BookName" />
