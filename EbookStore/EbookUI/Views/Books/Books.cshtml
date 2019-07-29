@@ -96,7 +96,7 @@
 
                     <div class="col-md-2">
                         <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-                            <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
+                            <img class="img-responsive border" src="@photoPath" asp-append-version="true" title="@item.Remarks" tooltip="@item.Remarks" width="115" height="150" />
                         </a>
                     </div>
                 }

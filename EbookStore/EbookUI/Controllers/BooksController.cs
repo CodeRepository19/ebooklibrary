@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace EbookUI.Controllers
 {
@@ -85,7 +87,7 @@ namespace EbookUI.Controllers
                     else
                         ViewBag.approvedsubtitle = "";
 
-                    BVM.PendingList = objRepositoty.GetBooks().Where(s => s.StatusId == 1).OrderByDescending(s => s.CreatedDate);
+                    BVM.PendingList = objRepositoty.GetBooks().Where(s => (s.StatusId == 1 || s.StatusId == 3)).OrderByDescending(s => s.CreatedDate);
                     if (BVM.PendingList.ToList().Count > 0)
                     {
                         ViewBag.pendingsubtitle = "Pending Books";
@@ -575,11 +577,25 @@ namespace EbookUI.Controllers
         [HttpPost]
         public IActionResult ApprovalStatus(BookViewModel objbookDetails)
         {
+            string ImagePath = string.Empty;
+
+            if (objbookDetails.book.StatusId == 3)
+            {
+                string UploadImageFolder = Path.Combine(objHostingEnvironment.WebRootPath, "uploadImages");
+                string ExistringImgPath = UploadImageFolder + "\\" + objbookDetails.book.ImageUrl;
+                string NewImgName = Guid.NewGuid().ToString();
+                ImagePath = NewImgName + ".png";
+                string NewImagePath = UploadImageFolder + "\\" + NewImgName + ".png";
+                ChangeToRejectedImg(ExistringImgPath, "REJECTED!", NewImagePath);
+                System.IO.File.Delete(ExistringImgPath);
+            }
+            else
+                ImagePath = objbookDetails.book.ImageUrl;
             Book objEditBook = new Book
             {
                 BookId = objbookDetails.book.BookId,
                 BookName = objbookDetails.book.BookName,
-                ImageUrl = objbookDetails.book.ImageUrl,
+                ImageUrl = ImagePath,
                 TechnologyId = objbookDetails.book.TechnologyId,
                 Description = objbookDetails.book.Description,
                 StatusId = objbookDetails.book.StatusId,
@@ -594,6 +610,35 @@ namespace EbookUI.Controllers
 
             objRepositoty.Update(objEditBook);
             return RedirectToAction(nameof(Index));
+        }
+
+        public void ChangeToRejectedImg(string imgpath, string text, string UploadImageFolder)
+        {
+            //Load the Image to be written on.
+            Bitmap bitMapImage1 = new System.Drawing.Bitmap(imgpath);
+            Bitmap bitMapImage = (Bitmap)bitMapImage1.Clone(new Rectangle(0, 0, bitMapImage1.Width, bitMapImage1.Height), bitMapImage1.PixelFormat);
+            bitMapImage1.Dispose();
+
+            using (Graphics graphicImage = Graphics.FromImage(bitMapImage))
+            {
+                //Smooth graphics is nice.
+                graphicImage.SmoothingMode = SmoothingMode.AntiAlias;
+
+                //I am drawing a oval around my text.
+                //graphicImage.DrawArc(new Pen(Color.Red, 3), 90, 235, 150, 50, 0, 360);
+
+                //Write your text.
+                //graphicImage.DrawString("That's my boy!", new Font("Arial", 12, FontStyle.Bold), SystemBrushes.WindowText, new Point(100, 250));
+                graphicImage.DrawString(text, new Font("Arial", 16, FontStyle.Bold), new SolidBrush(Color.Red), new Point(10, 100));
+
+                //Set the content type
+                Response.ContentType = "image/png";
+                bitMapImage.Save(UploadImageFolder, ImageFormat.Png);
+
+                //Clean house.
+                graphicImage.Dispose();
+                bitMapImage.Dispose();
+            }
         }
 
         public async Task<IActionResult> ShowByLetter(string id)
@@ -635,6 +680,7 @@ namespace EbookUI.Controllers
             GBooks = GBooks.ToList();
             var BVM = new BookViewModel();
             BVM.ApprovedList = GBooks.Where(s => s.StatusId == 2);
+            ViewBag.searchLetter = id;
             if (BVM.ApprovedList.ToList().Count > 0)
             {
                 ViewBag.approvedsubtitle = "Books";

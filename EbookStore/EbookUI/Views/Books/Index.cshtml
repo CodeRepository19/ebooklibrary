@@ -49,7 +49,8 @@
 
             @foreach (var item in Model.ApprovedList)
             {
-                @if (IsApprovalTitle == false)
+
+                if (IsApprovalTitle == false)
                 {
                     <div class="col-md-12">
                         <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
@@ -61,28 +62,38 @@
 
                 <div class="col-xs-3 col-sm-3 col-md-3 imgdiv" style="padding-top:20px;">
                     <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-                        <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150">
+                        <img class="img-responsive border" src="@photoPath" title="@item.Remarks" tooltip="@item.Remarks" asp-append-version="true" width="115" height="150">
                     </a>
                 </div>
+            }
 
+            @if (Model.ApprovedList.ToList().Count == 0)
+            {
+                <div class="container" style="padding-top:20px;">
+                    <h6 class="text-danger" style="font-weight:bold;">
+                        <i class="fa fa-meh-o" aria-hidden="true"></i>
+                        Books are not availabe with your search Letter "@ViewBag.searchLetter"
+                    </h6>
+                </div>
+                <hr />
 
             }
 
         </div>
 
-            <div class="col-md-4">
-                <h6 class="text-muted" style="font-weight:bold;padding:6px;"><i class="fa fa-newspaper-o" aria-hidden="true"></i> SP Soft Events</h6><hr />
-                <div class="border scroll-text" id="demo2" style="width:100%;height:250px;overflow-y:hidden;">
-                    <ul class="fa-ul">
-                        <li><i class="fa-li fa fa-bell"></i>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
-                        <li><i class="fa-li fa fa-check-square"></i>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ning essentially unchanged.</li>
-                        <li><i class="fa-li fa fa-spinner fa-spin"></i>It was populariesktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</li>
-                        <li><i class="fa-li fa fa-square"></i>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </li>
-                        <li><i class="fa-li fa fa-list-alt"></i>The point of using Lorem Ipsum is that itke readable English.</li>
-                        <li><i class="fa-li fa fa-bar-chart"></i>Many desktop publishing packages andstill in their infancy. </li>
-                    </ul>
-                </div>
+        <div class="col-md-4">
+            <h6 class="text-muted" style="font-weight:bold;padding:6px;"><i class="fa fa-newspaper-o" aria-hidden="true"></i> SP Soft Events</h6><hr />
+            <div class="border scroll-text" id="demo2" style="width:100%;height:250px;overflow-y:hidden;">
+                <ul class="fa-ul">
+                    <li><i class="fa-li fa fa-bell"></i>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                    <li><i class="fa-li fa fa-check-square"></i>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ning essentially unchanged.</li>
+                    <li><i class="fa-li fa fa-spinner fa-spin"></i>It was populariesktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</li>
+                    <li><i class="fa-li fa fa-square"></i>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </li>
+                    <li><i class="fa-li fa fa-list-alt"></i>The point of using Lorem Ipsum is that itke readable English.</li>
+                    <li><i class="fa-li fa fa-bar-chart"></i>Many desktop publishing packages andstill in their infancy. </li>
+                </ul>
             </div>
-
         </div>
+
+    </div>
 </div>

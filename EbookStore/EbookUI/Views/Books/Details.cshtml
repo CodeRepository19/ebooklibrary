@@ -48,7 +48,7 @@
                     }
 
                     <div style="display:flex">
-                       
+
                         <div>
 
                             @if (User.IsInRole("Admin"))
@@ -69,10 +69,9 @@
                                             <input hidden asp-for="book.CreatedDate" />
                                             <input hidden asp-for="book.Author" />
                                             <input hidden asp-for="book.PublishedDate" />
-
                                             <input asp-for="book.StatusId" type="radio" value="2" checked="checked" id="approved" />&nbsp;Approve
                                             &nbsp;&nbsp;<input asp-for="book.StatusId" type="radio" value="3" id="rejected" />&nbsp;Reject
-
+                                            <div> <textarea class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea></div>
                                             <button class="btn btn-success btn-sm pull-right ml-3" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
                                         </form>
                                     </div>
@@ -80,7 +79,7 @@
                             }
                         </div>
                     </div>
-                    <div> <textarea required class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea></div>
+                    
                 </div>
             </div>
 
