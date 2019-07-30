@@ -55,26 +55,38 @@
                             {
                                 @if (@Model.book.StatusId == 1)
                                 {
-                                    <p style="font-size:15px;">
-                                        <strong>Approval Status:&nbsp;&nbsp;&nbsp;</strong>
-                                    </p>
-                                    <div class="ml-1 row">
-                                        <form enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
-                                            <input hidden asp-for="book.BookId" />
-                                            <input hidden asp-for="book.BookName" />
-                                            <input hidden asp-for="book.TechnologyId" />
-                                            <input hidden asp-for="book.Description" />
-                                            <input hidden asp-for="book.ImageUrl" />
-                                            <input hidden asp-for="book.CreatedBy" />
-                                            <input hidden asp-for="book.CreatedDate" />
-                                            <input hidden asp-for="book.Author" />
-                                            <input hidden asp-for="book.PublishedDate" />
-                                            <input asp-for="book.StatusId" type="radio" value="2" checked="checked" id="approved" />&nbsp;Approve
-                                            &nbsp;&nbsp;<input asp-for="book.StatusId" type="radio" value="3" id="rejected" />&nbsp;Reject
-                                            <div> <textarea class="form-control mt-2" asp-for="book.Remarks" cols="50" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea></div>
-                                            <button class="btn btn-success btn-sm pull-right ml-3" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
-                                        </form>
+                                    <div style="display:flex">
+                                        <p style="font-size:15px;">
+                                            <strong>Approval Status:&nbsp;&nbsp;&nbsp;</strong>
+                                        </p>
+                                        <div class="ml-1 row">
+                                            <form enctype="multipart/form-data" asp-controller="Books" asp-action="ApprovalStatus" method="post">
+                                                <input hidden asp-for="book.BookId" />
+                                                <input hidden asp-for="book.BookName" />
+                                                <input hidden asp-for="book.TechnologyId" />
+                                                <input hidden asp-for="book.Description" />
+                                                <input hidden asp-for="book.ImageUrl" />
+                                                <input hidden asp-for="book.CreatedBy" />
+                                                <input hidden asp-for="book.CreatedDate" />
+                                                <input hidden asp-for="book.Author" />
+                                                <input hidden asp-for="book.PublishedDate" />
+                                                <div style="display:flex;">
+                                                    <div>
+                                                        <input asp-for="book.StatusId" type="radio" value="2" checked="checked" id="approved" />&nbsp;Approve
+                                                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <div>
+                                                        <input asp-for="book.StatusId" type="radio" value="3" id="rejected" />&nbsp;Reject
+                                                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <div>
+                                                        <button class="btn btn-success btn-sm pull-right ml-3" title="Add a Review" id="btnreviewadd" type="submit">Save</button>
+                                                    </div>
+                                                </div>
+                                                <div> <textarea class="form-control mt-2" asp-for="book.Remarks" cols="30" id="remarks" placeholder="Enter your Remarks here..." rows="2" style="display:none;"></textarea></div>
+                                            </form>
+                                        </div>
                                     </div>
+
+
                                 }
                             }
                         </div>

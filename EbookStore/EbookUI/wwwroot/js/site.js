@@ -28,13 +28,12 @@ btn.on('click', function (e) {
 
 // Script for Details Page
 //$(document).ready(function () {
-$("#rejected").click(function () {
+$("#rejected").click(function ()
+{
     $("#remarks").show();
-    $("#btnreviewadd").addClass("mt-1");
 });
 $("#approved").click(function () {
     $("#remarks").hide();
-    $("#btnreviewadd").removeClass("mt-1");
 });
 //});
 
