@@ -36,10 +36,10 @@
             <div class="row m-3">
                 <div class="btn-group btn-group-sm">
                     @{
-                        for (char c = 'A'; c <= 'Z'; c++)
-                        {
-                            <a name=@c asp-controller="Books" asp-action="ShowByLetterLanding" asp-route-id="@c" class="grocery letters border btn btn-default">&nbsp;@c&nbsp;</a>
-                        }
+                    for (char c = 'A'; c <= 'Z'; c++)
+                    {
+                    <a name=@c asp-controller="Books" asp-action="ShowByLetterLanding" asp-route-id="@c" class="grocery letters border btn btn-default">&nbsp;@c&nbsp;</a>
+                    }
                     }
                 </div>
             </div>
@@ -50,17 +50,10 @@
             </div>
         </div>
 
+        @*Events*@
         <div class="col-md-4">
-            <h6 class="text-muted" style="font-weight:bold;padding:6px;"><i class="fa fa-newspaper-o" aria-hidden="true"></i> SP Soft Events</h6><hr />
-            <div class="border scroll-text" id="demo2" style="width:100%;height:250px;overflow-y:hidden;">
-                <ul class="fa-ul">
-                    <li><i class="fa-li fa fa-bell"></i>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
-                    <li><i class="fa-li fa fa-check-square"></i>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ning essentially unchanged.</li>
-                    <li><i class="fa-li fa fa-spinner fa-spin"></i>It was populariesktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</li>
-                    <li><i class="fa-li fa fa-square"></i>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. </li>
-                    <li><i class="fa-li fa fa-list-alt"></i>The point of using Lorem Ipsum is that itke readable English.</li>
-                    <li><i class="fa-li fa fa-bar-chart"></i>Many desktop publishing packages andstill in their infancy. </li>
-                </ul>
+            <div id="div_GetEvents">
+                @await Html.PartialAsync("_EventsList")
             </div>
         </div>
 

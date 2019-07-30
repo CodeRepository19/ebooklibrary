@@ -1,0 +1,52 @@
+﻿@model EbookApplication.ViewModels.BookViewModel
+@{
+    var IsPendingTitle = false;
+    var IsApprovalTitle = false;
+}
+
+@*Pending Books List*@
+<div class="row">
+    @foreach (var item in Model.PendingList)
+    {
+        @if (IsPendingTitle == false)
+        {
+            <div class="col-md-12">
+                <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-down" aria-hidden="true"></i> @ViewBag.pendingsubtitle</h6><hr />
+            </div>
+
+            IsPendingTitle = true;
+        }
+
+        var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
+
+
+        <div class="col-md-2">
+            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
+            </a>
+        </div>
+    }
+</div>
+
+@*Approval Books List*@
+
+<div class="row">
+    @foreach (var item in Model.ApprovedList)
+    {
+        @if (IsApprovalTitle == false)
+        {
+            <div class="col-md-12">
+                <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
+            </div>
+            IsApprovalTitle = true;
+        }
+
+        var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
+
+        <div class="col-md-2">
+            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
+                <img class="img-responsive border" src="@photoPath" asp-append-version="true" title="@item.Remarks" tooltip="@item.Remarks" width="115" height="150" />
+            </a>
+        </div>
+    }
+</div>

@@ -85,6 +85,56 @@ namespace EbookUI.Controllers
             return PartialView("_ApprovedBooksList", BVM);
         }
 
+        public IActionResult GetPendingApprovedBooks()
+        {
+            var BVM = new BookViewModel();
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "My Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+
+                    BVM.PendingList = objRepositoty.GetBooks().Where(s => (s.StatusId == 1 || s.StatusId == 3)).OrderByDescending(s => s.CreatedDate);
+                    if (BVM.PendingList.ToList().Count > 0)
+                    {
+                        ViewBag.pendingsubtitle = "Pending Books";
+                    }
+                    else
+                        ViewBag.pendingsubtitle = "";
+                }
+                else
+                {
+                    BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
+                    if (BVM.ApprovedList.ToList().Count > 0)
+                    {
+                        ViewBag.approvedsubtitle = "My Approved Books";
+                    }
+                    else
+                        ViewBag.approvedsubtitle = "";
+
+                    BVM.PendingList = objRepositoty.GetBooks().Where(s => (s.StatusId == 1 || s.StatusId == 3) && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.CreatedDate);
+                    if (BVM.PendingList.ToList().Count > 0)
+                    {
+                        ViewBag.pendingsubtitle = "My Pending / Rejected Books";
+                    }
+                    else
+                        ViewBag.pendingsubtitle = "";
+                }
+            }
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+
+            return PartialView("_PendingApprovedBooksList", BVM);
+        }
+
         public IActionResult Books()
         {
             var BVM = new BookViewModel();
