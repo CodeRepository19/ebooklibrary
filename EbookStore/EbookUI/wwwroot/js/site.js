@@ -11,31 +11,31 @@ $(document).ready(function () {
 
 //Script for Scroll top event
 //$(document).ready(function () {
-    var btn = $('#button');
-    $(window).scroll(function () {
-        if ($(window).scrollTop() > 400) {
-            btn.addClass('show');
-        } else {
-            btn.removeClass('show');
-        }
-    });
-    btn.on('click', function (e) {
-        e.preventDefault();
-        $('html, body').animate({ scrollTop: 0 }, '500');
-    });
+var btn = $('#button');
+$(window).scroll(function () {
+    if ($(window).scrollTop() > 400) {
+        btn.addClass('show');
+    } else {
+        btn.removeClass('show');
+    }
+});
+btn.on('click', function (e) {
+    e.preventDefault();
+    $('html, body').animate({ scrollTop: 0 }, '500');
+});
 
 //});
 
 // Script for Details Page
 //$(document).ready(function () {
-    $("#rejected").click(function () {
-        $("#remarks").show();
-        $("#btnreviewadd").addClass("mt-1");
-    });
-    $("#approved").click(function () {
-        $("#remarks").hide();
-        $("#btnreviewadd").removeClass("mt-1");
-    });
+$("#rejected").click(function () {
+    $("#remarks").show();
+    $("#btnreviewadd").addClass("mt-1");
+});
+$("#approved").click(function () {
+    $("#remarks").hide();
+    $("#btnreviewadd").removeClass("mt-1");
+});
 //});
 
 //Script for Create Form Page
@@ -256,3 +256,5 @@ $(document).ready(function () {
         });
     }
 });
+
+

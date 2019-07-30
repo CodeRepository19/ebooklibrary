@@ -71,6 +71,20 @@ namespace EbookUI.Controllers
             return View(BVM);
         }
 
+        public IActionResult Refresh()
+        {
+            var BVM = new BookViewModel();
+            BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
+            if (BVM.ApprovedList.ToList().Count > 0)
+            {
+                ViewBag.approvedsubtitle = "Books";
+            }
+            else
+                ViewBag.approvedsubtitle = "";
+
+            return PartialView("_ApprovedBooksList", BVM);
+        }
+
         public IActionResult Books()
         {
             var BVM = new BookViewModel();

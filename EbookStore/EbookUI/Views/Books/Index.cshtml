@@ -1,12 +1,11 @@
 ﻿@using System.Security.Claims;
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<IdentityUser>  SignInManager
 @inject UserManager<IdentityUser> UserManager
-
 @model EbookApplication.ViewModels.BookViewModel
+
 @{
     ViewData["Title"] = "E-Books";
-    var IsApprovalTitle = false;
 }
 
 <div class="container-fluid">
@@ -45,40 +44,10 @@
                 </div>
             </div>
 
-            @*Title-Books(Approved Books)*@
-
-            @foreach (var item in Model.ApprovedList)
-            {
-
-                if (IsApprovalTitle == false)
-                {
-                    <div class="col-md-12">
-                        <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
-                    </div>
-                    IsApprovalTitle = true;
-                }
-
-                var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
-
-                <div class="col-xs-3 col-sm-3 col-md-3 imgdiv" style="padding-top:20px;">
-                    <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
-                        <img class="img-responsive border" src="@photoPath" title="@item.Remarks" tooltip="@item.Remarks" asp-append-version="true" width="115" height="150">
-                    </a>
-                </div>
-            }
-
-            @if (Model.ApprovedList.ToList().Count == 0)
-            {
-                <div class="container" style="padding-top:20px;">
-                    <h6 class="text-danger" style="font-weight:bold;">
-                        <i class="fa fa-meh-o" aria-hidden="true"></i>
-                        Books are not availabe with your search Letter "@ViewBag.searchLetter"
-                    </h6>
-                </div>
-                <hr />
-
-            }
-
+            @*Approved Books*@
+            <div id="div_GetApprovedBooks">
+                @await Html.PartialAsync("_ApprovedBooksList")
+            </div>
         </div>
 
         <div class="col-md-4">
@@ -97,3 +66,22 @@
 
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var ajax_call = function () {
+            $.ajax({
+                url: '/Books/Refresh',
+                type: 'Post',
+                success: function (objOperations) {
+                    $("#div_GetApprovedBooks").html(objOperations);
+                },
+            });
+        };
+
+        var Interval = 20000; // 20 Seconds
+
+        setInterval(ajax_call, Interval);
+    });
+
+</script>
