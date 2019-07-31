@@ -21,6 +21,13 @@ body {
         height: 50px;
     }
 
+
+/* Login Register and Forgot Password*/
+.boxcss {
+    background-color: #a1bdd8 !important;
+    border-radius: 10px;
+}
+
 /* Apply styles for Entire body End*/
 
 .grocery:hover {
@@ -243,8 +250,8 @@ body {
     .imgdiv img {
         /*width: 100%;*/
         /*height: auto;*/
-        width:150px;
-        height:150px;
+        width: 150px;
+        height: 150px;
     }
 
 body .carousel-indicators li {
