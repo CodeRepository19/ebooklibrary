@@ -8,5 +8,7 @@ namespace EbookApplication.ViewModels
     public class EventViewModel
     {
         public IEnumerable<Event> Events { get; set; }
+
+        public Event events { get; set; }
     }
 }
