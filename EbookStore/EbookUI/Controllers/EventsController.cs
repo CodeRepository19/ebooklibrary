@@ -31,20 +31,20 @@ namespace EbookUI.Controllers
             return View(EVM);
         }
 
-        // GET: Courses/Details/5
-        public IActionResult Details(int Id)
-        {
-            if (Id == 0)
-                return NotFound();
+        //// GET: Courses/Details/5
+        //public IActionResult Details(int Id)
+        //{
+        //    if (Id == 0)
+        //        return NotFound();
 
-            EventViewModel objEventDetails = GetEventDetails(Id);
-            if (objEventDetails == null)
-                return NotFound();
-            else
-            {
-                return View(objEventDetails);
-            }
-        }
+        //    EventViewModel objEventDetails = GetEventDetails(Id);
+        //    if (objEventDetails == null)
+        //        return NotFound();
+        //    else
+        //    {
+        //        return View(objEventDetails);
+        //    }
+        //}
 
         private EventViewModel GetEventDetails(int intEventId)
         {
