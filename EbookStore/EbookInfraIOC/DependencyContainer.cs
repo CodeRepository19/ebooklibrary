@@ -15,6 +15,12 @@ namespace EbookInfraIOC
 
             // Infra.Data Layer
             services.AddScoped<IBookRepository, BookRepository>();
+
+            // Application Layer 
+            services.AddScoped<IEventService, EventService>();
+
+            // Infra.Data Layer
+            services.AddScoped<IEventRepository, EventRepository>();
         }
     }
 }

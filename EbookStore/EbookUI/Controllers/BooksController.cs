@@ -655,6 +655,7 @@ namespace EbookUI.Controllers
             }
             else
                 ImagePath = objbookDetails.book.ImageUrl;
+
             Book objEditBook = new Book
             {
                 BookId = objbookDetails.book.BookId,

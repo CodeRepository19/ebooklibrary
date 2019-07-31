@@ -17,12 +17,15 @@ namespace EbookInfraData.Context
 
         public DbSet<ApprovalStatus> approvalStatuses { get; set; }
 
+        public DbSet<Event> Events { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book>().ToTable("Book");
             modelBuilder.Entity<Technology>().ToTable("Technology");
             modelBuilder.Entity<Reviewes>().ToTable("Reviewes");
             modelBuilder.Entity<ApprovalStatus>().ToTable("ApprovalStatus");
+            modelBuilder.Entity<Event>().ToTable("Event");
         }
     }
 }

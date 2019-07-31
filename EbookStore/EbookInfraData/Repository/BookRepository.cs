@@ -19,22 +19,9 @@ namespace EbookInfraData.Repository
             return _ctx.Books;
         }
 
-
-        public IEnumerable<Reviewes> GetReviews()
-        {
-            return _ctx.reviewes;
-        }
-
         public Book GetBookDetailsById(int bookId)
         {
             return _ctx.Books.Find(bookId);
-        }
-        
-        public Reviewes Add(Reviewes reviewDetails)
-        {
-            _ctx.reviewes.Add(reviewDetails);
-            _ctx.SaveChanges();
-            return reviewDetails;
         }
 
         public Book Add(Book bookDetails)
@@ -73,6 +60,18 @@ namespace EbookInfraData.Repository
         public Technology GetTechnologyDetailsById(int technologyId)
         {
             return _ctx.Technologys.Find(technologyId);
+        }
+
+        public IEnumerable<Reviewes> GetReviews()
+        {
+            return _ctx.reviewes;
+        }
+
+        public Reviewes Add(Reviewes reviewDetails)
+        {
+            _ctx.reviewes.Add(reviewDetails);
+            _ctx.SaveChanges();
+            return reviewDetails;
         }
 
         public IEnumerable<ApprovalStatus> GetApprovalStatus()
