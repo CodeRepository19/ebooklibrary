@@ -52,7 +52,7 @@ namespace EbookUI.Controllers
                         ViewBag.approvedsubtitle = "Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";
+                        ViewBag.approvedsubtitle = "Books";
                 }
             }
             else
@@ -63,7 +63,7 @@ namespace EbookUI.Controllers
                     ViewBag.approvedsubtitle = "Books";
                 }
                 else
-                    ViewBag.approvedsubtitle = "";
+                    ViewBag.approvedsubtitle = "Books";
 
                 TempData["Home"] = "false";
             }
@@ -98,7 +98,7 @@ namespace EbookUI.Controllers
                         ViewBag.approvedsubtitle = "My Approved Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";
+                        ViewBag.approvedsubtitle = "My Approved Books";
 
                     BVM.PendingList = objRepositoty.GetBooks().Where(s => (s.StatusId == 1 || s.StatusId == 3)).OrderByDescending(s => s.CreatedDate);
                     if (BVM.PendingList.ToList().Count > 0)
@@ -106,7 +106,7 @@ namespace EbookUI.Controllers
                         ViewBag.pendingsubtitle = "Pending Books";
                     }
                     else
-                        ViewBag.pendingsubtitle = "";
+                        ViewBag.pendingsubtitle = "Pending Books";
                 }
                 else
                 {
@@ -116,7 +116,7 @@ namespace EbookUI.Controllers
                         ViewBag.approvedsubtitle = "My Approved Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";
+                        ViewBag.approvedsubtitle = "My Approved Books";
 
                     BVM.PendingList = objRepositoty.GetBooks().Where(s => (s.StatusId == 1 || s.StatusId == 3) && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.CreatedDate);
                     if (BVM.PendingList.ToList().Count > 0)
@@ -124,7 +124,7 @@ namespace EbookUI.Controllers
                         ViewBag.pendingsubtitle = "My Pending / Rejected Books";
                     }
                     else
-                        ViewBag.pendingsubtitle = "";
+                        ViewBag.pendingsubtitle = "My Pending / Rejected Books";
                 }
             }
             else
@@ -146,10 +146,10 @@ namespace EbookUI.Controllers
                     BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
                     if (BVM.ApprovedList.ToList().Count > 0)
                     {
-                        ViewBag.approvedsubtitle = "My Approved Books";
+                        ViewBag.approvedsubtitle = "Approved Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";
+                        ViewBag.approvedsubtitle = "Approved Books";
 
                     BVM.PendingList = objRepositoty.GetBooks().Where(s => (s.StatusId == 1 || s.StatusId == 3)).OrderByDescending(s => s.CreatedDate);
                     if (BVM.PendingList.ToList().Count > 0)
@@ -157,25 +157,25 @@ namespace EbookUI.Controllers
                         ViewBag.pendingsubtitle = "Pending Books";
                     }
                     else
-                        ViewBag.pendingsubtitle = "";
+                        ViewBag.pendingsubtitle = "Pending Books";
                 }
                 else
                 {
                     BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
                     if (BVM.ApprovedList.ToList().Count > 0)
                     {
-                        ViewBag.approvedsubtitle = "My Approved Books";
+                        ViewBag.approvedsubtitle = "Approved Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";
+                        ViewBag.approvedsubtitle = "Approved Books";
 
                     BVM.PendingList = objRepositoty.GetBooks().Where(s => (s.StatusId == 1 || s.StatusId == 3) && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.CreatedDate);
                     if (BVM.PendingList.ToList().Count > 0)
                     {
-                        ViewBag.pendingsubtitle = "My Pending / Rejected Books";
+                        ViewBag.pendingsubtitle = "Pending / Rejected Books";
                     }
                     else
-                        ViewBag.pendingsubtitle = "";
+                        ViewBag.pendingsubtitle = "Pending / Rejected Books";
                 }
             }
             else
@@ -190,6 +190,7 @@ namespace EbookUI.Controllers
         {
             var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.Equals(searchString, StringComparison.OrdinalIgnoreCase)) select m.TechnologyId;
             var BVM = new BookViewModel();
+            ViewBag.searchLetter = searchString;
             if (tehonlolgyId.ToList().Count > 0)
             {
                 int techID = Convert.ToInt32(tehonlolgyId.ToList()[0]);
@@ -201,10 +202,10 @@ namespace EbookUI.Controllers
 
                     if (BVM.ApprovedList.ToList().Count > 0)
                     {
-                        ViewBag.approvedsubtitle = "My Approved Books";
+                        ViewBag.approvedsubtitle = "Approved Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";
+                        ViewBag.approvedsubtitle = "Approved Books";
 
                     if (User.IsInRole("Admin"))
                     {
@@ -220,7 +221,7 @@ namespace EbookUI.Controllers
                         ViewBag.pendingsubtitle = "Pending Books";
                     }
                     else
-                        ViewBag.pendingsubtitle = "";
+                        ViewBag.pendingsubtitle = "Pending Books";
                 }
                 else
                     return RedirectToAction(nameof(Books));
@@ -244,10 +245,10 @@ namespace EbookUI.Controllers
 
                     if (BVM.ApprovedList.ToList().Count > 0)
                     {
-                        ViewBag.approvedsubtitle = "My Approved Books";
+                        ViewBag.approvedsubtitle = "Approved Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";
+                        ViewBag.approvedsubtitle = "Approved Books";
 
                     if (User.IsInRole("Admin"))
                     {
@@ -263,7 +264,7 @@ namespace EbookUI.Controllers
                         ViewBag.pendingsubtitle = "Pending Books";
                     }
                     else
-                        ViewBag.pendingsubtitle = "";
+                        ViewBag.pendingsubtitle = "Pending Books";
                 }
                 else
                     //return View("Error/500");
@@ -284,6 +285,7 @@ namespace EbookUI.Controllers
         {
             var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.Equals(searchString, StringComparison.OrdinalIgnoreCase)) select m.TechnologyId;
             var BVM = new BookViewModel();
+            ViewBag.searchLetter = searchString;
             if (tehonlolgyId.ToList().Count > 0)
             {
                 int techID = Convert.ToInt32(tehonlolgyId.ToList()[0]);
@@ -298,7 +300,7 @@ namespace EbookUI.Controllers
                         ViewBag.approvedsubtitle = "Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";
+                        ViewBag.approvedsubtitle = "Books";
                 }
                 else
                     return RedirectToAction(nameof(Books));
@@ -321,10 +323,10 @@ namespace EbookUI.Controllers
                     BVM.ApprovedList = Books.Where(s => s.BookName.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1 && s.StatusId == 2); // objRepositoty.GetBooks().Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier)).OrderByDescending(s => s.ApprovedDate);
                     if (BVM.ApprovedList.ToList().Count > 0)
                     {
-                        ViewBag.approvedsubtitle = "My Approved Books";
+                        ViewBag.approvedsubtitle = "Books";
                     }
                     else
-                        ViewBag.approvedsubtitle = "";
+                        ViewBag.approvedsubtitle = "Books";
                 }
                 else
                     //return View("Error/500");
@@ -712,13 +714,14 @@ namespace EbookUI.Controllers
             GBooks = GBooks.ToList();
             var BVM = new BookViewModel();
             BVM.ApprovedList = GBooks.Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier));
+            ViewBag.searchLetter = id;
 
             if (BVM.ApprovedList.ToList().Count > 0)
             {
-                ViewBag.approvedsubtitle = "My Approved Books";
+                ViewBag.approvedsubtitle = "Approved Books";
             }
             else
-                ViewBag.approvedsubtitle = "";
+                ViewBag.approvedsubtitle = "Approved Books";
 
             if (User.IsInRole("Admin"))
             {
@@ -734,7 +737,7 @@ namespace EbookUI.Controllers
                 ViewBag.pendingsubtitle = "Pending Books";
             }
             else
-                ViewBag.pendingsubtitle = "";
+                ViewBag.pendingsubtitle = "Pending Books";
 
             return await Task.FromResult(View("Books", BVM));
         }
@@ -751,7 +754,7 @@ namespace EbookUI.Controllers
                 ViewBag.approvedsubtitle = "Books";
             }
             else
-                ViewBag.approvedsubtitle = "";
+                ViewBag.approvedsubtitle = "Books";
 
             return await Task.FromResult(View("Index", BVM));
         }

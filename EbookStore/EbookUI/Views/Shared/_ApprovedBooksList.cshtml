@@ -27,10 +27,14 @@
 
 @if (Model.ApprovedList.ToList().Count == 0)
 {
-    <div class="container" style="padding-top:20px;">
+    <div class="col-md-12">
+        <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
+    </div>
+
+    <div class="container" style="padding-top:5px;">
         <h6 class="text-danger" style="font-weight:bold;">
             <i class="fa fa-meh-o" aria-hidden="true"></i>
-            Books are not availabe with your search Letter "@ViewBag.searchLetter"
+            No results for "@ViewBag.searchLetter"
         </h6>
     </div>
     <hr />

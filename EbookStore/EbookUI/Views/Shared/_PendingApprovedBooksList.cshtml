@@ -26,6 +26,20 @@
             </a>
         </div>
     }
+    @if (Model.PendingList.ToList().Count == 0)
+    {
+        <div class="col-md-12">
+            <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-down" aria-hidden="true"></i> @ViewBag.pendingsubtitle</h6><hr />
+        </div>
+
+        <div class="container" style="padding-top:5px;">
+            <h6 class="text-danger" style="font-weight:bold;">
+                <i class="fa fa-meh-o" aria-hidden="true"></i>
+                No results for "@ViewBag.searchLetter"
+            </h6>
+        </div>
+        <hr />
+    }
 </div>
 
 @*Approval Books List*@
@@ -48,5 +62,20 @@
                 <img class="img-responsive border" src="@photoPath" asp-append-version="true" title="@item.Remarks" tooltip="@item.Remarks" width="115" height="150" />
             </a>
         </div>
+    }
+
+    @if (Model.ApprovedList.ToList().Count == 0)
+    {
+        <div class="col-md-12">
+            <h6 class="text-muted" style="font-weight:bold;"><i class="fa fa-thumbs-up" aria-hidden="true"></i> @ViewBag.approvedsubtitle</h6><hr />
+        </div>
+
+        <div class="container" style="padding-top:5px;">
+            <h6 class="text-danger" style="font-weight:bold;">
+                <i class="fa fa-meh-o" aria-hidden="true"></i>
+                No results for "@ViewBag.searchLetter"
+            </h6>
+        </div>
+        <hr />
     }
 </div>
