@@ -20,7 +20,7 @@
         var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
 
 
-        <div class="col-md-2">
+        <div class="col-md-2" style="padding-top:20px;">
             <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
                 <img class="img-responsive border" src="@photoPath" asp-append-version="true" width="115" height="150" />
             </a>
@@ -44,7 +44,7 @@
 
 @*Approval Books List*@
 
-<div class="row">
+<div class="row pt-4">
     @foreach (var item in Model.ApprovedList)
     {
         @if (IsApprovalTitle == false)
@@ -57,7 +57,7 @@
 
         var photoPath = "/uploadImages/" + (item.ImageUrl ?? "noimage.jpg");
 
-        <div class="col-md-2">
+        <div class="col-md-2" style="padding-top:20px;">
             <a asp-controller="Books" asp-action="Details" asp-route-id="@item.BookId">
                 <img class="img-responsive border" src="@photoPath" asp-append-version="true" title="@item.Remarks" tooltip="@item.Remarks" width="115" height="150" />
             </a>
