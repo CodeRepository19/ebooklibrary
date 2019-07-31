@@ -26,13 +26,15 @@ namespace EbookDomain.Models
         [Display(Name = "Event Name")]
         public string EventName { get; set; }
 
-        public string EventDate { get; set; }
+        [Required]
+        [Display(Name = "Event Date")]
+        public DateTime EventDate { get; set; }
 
         [Required]
+        [Display(Name = "Event Description")]
         [MaxLength(5000, ErrorMessage = "Event Description should be maximum of 5000 characters")]
         [MinLength(10, ErrorMessage = "Event Description should be minimum of 10 characters")]
         // This will make Display the Column Name "Description"  instead of actual Column "Description"
-        [Display(Name = "Event Description")]
         public string EventDescription { get; set; }
 
         public string CreatedBy { get; set; }

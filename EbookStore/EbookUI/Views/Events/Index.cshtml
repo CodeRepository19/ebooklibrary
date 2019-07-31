@@ -1,8 +1,65 @@
 ﻿
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser>  SignInManager
+@inject UserManager<IdentityUser> UserManager
+@model EbookApplication.ViewModels.EventViewModel
+
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "E-Books";
 }
 
-<h1>Index</h1>
+<div class="container-fluid">
+
+    <div class="row mt-3">
+        
+        <div class="col-md-12">
+            <p>
+                <a asp-area="" asp-controller="Events" asp-action="Create">Create New</a>
+            </p>           
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            S.No
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.events.EventName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.events.EventDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.events.EventDescription)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Events.Select((x, i) => new { Data = x, Index = i + 1 }))
+                    {
+                        <tr>
+                            <td>
+                                @item.Index
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Data.EventName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Data.EventDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Data.EventDescription)
+                            </td>
+                            <td>
+                                <a asp-controller="Events" asp-action="Edit" asp-route-id="@item.Data.EventId">Edit</a> |
+                                <a asp-controller="Events" asp-action="Delete" asp-route-id="@item.Data.EventId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 

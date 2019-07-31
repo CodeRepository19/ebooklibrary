@@ -21,8 +21,8 @@
     <script src="~/js/jquery.scrollbox.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
     @*<script src="https://cdn.jsdelivr.net/npm/jquery-ajax-unobtrusive@3.2.6/dist/jquery.unobtrusive-ajax.min.js"
-            integrity="sha256-PAC000yuHt78nszJ2RO0OiDMu/uLzPLRlYTk8J3AO10="
-            crossorigin="anonymous"></script>*@
+        integrity="sha256-PAC000yuHt78nszJ2RO0OiDMu/uLzPLRlYTk8J3AO10="
+        crossorigin="anonymous"></script>*@
 
     <script src="~/js/pdf.js"></script>
     <script src="~/js/pdf.worker.js"></script>
@@ -66,9 +66,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Books">Books</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="#">Events</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Events</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -87,7 +90,7 @@
             </div>
         </div>
     </footer>
-    
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

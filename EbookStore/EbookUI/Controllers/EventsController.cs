@@ -121,7 +121,7 @@ namespace EbookUI.Controllers
 
             if (objNewEvent != null)
             {
-                return View(objNewEvent);
+                return View("Create", objNewEvent);
             }
             else
                 return NotFound();
