@@ -22,11 +22,13 @@ namespace EbookUI.Controllers
     {
         private readonly IHostingEnvironment objHostingEnvironment;
         private readonly IBookRepository objRepositoty;
+        private readonly IEventRepository objEventRepository;
 
-        public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository repositoty)
+        public BooksController(IHostingEnvironment hostingEnvironment, IBookRepository repositoty, IEventRepository eventrepositoty)
         {
             this.objHostingEnvironment = hostingEnvironment;
             objRepositoty = repositoty;
+            objEventRepository = eventrepositoty;
         }
 
         public IActionResult Home()
@@ -38,6 +40,8 @@ namespace EbookUI.Controllers
         public IActionResult Index()
         {
             var BVM = new BookViewModel();
+            BVM.EventsList = objEventRepository.GetEvents().OrderByDescending(s => s.EventDate);
+
             if ((string)TempData["Home"] == "false" || (string)TempData["Home"] == null)
             {
                 if (User.Identity.IsAuthenticated)
@@ -69,7 +73,7 @@ namespace EbookUI.Controllers
             }
 
             return View(BVM);
-        }
+        }        
 
         public IActionResult Refresh()
         {
@@ -138,6 +142,7 @@ namespace EbookUI.Controllers
         public IActionResult Books()
         {
             var BVM = new BookViewModel();
+            BVM.EventsList = objEventRepository.GetEvents().OrderByDescending(s => s.EventDate);
 
             if (User.Identity.IsAuthenticated)
             {
@@ -191,6 +196,7 @@ namespace EbookUI.Controllers
             var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.Equals(searchString, StringComparison.OrdinalIgnoreCase)) select m.TechnologyId;
             var BVM = new BookViewModel();
             ViewBag.searchLetter = searchString;
+            BVM.EventsList = objEventRepository.GetEvents().OrderByDescending(s => s.EventDate);
             if (tehonlolgyId.ToList().Count > 0)
             {
                 int techID = Convert.ToInt32(tehonlolgyId.ToList()[0]);
@@ -285,6 +291,7 @@ namespace EbookUI.Controllers
         {
             var tehonlolgyId = from m in objRepositoty.GetTechnologys().Where(a => a.TechnologyName.Equals(searchString, StringComparison.OrdinalIgnoreCase)) select m.TechnologyId;
             var BVM = new BookViewModel();
+            BVM.EventsList = objEventRepository.GetEvents().OrderByDescending(s => s.EventDate);
             ViewBag.searchLetter = searchString;
             if (tehonlolgyId.ToList().Count > 0)
             {
@@ -349,13 +356,13 @@ namespace EbookUI.Controllers
         {
             if (Id == 0)
                 return NotFound();
-
             BookViewModel objBookDetails = GetBookDetails(Id);
             if (objBookDetails == null)
                 return NotFound();
             else
             {
                 ApprovalStatusList();
+                objBookDetails.EventsList = objEventRepository.GetEvents().OrderByDescending(s => s.EventDate);
                 return View(objBookDetails);
             }
         }
@@ -404,8 +411,10 @@ namespace EbookUI.Controllers
         [Authorize]
         public IActionResult Create()
         {
+            var BVM = new BookViewModel();
+            BVM.EventsList = objEventRepository.GetEvents().OrderByDescending(s => s.EventDate);
             TechnologyList();
-            return View();
+            return View(BVM);
         }
 
         // POST: Courses/Create
@@ -465,6 +474,7 @@ namespace EbookUI.Controllers
             if (objNewBook != null)
             {
                 ViewBag.FileName = objNewBook.ExistingImageUrl;
+                objNewBook.EventsList = objEventRepository.GetEvents().OrderByDescending(s => s.EventDate);
                 return View(objNewBook);
             }
             else
@@ -713,6 +723,7 @@ namespace EbookUI.Controllers
             var GBooks = from m in objRepositoty.GetBooks().Where(a => a.BookName.StartsWith(id)) select m;
             GBooks = GBooks.ToList();
             var BVM = new BookViewModel();
+            BVM.EventsList = objEventRepository.GetEvents().OrderByDescending(s => s.EventDate);
             BVM.ApprovedList = GBooks.Where(s => s.StatusId == 2 && s.CreatedBy == User.FindFirstValue(ClaimTypes.NameIdentifier));
             ViewBag.searchLetter = id;
 
@@ -747,6 +758,7 @@ namespace EbookUI.Controllers
             var GBooks = from m in objRepositoty.GetBooks().Where(a => a.BookName.StartsWith(id)) select m;
             GBooks = GBooks.ToList();
             var BVM = new BookViewModel();
+            BVM.EventsList = objEventRepository.GetEvents().OrderByDescending(s => s.EventDate);
             BVM.ApprovedList = GBooks.Where(s => s.StatusId == 2);
             ViewBag.searchLetter = id;
             if (BVM.ApprovedList.ToList().Count > 0)

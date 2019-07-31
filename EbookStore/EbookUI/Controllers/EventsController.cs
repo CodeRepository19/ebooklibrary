@@ -31,6 +31,13 @@ namespace EbookUI.Controllers
             return View(EVM);
         }
 
+        public IActionResult EventsList()
+        {
+            var EVM = new BookViewModel();
+            EVM.EventsList = objRepository.GetEvents().OrderByDescending(s => s.EventDate);
+            return PartialView("_EventsList", EVM);
+        }
+
         //// GET: Courses/Details/5
         //public IActionResult Details(int Id)
         //{

@@ -28,5 +28,7 @@ namespace EbookApplication.ViewModels
 
         public IEnumerable<Book> ApprovedList { get; set; }
 
+        public IEnumerable<Event> EventsList { get; set; }
+
     }
 }
