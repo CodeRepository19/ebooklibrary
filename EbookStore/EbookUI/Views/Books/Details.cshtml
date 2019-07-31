@@ -1,7 +1,7 @@
 ﻿@model EbookApplication.ViewModels.BookViewModel
 @using System.Security.Claims;
 @using Microsoft.AspNetCore.Identity;
-@inject UserManager<IdentityUser> UserManager;
+@inject UserManager<ApplicationUser> UserManager;
 
 @{
     ViewData["Title"] = "Book Details";

@@ -3,6 +3,7 @@ using EbookInfraData.Context;
 using EbookInfraData.Repository;
 using EbookInfraIOC;
 using EbookUI.Data;
+using EbookUI.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,8 +33,9 @@ namespace EbookUI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("ebookLibraryIdentityConnection")));
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
+                  .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddDbContext<ebooklibraryDBcontext>(options =>
@@ -76,7 +78,7 @@ namespace EbookUI
                 template: "{controller=Books}/{action=Index}/{id?}");
             });
 
-            CreateUserRoles(service).Wait();
+           CreateUserRoles(service).Wait();
         }
 
         private static void RegisterServices(IServiceCollection services)
@@ -87,7 +89,7 @@ namespace EbookUI
         private async Task CreateUserRoles(IServiceProvider serviceProvider)
         {
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var UserManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
 
             IdentityResult roleResult;
@@ -99,8 +101,8 @@ namespace EbookUI
                 roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
             }
             //Assign Admin role to the main User here we have given our newly loregistered login id for Admin management  
-            IdentityUser user = await UserManager.FindByEmailAsync("prasad@prasad.com");
-            var User = new IdentityUser();
+            ApplicationUser user = await UserManager.FindByEmailAsync("prasad@prasad.com");
+            var User = new ApplicationUser();
             await UserManager.AddToRoleAsync(user, "Admin");
         }
     }
