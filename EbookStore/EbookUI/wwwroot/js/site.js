@@ -1,40 +1,44 @@
 ﻿
 // Script for Automatic scroll div tag in index page.
-$(document).ready(function () {
-    $('#demo2').scrollbox({
-        linear: true,
-        step: 1,
-        delay: 0,
-        speed: 40
-    });
-});
+//$(document).ready(function () {
+    if (document.querySelector("#demo2") != null) {
+        $('#demo2').scrollbox({
+            linear: true,
+            step: 1,
+            delay: 0,
+            speed: 40
+        });
+    }
+//});
 
 //Script for Scroll top event
 //$(document).ready(function () {
-var btn = $('#button');
-$(window).scroll(function () {
-    if ($(window).scrollTop() > 400) {
-        btn.addClass('show');
-    } else {
-        btn.removeClass('show');
+    if (document.querySelector("#button") != null) {
+        var btn = $('#button');
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 400) {
+                btn.addClass('show');
+            } else {
+                btn.removeClass('show');
+            }
+        });
+        btn.on('click', function (e) {
+            e.preventDefault();
+            $('html, body').animate({ scrollTop: 0 }, '500');
+        });
     }
-});
-btn.on('click', function (e) {
-    e.preventDefault();
-    $('html, body').animate({ scrollTop: 0 }, '500');
-});
-
 //});
 
 // Script for Details Page
 //$(document).ready(function () {
-$("#rejected").click(function ()
-{
-    $("#remarks").show();
-});
-$("#approved").click(function () {
-    $("#remarks").hide();
-});
+    if (document.querySelector("#rejected") != null || document.querySelector("#approved") != null) {
+        $("#rejected").click(function () {
+            $("#remarks").show();
+        });
+        $("#approved").click(function () {
+            $("#remarks").hide();
+        });
+    }
 //});
 
 //Script for Create Form Page

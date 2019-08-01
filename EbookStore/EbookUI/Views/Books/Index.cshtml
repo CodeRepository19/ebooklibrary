@@ -64,7 +64,7 @@
     $(document).ready(function () {
         var ajax_call = function () {
             $.ajax({
-                url: '/Books/Refresh',
+                url: '/Books/GetApprovedBooks',
                 type: 'Post',
                 success: function (objOperations) {
                     $("#div_GetApprovedBooks").html(objOperations);
@@ -77,20 +77,20 @@
         setInterval(ajax_call, Interval);
     });
 
-    $(document).ready(function () {
-        var ajaxEvent_call = function () {
-            $.ajax({
-                url: '/Events/EventsList',
-                type: 'Post',
-                success: function (objOperations) {
-                    $("#div_GetEvents").html(objOperations);
-                },
-            });
-        };
+    //$(document).ready(function () {
+    //    var ajaxEvent_call = function () {
+    //        $.ajax({
+    //            url: '/Events/EventsList',
+    //            type: 'Post',
+    //            success: function (objOperations) {
+    //                $("#div_GetEvents").html(objOperations);
+    //            },
+    //        });
+    //    };
 
-        var Interval = 10000; // 10 Seconds
+    //    var Interval = 10000; // 10 Seconds
 
-        setInterval(ajaxEvent_call, Interval);
-    });
+    //    setInterval(ajaxEvent_call, Interval);
+    //});
 
 </script>
