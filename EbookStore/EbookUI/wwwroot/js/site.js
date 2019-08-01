@@ -1,48 +1,48 @@
 ﻿
 // Script for Automatic scroll div tag in index page.
 //$(document).ready(function () {
-    if (document.querySelector("#demo2") != null) {
-        $('#demo2').scrollbox({
-            linear: true,
-            step: 1,
-            delay: 0,
-            speed: 40
-        });
-    }
+//if (document.querySelector("#demo2") != null) {
+
+//}
 //});
 
 //Script for Scroll top event
 //$(document).ready(function () {
-    if (document.querySelector("#button") != null) {
-        var btn = $('#button');
-        $(window).scroll(function () {
-            if ($(window).scrollTop() > 400) {
-                btn.addClass('show');
-            } else {
-                btn.removeClass('show');
-            }
-        });
-        btn.on('click', function (e) {
-            e.preventDefault();
-            $('html, body').animate({ scrollTop: 0 }, '500');
-        });
-    }
+//if (document.querySelector("#button") != null) {
+
+//}
 //});
 
 // Script for Details Page
 //$(document).ready(function () {
-    if (document.querySelector("#rejected") != null || document.querySelector("#approved") != null) {
-        $("#rejected").click(function () {
-            $("#remarks").show();
-        });
-        $("#approved").click(function () {
-            $("#remarks").hide();
-        });
-    }
+//if (document.querySelector("#rejected") != null || document.querySelector("#approved") != null) {
+
+//}
 //});
 
 //Script for Create Form Page
 $(document).ready(function () {
+
+    var btn = $('#button');
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 400) {
+            btn.addClass('show');
+        } else {
+            btn.removeClass('show');
+        }
+    });
+    btn.on('click', function (e) {
+        e.preventDefault();
+        $('html, body').animate({ scrollTop: 0 }, '500');
+    });
+
+    $("#rejected").click(function () {
+        $("#remarks").show();
+    });
+    $("#approved").click(function () {
+        $("#remarks").hide();
+    });
+
     if (document.querySelector("#pdf-loader") != null && document.querySelector("#changePDFLoader") != null) {
         document.querySelector("#pdf-loader").style.display = 'none';
         document.querySelector("#changePDFLoader").style.display = 'none';
@@ -147,11 +147,7 @@ $(document).ready(function () {
             }
         });
     }
-});
 
-
-//Script for Edit Form Page
-$(document).ready(function () {
     if (document.querySelector("#pdf-loader") != null && document.querySelector("#changeBookLbl") != null && document.querySelector("#changePDFLoader") != null) {
         document.querySelector("#pdf-loader").style.display = 'none';
         document.querySelector("#changePDFLoader").style.display = 'none';
@@ -258,6 +254,13 @@ $(document).ready(function () {
             }
         });
     }
+
+    $('#demo2').scrollbox({
+        linear: true,
+        step: 1,
+        delay: 0,
+        speed: 40
+    });
 });
 
 

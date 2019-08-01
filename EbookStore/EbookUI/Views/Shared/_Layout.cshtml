@@ -24,10 +24,6 @@
         integrity="sha256-PAC000yuHt78nszJ2RO0OiDMu/uLzPLRlYTk8J3AO10="
         crossorigin="anonymous"></script>*@
 
-    <script src="~/js/pdf.js"></script>
-    <script src="~/js/pdf.worker.js"></script>
-    <script src="~/js/site.js"></script>
-
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"
@@ -40,6 +36,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </environment>
 
+    <script src="~/js/pdf.js"></script>
+    <script src="~/js/pdf.worker.js"></script>
+    <script src="~/js/site.js"></script>
 </head>
 <body>
     <a id="button"></a>
@@ -68,9 +67,9 @@
                         </li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Events</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Events" asp-action="Index">Events</a>
+                        </li>
                         }
                     </ul>
                 </div>
