@@ -4,14 +4,16 @@ using EbookInfraData.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EbookInfraData.Migrations
 {
     [DbContext(typeof(ebooklibraryDBcontext))]
-    partial class ebooklibraryDBcontextModelSnapshot : ModelSnapshot
+    [Migration("20190731123002_MyFirstsd1")]
+    partial class MyFirstsd1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
