@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -42,7 +40,7 @@ namespace EbookDomain.Models
         /// <summary>
         /// The Below line contains "[BindRequired]" which is called DataAnnotation used to Validate the column "TechnologyId" DropDown data in Presentaion Layer
         /// </summary>
-        [BindRequired]
+        //[BindRequired]
         [Required(ErrorMessage = "Select a Technology")]
         // This will make Display the Column Name "Technology"  instead of actual Column "TechnologyId"
         [Display(Name = "Technology")]
