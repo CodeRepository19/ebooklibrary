@@ -36,6 +36,7 @@ $(document).ready(function () {
         $('html, body').animate({ scrollTop: 0 }, '500');
     });
 
+    // Details Page
     $("#rejected").click(function () {
         $("#remarks").show();
     });
@@ -43,6 +44,7 @@ $(document).ready(function () {
         $("#remarks").hide();
     });
 
+    // Create Book Page
     if (document.querySelector("#pdf-loader") != null && document.querySelector("#changePDFLoader") != null) {
         document.querySelector("#pdf-loader").style.display = 'none';
         document.querySelector("#changePDFLoader").style.display = 'none';
@@ -148,6 +150,7 @@ $(document).ready(function () {
         });
     }
 
+    // Edit Book Page
     if (document.querySelector("#pdf-loader") != null && document.querySelector("#changeBookLbl") != null && document.querySelector("#changePDFLoader") != null) {
         document.querySelector("#pdf-loader").style.display = 'none';
         document.querySelector("#changePDFLoader").style.display = 'none';
@@ -255,11 +258,18 @@ $(document).ready(function () {
         });
     }
 
-    $('#demo2').scrollbox({
-        linear: true,
-        step: 1,
-        delay: 0,
-        speed: 40
+    //$('#demo2').scrollbox({
+    //    linear: true,
+    //    step: 1,
+    //    delay: 0,
+    //    speed: 40
+    //});
+
+    $('#demo2').scrollbox(function () {
+        linear: true;
+        step: 1;
+        delay: 2;
+        speed: 10;
     });
 });
 
