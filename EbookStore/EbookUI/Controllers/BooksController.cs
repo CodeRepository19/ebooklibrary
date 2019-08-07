@@ -57,7 +57,7 @@ namespace EbookUI.Controllers
                 else
                 {
                     BVM.ApprovedList = objRepositoty.GetBooks().Where(s => s.StatusId == 2).OrderByDescending(s => s.ApprovedDate);
-                    ViewBag.approvedsubtitle = "Books";
+                    ViewBag.approvedsubtitle = "Approval Books";
                 }
             }
             else
