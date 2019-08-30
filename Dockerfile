@@ -4,7 +4,7 @@ WORKDIR /app
 # Copy csproj and restore as distinct layers
 COPY EbookStore\\EbookStore.sln .
 COPY EbookStore\\EbookUI\\EbookUI.csproj ./
-RUN dotnet restore EbookStore\\EbookStore.sln
+RUN dotnet restore EbookStore\\EbookUI\\EbookUI.csproj
 
 # Copy everything else and build
 COPY . ./
